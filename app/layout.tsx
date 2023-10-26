@@ -63,9 +63,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             <div className="relative flex min-h-screen flex-col">
               <TopNavigation session={session} />
               <div className="hidden md:flex w-20 flex-col fixed inset-y-0">
-                <SideNavigation session={session} user={user} />
+                <SideNavigation session={session} />
               </div>
-              <Nav session={session} user={user} />
+              <Nav session={session} />
 
               <div className="flex-1 ml-[5px] md:ml-[30px] lg:ml-[90px] ">
                 {children}
