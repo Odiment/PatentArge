@@ -26,7 +26,7 @@ import { toast } from '@/components/ui/use-toast'
 /* import MarkaCardTek from '@/components/marka-card-tek'
 import MarkaForm from '@/components/marka-form' */
 
-import { Database } from '@/database.types'
+/* import { Database } from '@/database.types' */
 /* import IdeaMarkaLogo from './ideamarka-logo' */
 
 import {
