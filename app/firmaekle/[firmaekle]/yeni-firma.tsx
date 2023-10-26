@@ -47,7 +47,7 @@ const FormSchema = z.object({
 })
 
 interface FirmaBilgiProps {
-  firmabilgi: string
+  firmabilgi: any | null
 }
 
 export default function YeniFirma({ firmabilgi }: FirmaBilgiProps) {
