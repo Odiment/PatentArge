@@ -11,8 +11,6 @@ import { CheckIcon } from '@/icons/CheckIcon'
 import { EyeIcon } from '@/icons/EyeIcon'
 import { EditIcon } from '@/icons/EditIcon'
 import {
-  /*   Button,
-  Link, */
   Modal,
   ModalBody,
   ModalContent,

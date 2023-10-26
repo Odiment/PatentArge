@@ -8,8 +8,6 @@ import { EditIcon } from '@/icons/EditIcon'
 import { EyeIcon } from '@/icons/EyeIcon'
 import { GiPlainCircle } from 'react-icons/gi'
 import {
-  /*   Button,
-  Link, */
   Modal,
   ModalBody,
   ModalContent,
@@ -25,7 +23,6 @@ import { Button } from '@/components/ui/button'
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
-/* import { Card, CardContent, CardFooter } from "@/components/ui/card" */
 import {
   Card,
   CardBody,
