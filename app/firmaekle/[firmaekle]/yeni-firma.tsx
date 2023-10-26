@@ -88,7 +88,7 @@ export default function YeniFirma({ firmabilgi }: FirmaBilgiProps) {
           </pre>
         ),
       })
-    } catch (error) {
+    } catch (error: any) {
       alert(error.message)
     }
   }
