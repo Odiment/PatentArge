@@ -1,25 +1,25 @@
-import { cookies } from "next/headers";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from 'next/headers'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 
 //components
-import ProjectsBtn from "@/components/ProjectsBtn";
-import ParticlesContainer from "@/components/ParticlesContainer";
+import ProjectsBtn from '@/components/ProjectsBtn'
+import ParticlesContainer from '@/components/ParticlesContainer'
 //framer motion
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
 //import variants
-import { fadeIn } from "@/variants";
+import { fadeIn } from '@/variants'
 
 export default async function IndexPage() {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = createServerComponentClient({ cookies })
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await supabase.auth.getSession()
 
   if (!session) {
     /* redirect("/unauthenticated") */
-    redirect("/");
+    redirect('/')
   }
 
   return (
@@ -29,7 +29,7 @@ export default async function IndexPage() {
           {/*   title */}
           <h1 className="text-[35px] leading-tight md:text-[60px] md:leading-[1.3] mb-8 font-semibold">
             PatentArge ile
-            <br />{" "}
+            <br />
             <span className="text-primary">Tüm Süreçlerinizi Yönetin...</span>
           </h1>
           {/*   subtitle */}
@@ -50,12 +50,9 @@ export default async function IndexPage() {
           {/*bg img */}
           <div className="bg-none xl:bg-explosion xl:bg-cover xl:bg-right xl:bg-no-repeat w-full h-full absolute mix-blend-difference translate-z-0 opa"></div>
           {/*particles */}
-          <ParticlesContainer /> 
-       
-        
+          <ParticlesContainer />
         </div>
       </div>
-      {/*  <div>image</div> */}
     </div>
-  );
+  )
 }
