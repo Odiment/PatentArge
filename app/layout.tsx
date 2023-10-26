@@ -15,6 +15,8 @@ import TopNavigation from '@/components/topnavigation'
 import SideNavigation from '@/components/sidenavigation'
 import Nav from '@/components/Nav'
 
+import { Database } from '@/app/database.types'
+
 /* export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
