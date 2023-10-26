@@ -15,7 +15,7 @@ import TopNavigation from '@/components/topnavigation'
 import SideNavigation from '@/components/sidenavigation'
 import Nav from '@/components/Nav'
 
-import { Database } from '@/app/database.types'
+import { Database } from './database.types'
 
 /* export const metadata: Metadata = {
   title: {
@@ -61,7 +61,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         >
           <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
             <div className="relative flex min-h-screen flex-col">
-              <TopNavigation session={session} user={user} />
+              <TopNavigation session={session} />
               <div className="hidden md:flex w-20 flex-col fixed inset-y-0">
                 <SideNavigation session={session} user={user} />
               </div>
