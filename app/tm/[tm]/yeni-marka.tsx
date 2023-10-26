@@ -145,7 +145,7 @@ export default function YeniMarka({ firmabilgi }) {
     } finally {
       setLoading(false)
     }
-  }, [marka, supabase])
+  }, [deger, marka, supabase])
 
   useEffect(() => {
     getirYeniMarka()

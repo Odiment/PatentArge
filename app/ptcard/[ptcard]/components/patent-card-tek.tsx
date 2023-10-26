@@ -250,7 +250,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     } finally {
       setLoading(false)
     }
-  }, [patent_resimler, supabase])
+  }, [veri, patent_resimler, supabase])
 
   useEffect(() => {
     getirYeniPatentResmi()
@@ -328,7 +328,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     } finally {
       setLoading(false)
     }
-  }, [product_resimler, supabase])
+  }, [veri, product_resimler, supabase])
 
   useEffect(() => {
     getirYeniUrunResmi()

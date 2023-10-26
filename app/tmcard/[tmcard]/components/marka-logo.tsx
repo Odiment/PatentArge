@@ -144,6 +144,7 @@ export default function MarkaLogo({
             style={{ height: 300, width: 300 }}
           /> */
           <Image
+            alt="MarkaLogoStatic"
             width={size}
             height={size}
             className="aspect-square object-cover rounded-lg transition-all duration-300 hover:scale-105"
