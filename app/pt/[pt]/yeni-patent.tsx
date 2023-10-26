@@ -152,7 +152,7 @@ export default function YeniPatent({ firmabilgi }) {
     } finally {
       setLoading(false)
     }
-  }, [patent_title, supabase])
+  }, [veri, patent_title, supabase])
 
   useEffect(() => {
     getirYeniPatent()

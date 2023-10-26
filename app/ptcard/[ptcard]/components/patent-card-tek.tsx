@@ -254,7 +254,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
 
   useEffect(() => {
     getirYeniPatentResmi()
-  }, [patent_resimler, getirYeniPatentResmi])
+  }, [veri, patent_resimler, getirYeniPatentResmi])
 
   async function deletePatentResim() {
     try {
