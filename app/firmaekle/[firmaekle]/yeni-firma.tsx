@@ -46,11 +46,11 @@ const FormSchema = z.object({
   }),
 })
 
-interface RootLayoutProps {
-  firmabilgi: string | null
+interface FirmaBilgiProps {
+  firmabilgi: string
 }
 
-export default function YeniFirma({ firmabilgi }: RootLayoutProps) {
+export default function YeniFirma({ firmabilgi }: FirmaBilgiProps) {
   let firmalar = firmabilgi.map(({ firma }) => firma)
 
   const form = useForm<z.infer<typeof FormSchema>>({
