@@ -50,6 +50,10 @@ interface FirmaBilgiProps {
   firmabilgi: any | null
 }
 
+interface ItemProps {
+  item: any | null
+}
+
 export default function YeniFirma({ firmabilgi }: FirmaBilgiProps) {
   let firmalar = firmabilgi.map((item) => firma)
 
