@@ -51,7 +51,7 @@ interface FirmaBilgiProps {
 }
 
 interface ItemProps {
-  item: any | null
+  firma: any | null
 }
 
 export default function YeniFirma({ firmabilgi }: FirmaBilgiProps) {
