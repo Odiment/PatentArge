@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/landing-card'
 import { Poppins } from 'next/font/google'
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
+/* import Image from 'next/image' */
 
 const fontbaslik = Poppins({ weight: '600', subsets: ['latin'] })
 const testimonials = [
@@ -72,7 +72,7 @@ export const LandingContent = () => {
                 </div>
               </CardTitle>
               <CardImg className="pt-4 px-0">
-                <Image src={item.img} alt="" className="rounded-lg" />
+                <img src={item.img} alt="" className="rounded-lg" />
               </CardImg>
               <CardContent className="pt-3 px-0 dark:text-[#e7e5e4] text-secodary">
                 {item.description}

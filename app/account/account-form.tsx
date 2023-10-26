@@ -16,6 +16,7 @@ export default function AccountForm({ session }: { session: Session | null }) {
   const [username, setUsername] = useState<string | null>(null)
   const [website, setWebsite] = useState<string | null>(null)
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
+  type user: string | null
   const user = session?.user
 
   const getProfile = useCallback(async () => {
