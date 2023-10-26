@@ -146,7 +146,7 @@ export default function NextUiDataTable({ veri, user }) {
     const end = start + rowsPerPage
 
     return filteredItems.slice(start, end)
-  }, [page, filteredItems, rowsPerPage])
+  }, [hasSearchFilter, page, filteredItems, rowsPerPage])
 
   const sortedItems = React.useMemo(() => {
     return [...items].sort((a: User, b: User) => {
@@ -158,75 +158,72 @@ export default function NextUiDataTable({ veri, user }) {
     })
   }, [sortDescriptor, items])
 
-  const renderCell = React.useCallback(
-    (user: User, columnKey: React.Key) => {
-      const cellValue = user[columnKey]
+  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
+    const cellValue = user[columnKey]
 
-      switch (columnKey) {
-        case 'marka':
-          return (
-            <User
-              avatarProps={{
-                radius: 'sm',
-                src: user.tp_avatar,
-                size: 'lg',
-              }}
-              description={user.basvuru_no}
-              name={cellValue}
-            >
-              {user.basvuru_no}
-            </User>
-          )
-        case 'status':
-          return (
-            <Chip
-              className="capitalize"
-              color={statusColorMap[user.status]}
-              size="lg"
-              variant="flat"
-            >
-              {cellValue}
-            </Chip>
-          )
-        case 'actions':
-          return (
-            <div className="relative flex justify-end items-center gap-2">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button isIconOnly size="sm" variant="light">
-                    <VerticalDotsIcon className="text-default-300" />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu>
-                  <DropdownItem
-                    key="markadetay"
-                    onClick={() => {
-                      onNavigate(`/markadetay/${user.referans_no}`)
-                    }}
-                  >
-                    Marka Detayları
-                  </DropdownItem>
-                  <DropdownItem
-                    key="markadetay"
-                    onClick={() => {
-                      onNavigate(`/tmcard/${user.referans_no}`)
-                    }}
-                  >
-                    Düzenle
-                  </DropdownItem>
-                  <DropdownItem className="text-rose-500">
-                    Markayı Sil
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-          )
-        default:
-          return cellValue
-      }
-    },
-    [onNavigate]
-  )
+    switch (columnKey) {
+      case 'marka':
+        return (
+          <User
+            avatarProps={{
+              radius: 'sm',
+              src: user.tp_avatar,
+              size: 'lg',
+            }}
+            description={user.basvuru_no}
+            name={cellValue}
+          >
+            {user.basvuru_no}
+          </User>
+        )
+      case 'status':
+        return (
+          <Chip
+            className="capitalize"
+            color={statusColorMap[user.status]}
+            size="lg"
+            variant="flat"
+          >
+            {cellValue}
+          </Chip>
+        )
+      case 'actions':
+        return (
+          <div className="relative flex justify-end items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  <VerticalDotsIcon className="text-default-300" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  key="markadetay"
+                  onClick={() => {
+                    onNavigate(`/markadetay/${user.referans_no}`)
+                  }}
+                >
+                  Marka Detayları
+                </DropdownItem>
+                <DropdownItem
+                  key="markadetay"
+                  onClick={() => {
+                    onNavigate(`/tmcard/${user.referans_no}`)
+                  }}
+                >
+                  Düzenle
+                </DropdownItem>
+                <DropdownItem className="text-rose-500">
+                  Markayı Sil
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        )
+      default:
+        return cellValue
+    }
+  }, [])
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
@@ -245,7 +242,7 @@ export default function NextUiDataTable({ veri, user }) {
       setRowsPerPage(Number(e.target.value))
       setPage(1)
     },
-    []
+    [kullanici, onNavigate, patentResimler]
   )
 
   const onSearchChange = React.useCallback((value?: string) => {
@@ -338,8 +335,6 @@ export default function NextUiDataTable({ veri, user }) {
     statusFilter,
     visibleColumns,
     onSearchChange,
-    onRowsPerPageChange,
-    hasSearchFilter,
     onClear,
     veri.length,
   ])
@@ -386,10 +381,10 @@ export default function NextUiDataTable({ veri, user }) {
     onNextPage,
     onPreviousPage,
     selectedKeys,
-    items.length,
     page,
     pages,
-    hasSearchFilter,
+    onClear,
+    veri.length,
   ])
 
   return (
