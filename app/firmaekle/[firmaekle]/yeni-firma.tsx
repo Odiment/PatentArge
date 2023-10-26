@@ -50,7 +50,7 @@ interface RootLayoutProps {
   firmabilgi: React.ReactNode
 }
 
-export default function YeniFirma({ firmabilgi }) {
+export default function YeniFirma({ firmabilgi }: RootLayoutProps) {
   let firmalar = firmabilgi.map(({ firma }) => firma)
 
   const form = useForm<z.infer<typeof FormSchema>>({
