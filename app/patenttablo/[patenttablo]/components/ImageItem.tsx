@@ -205,7 +205,6 @@ const ImageItem: React.FC<PatentCard> = ({
         <div className="relative col-span-6 md:col-span-4">
           <Image
             isZoomed
-            shadow="sm"
             radius="lg"
             alt="Album cover"
             className="object-cover "

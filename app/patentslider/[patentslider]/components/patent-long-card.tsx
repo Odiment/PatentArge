@@ -313,7 +313,6 @@ const PatentLongCard: React.FC<PatentCard> = ({
             <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 justify-center">
               <div className="relative group col-span-2 md:col-span-2 items-center">
                 <Image
-                  shadow="sm"
                   radius="lg"
                   alt="Album cover"
                   className="relative opacity-0 shadow-black/5 data-[loaded=true]:opacity-100 shadow-none transition-transform-opacity motion-reduce:transition-none !duration-300 rounded-large z-0 w-full h-full object-contain max-h-[340px]"
@@ -333,7 +332,6 @@ const PatentLongCard: React.FC<PatentCard> = ({
 
               <div className="relative group col-span-2 md:col-span-2">
                 <Image
-                  shadow="sm"
                   radius="lg"
                   alt="Patent cover"
                   className="relative opacity-0 shadow-black/5 data-[loaded=true]:opacity-100 shadow-none transition-transform-opacity motion-reduce:transition-none !duration-300 rounded-large z-0 w-full h-full object-contain"

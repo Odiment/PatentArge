@@ -154,7 +154,6 @@ const MarkaCardYatay: React.FC<MarkaCard> = ({ data, bilgiler, user }) => {
           onPress={onOpen}
           isBlurred
           className="border-1 border-primary  hover:bg-primary/20"
-          shadow="sm"
         >
           <CardBody>
             <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 justify-center">

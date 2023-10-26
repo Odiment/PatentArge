@@ -9,8 +9,6 @@ import { Chip, Avatar } from '@nextui-org/react'
 import { EyeIcon } from '@/icons/EyeIcon'
 import { EditIcon } from '@/icons/EditIcon'
 import {
-  /*   Button,
-  Link, */
   Modal,
   ModalBody,
   ModalContent,
@@ -203,7 +201,6 @@ const PatentCardYatay: React.FC<PatentCard> = ({
     <>
       <div className="rounded-lg justify-center">
         <Card
-          shadow="sm"
           key={data.id}
           isBlurred
           className="border-1 border-primary hover:bg-primary/20"
