@@ -2,7 +2,11 @@
 
 import { Toaster } from '@/components/ui/toaster'
 
-export default function IdeaLayout({ children }) {
+interface RootLayoutProps {
+  children: React.ReactNode
+}
+
+export default function IdeaLayout({ children }: RootLayoutProps) {
   return (
     <section className="py-24">
       <div className="container">
