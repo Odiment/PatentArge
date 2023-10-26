@@ -210,13 +210,13 @@ const PatentCardYatay: React.FC<PatentCard> = ({
             <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 justify-center">
               <div className="col-span-6 md:col-span-4 relative group">
                 <Image
-                  shadow="sm"
                   radius="lg"
                   width="100%"
                   height="100%"
                   alt="patent_figure"
                   className="relative opacity-0 shadow-black/5 data-[loaded=true]:opacity-100 shadow-none transition-transform-opacity motion-reduce:transition-none !duration-300 rounded-large z-0 w-full h-full object-cover"
                   src={resim_url}
+                  shadow="sm"
                 />
                 <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
                   <ChevronLeft onClick={prevPatentSlide} size={30} />
