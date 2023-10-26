@@ -48,11 +48,10 @@ const FormSchema = z.object({
 
 interface FirmaBilgiProps {
   firmabilgi: any | null
-  firma: any | null
 }
 
 export default function YeniFirma({ firmabilgi }: FirmaBilgiProps) {
-  let firmalar = firmabilgi.map(({ firma }: FirmaBilgiProps) => firma)
+  let firmalar = firmabilgi.map(({ firma }: string | null) => firma)
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
