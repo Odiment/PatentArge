@@ -35,6 +35,7 @@ import { Database } from '@/app/database.types'
 interface MarkaCard {
   data: Database[]
   bilgiler: Database[]
+  user: string | null
 }
 
 type Markalar = Database['public']['Tables']['markalar']['Row']
