@@ -46,6 +46,10 @@ const FormSchema = z.object({
   }),
 })
 
+interface RootLayoutProps {
+  firmabilgi: React.ReactNode
+}
+
 export default function YeniFirma({ firmabilgi }) {
   let firmalar = firmabilgi.map(({ firma }) => firma)
 
