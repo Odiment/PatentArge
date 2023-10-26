@@ -2,8 +2,9 @@ import { Database } from '@/app/database.types'
 import MarkaCard from './marka-card'
 
 interface ProductListProps {
-  items: Database[]
-  bilgiler: Database[]
+  items: string | null
+  bilgiler: string | null
+  user: string | null
 }
 
 const MarkaList: React.FC<ProductListProps> = ({ items, bilgiler, user }) => {
