@@ -207,8 +207,8 @@ export default function YeniPatent({ firmabilgi }) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="italic">
-                      {firmalar.map((firma_unvan) => (
-                        <SelectItem value={firma_unvan}>
+                      {firmalar.map((firma_unvan, index) => (
+                        <SelectItem key={index} value={firma_unvan}>
                           {firma_unvan}
                         </SelectItem>
                       ))}
