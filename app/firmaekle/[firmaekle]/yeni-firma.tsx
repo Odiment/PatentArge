@@ -37,6 +37,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import { Database } from '@/app/database.types'
+
 const FormSchema = z.object({
   firma_unvan: z.string().min(5, {
     message: 'Firma Ünvanı en az 5 karakterden oluşmalıdır.',

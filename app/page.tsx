@@ -1,10 +1,8 @@
-
 /* import ThemeSwitcher from "@/components/ThemeSwitcher"; */
 import { Button } from '@nextui-org/react'
-import { LandingHero } from "@/components/landing-hero"
-import { LandingContent } from "@/components/landing-content"
-import { LandingFooter } from "@/components/landing-footer"
-
+import { LandingHero } from '@/components/landing-hero'
+import { LandingContent } from '@/components/landing-content'
+import { LandingFooter } from '@/components/landing-footer'
 
 export default async function IndexPage() {
   return (
@@ -13,7 +11,6 @@ export default async function IndexPage() {
       <LandingHero />
       <LandingContent />
       <LandingFooter />
-  
     </section>
   )
 }
