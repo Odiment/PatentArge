@@ -55,7 +55,7 @@ interface ItemProps {
 }
 
 export default function YeniFirma({ firmabilgi }: FirmaBilgiProps) {
-  let firmalar = firmabilgi.map((item) => firma)
+  let firmalar = firmabilgi.map(({ firma }: ItemProps) => firma)
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
