@@ -47,7 +47,7 @@ const FormSchema = z.object({
 })
 
 interface RootLayoutProps {
-  firmabilgi: React.ReactNode
+  firmabilgi: string | null
 }
 
 export default function YeniFirma({ firmabilgi }: RootLayoutProps) {
