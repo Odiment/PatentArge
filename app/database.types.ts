@@ -53,9 +53,9 @@ export interface Database {
           class_no: string | null
           marka_durumu: string | null
           basvuru_tarihi: string | null
-          logo_url: string | null
-          tp_logo_url: string | null
-          tp_avatar: string | null
+          logo_url?: string | null
+          tp_logo_url?: string | null
+          tp_avatar?: string | null
           marka: string | null
           deger: string | null
           status: string | null
