@@ -49,7 +49,7 @@ const MarkaCard: React.FC<MarkaCard> = ({ data, bilgiler, user }) => {
   const [pozisyon, setPozisyon] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const [url, setUrl] = useState<Markalar['logo_url']>(bilgiler.logo_url)
+  const [url, setUrl] = useState<Markalar['logo_url']>(bilgiler.logo_url as any)
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
