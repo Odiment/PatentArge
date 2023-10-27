@@ -33,7 +33,7 @@ import {
 import { Database } from '@/app/database.types'
 
 interface MarkaCard {
-  items: string | null
+  data: string | null
   bilgiler: string | null
   user: string | null
 }
