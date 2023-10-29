@@ -7,11 +7,19 @@ import MarkaList from './components/marka-list'
 import { SearchInput } from '@/components/search-input'
 import Filter from '@/components/filter'
 
-interface RootPageProps {
+interface MarkaIdPageProps {
   searchParams: {
     name: string | null
+    kategori: string | null
   }
 }
+
+/* interface MarkaUser {
+    user: {
+        id: string | null
+        email: string | null
+}
+} */
 
 export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   const supabase = createServerComponentClient<Database>({ cookies })
@@ -23,6 +31,9 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
+  console.log("user")
+  console.log(user.email)
 
   if (!session) {
     redirect('/')
