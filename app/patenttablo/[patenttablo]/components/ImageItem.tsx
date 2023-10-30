@@ -211,8 +211,7 @@ const ImageItem: React.FC<PatentCard> = ({
             radius="lg"
             alt="Album cover"
             className="object-cover "
-            height={170}
-            shadow="md"
+            height={170}            
             src={resim_url}
             width={170}
           />

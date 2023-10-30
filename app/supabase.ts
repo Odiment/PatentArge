@@ -15,7 +15,7 @@ export interface Database {
           firma_ad: string
           firma_id: string
           id: string
-          user_email: string
+          user_email: string | undefined
           username: string
         }
         Insert: {
@@ -23,7 +23,7 @@ export interface Database {
           firma_ad: string
           firma_id: string
           id?: string
-          user_email: string
+          user_email: string | undefined
           username: string
         }
         Update: {
@@ -31,7 +31,7 @@ export interface Database {
           firma_ad?: string
           firma_id?: string
           id?: string
-          user_email?: string
+          user_email?: string | undefined
           username?: string
         }
         Relationships: [
@@ -96,7 +96,7 @@ export interface Database {
           firma_ad: string | null
           firma_id: string
           firma_unvan: string
-          id: string
+          id: string | null
           logo_url: string | null
           marka: string | null
           marka_durumu: string | null
@@ -117,7 +117,7 @@ export interface Database {
           firma_ad?: string | null
           firma_id: string
           firma_unvan: string
-          id?: string
+          id?: string | null
           logo_url?: string | null
           marka?: string | null
           marka_durumu?: string | null
@@ -138,7 +138,7 @@ export interface Database {
           firma_ad?: string | null
           firma_id?: string
           firma_unvan?: string
-          id?: string
+          id?: string | null
           logo_url?: string | null
           marka?: string | null
           marka_durumu?: string | null
@@ -296,7 +296,7 @@ export interface Database {
           email: string | null
           firma_ad: string | null
           full_name: string | null
-          id: string
+          id: string | null
           pozisyon: string | null
           updated_at: string | null
           username: string | null

@@ -35,12 +35,12 @@ import { Database } from '@/app/database.types'
 interface MarkaCard {
   data: object | null
   bilgiler: object | null
-  user: string | null
+  userid: string | undefined
 }
 
 type Markalar = Database['public']['Tables']['markalar']['Row']
 
-const MarkaCard: React.FC<MarkaCard> = ({ data, bilgiler, user }) => {
+const MarkaCard: React.FC<MarkaCard> = ({ data, bilgiler, userid }) => {
   const supabase = createClientComponentClient<Database>()
   const [fullname, setFullname] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
@@ -88,7 +88,7 @@ const MarkaCard: React.FC<MarkaCard> = ({ data, bilgiler, user }) => {
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`full_name, username, avatar_url, yetki, pozisyon`)
-        .eq('id', user?.id)
+        .eq('id', userid)
         .single()
 
       if (error && status !== 406) {
@@ -107,11 +107,11 @@ const MarkaCard: React.FC<MarkaCard> = ({ data, bilgiler, user }) => {
     } finally {
       setLoading(false)
     }
-  }, [user, supabase])
+  }, [userid, supabase])
 
   useEffect(() => {
     getProfile()
-  }, [user, getProfile])
+  }, [userid, getProfile])
 
   async function deleteMarka() {
     try {
