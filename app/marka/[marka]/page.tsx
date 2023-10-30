@@ -19,7 +19,7 @@ interface MarkaIdPageProps {
   };
 }
 
-type user = Object | null;
+/* type user = Object | null; */
 
 export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -86,8 +86,6 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
 
       markalarx = marka_tum;
     }
-
-    /* let aranan: MarkalarX[] | null */
 
     var aranan = markalarx?.reduce((result: any, thing) => {
       if (thing.marka != null && thing.marka.includes(`${searchParams.name}`)) {

@@ -2,16 +2,21 @@ import React from 'react'
 import { cookies } from 'next/headers'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { redirect } from 'next/navigation'
-import { Database } from '../../database.types'
+/* import { Database } from '../../database.types' */
 import MarkaList from './components/marka-list'
-import { SearchInput } from '@/components/search-input'
+/* import { SearchInput } from '@/components/search-input' */
 import Filter from '@/components/filter'
 
-interface RootPageProps {
-  searchParams: {
-    name: string | null
+import { Database } from "@/app/supabase";
+
+type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
+
+interface MarkaIdPageProps {
+    searchParams: {
+      name: string | null;
+      kategori: string | null;
+    };
   }
-}
 
 export default async function MarkaYatayKart({
   searchParams,
@@ -36,20 +41,39 @@ export default async function MarkaYatayKart({
   let kategori = `${searchParams.kategori}`
   let durumKategori = kategori === 'undefined' || kategori === null
 
-  const { data: profil } = await supabase
-    .from('profiles')
-    .select(`id, firma_ad, yetki`)
-    .eq('id', user.id)
+  type Profil =
+  | { id: string | null; firma_ad: string | null; yetki: string | null }[]
+  | null;
 
-  const { data: firma } = await supabase
-    .from('firma_profil')
-    .select('firma_id')
-    .eq('user_email', user.email)
+let profil: Profil | undefined;
+
+type Firma = { firma_id: string }[] | null;
+let firma: Firma | undefined; 
+
+if (user != null || user != undefined) {
+    const { data: profiltek } = await supabase
+      .from("profiles")
+      .select(`id, firma_ad, yetki`)
+      .eq("id", user.id);
+
+    profil = profiltek;
+
+    const useremail: string = user.email || "";
+
+    const { data: firmatek } = await supabase
+      .from("firma_profil")
+      .select("firma_id")
+      .eq("user_email", useremail);
+
+    firma = firmatek;
+  }
 
   // admin yetkisinde tüm markaların görülebilmesi - erişilebilmesi
-  let markalarx: array | null
+  let items: MarkalarX[] | null = [];
+  let markalarx: MarkalarX[] | null = [];
 
-  if (profil[0].yetki !== 'admin') {
+if (profil != null) {
+  if (profil[0].yetki !== "admin" && (firma != null || firma != undefined)) {
     const { data: marka_firma } = await supabase
       .from('markalar')
       .select()
@@ -61,118 +85,118 @@ export default async function MarkaYatayKart({
     markalarx = marka_tum
   }
 
-  /*   const { data: marka_firma_id } = await supabase
-    .from('markalar')
-    .select('firma_id') */
-
-  /*   const { data: markaBilgiler } = await supabase
-    .from('markalar')
-    .select('marka')
-
-  let search_parametre = searchParams.name
-
-  const searchFilter = (array) => {
-    return array.filter((el) =>
-      el.marka.toLowerCase().includes(search_parametre)
-    )
-  }
-  const filtered = searchFilter(markaBilgiler) */
-
-  /*   let result = markalarx.map(({ marka }) => marka) */
-
-  var aranan = markalarx.reduce((aranan, thing) => {
-    if (thing.marka.includes(`${searchParams.name}`)) {
-      aranan.push(thing)
-    }
-    return aranan
-  }, [])
-
-  var arananKategori = markalarx.reduce((arananKategori, thing) => {
-    if (thing.status.includes(`${searchParams.kategori}`)) {
-      arananKategori.push(thing)
+  var aranan = markalarx?.reduce((result: any, thing) => {
+    if (thing.marka != null && thing.marka.includes(`${searchParams.name}`)) {
+      result.push(thing);
     }
 
-    return arananKategori
-  }, [])
+    return result;
+  }, []);
 
-  var arananVeKategori = markalarx.reduce((arananVeKategori, thing) => {
+  var arananKategori = markalarx?.reduce((result: any, thing) => {
     if (
-      thing.marka.includes(`${searchParams.name}`) &
+      thing.status != null &&
       thing.status.includes(`${searchParams.kategori}`)
     ) {
-      arananVeKategori.push(thing)
+      result.push(thing);
     }
 
-    return arananVeKategori
-  }, [])
+    return result;
+  }, []);
 
-  let yalnizcaGecerli: string | null
-
-  let durumIptalOlmayan = searchParams.kategori
-
-  if ((durumIptalOlmayan = 'yalnizcaGecerli')) {
-    yalnizcaGecerli = markalarx.reduce((yalnizcaGecerli, thing) => {
-      if (!thing.status.includes('iptal')) {
-        yalnizcaGecerli.push(thing)
+  var arananVeKategori = markalarx?.reduce((result: any, thing) => {
+    if (thing.marka != null && thing.status != null) {
+      if (
+        thing.marka.includes(`${searchParams.name}`) &&
+        thing.status.includes(`${searchParams.kategori}`)
+      ) {
+        result.push(thing);
       }
-      return yalnizcaGecerli
-    }, [])
+    }
+
+    return result;
+  }, []);
+
+  let yalnizcaGecerli: MarkalarX[] = [];
+
+  let durumIptalOlmayan = searchParams.kategori;
+
+  if ((durumIptalOlmayan = "yalnizcaGecerli")) {
+    yalnizcaGecerli = markalarx?.reduce((result: any, thing) => {
+      if (thing.status != null) {
+        if (!thing.status.includes("iptal")) {
+          result.push(thing);
+        }
+      }
+      return result;
+    }, []);
+
+    if (yalnizcaGecerli != null) {
+      var arananYalnizcaGecerli = yalnizcaGecerli.reduce(
+        (result: any, thing) => {
+          if (thing.marka != null) {
+            if (thing.marka.includes(`${searchParams.name}`)) {
+              result.push(thing);
+            }
+          }
+
+          return result;
+        },
+        []
+      );
+    }
   }
 
-  var arananYalnizcaGecerli = yalnizcaGecerli.reduce(
-    (arananYalnizcaGecerli, thing) => {
-      if (thing.marka.includes(`${searchParams.name}`)) {
-        arananYalnizcaGecerli.push(thing)
-      }
-
-      return arananYalnizcaGecerli
-    },
-    []
-  )
-
-  let items: string | null
   if (durum === true) {
-    items = markalarx
-  } else items = aranan
+    items = markalarx;
+  } else items = aranan;
 
   if (durumKategori === true) {
-    items = markalarx
-  } else items = arananKategori
+    items = markalarx;
+  } else items = arananKategori;
 
-  if ((durum === false) & (durumKategori === false)) {
-    items = arananVeKategori
+  if (durum === false && durumKategori === false) {
+    items = arananVeKategori;
   }
 
-  if (searchParams.kategori === 'tumu') {
-    items = markalarx
+  if (searchParams.kategori === "tumu") {
+    items = markalarx;
   }
 
-  let durumTumuVeAranan = searchParams.kategori === 'tumu' && durum === false
+  let durumTumuVeAranan = searchParams.kategori === "tumu" && durum === false;
 
   if (durumTumuVeAranan === true) {
-    items = aranan
+    items = aranan;
   }
 
-  if (searchParams.kategori === 'yalnizcaGecerli') {
-    items = yalnizcaGecerli
+  if (searchParams.kategori === "yalnizcaGecerli") {
+    items = yalnizcaGecerli;
   }
 
   let durumYalnizcaGecerliVeAranan =
-    searchParams.kategori === 'yalnizcaGecerli' && durum === false
+    searchParams.kategori === "yalnizcaGecerli" && durum === false;
 
   if (durumYalnizcaGecerliVeAranan === true) {
-    items = arananYalnizcaGecerli
+    items = arananYalnizcaGecerli;
   }
+}
+
+let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as React.Key | null | undefined
+
+
+
+
+
   return (
     <>
       <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
         <Filter />
         <div className="flex-none object-contain">
           <MarkaList
-            key={items.id}
+            key={itemid}
             items={items}
             bilgiler={items}
-            user={user}
+            userid={user?.id!}
           />
         </div>
       </div>
