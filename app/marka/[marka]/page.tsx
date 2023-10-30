@@ -196,7 +196,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
           key={itemid}
           items={items}
           bilgiler={items}
-          userid={user?.id}
+          userid={user?.id!}
         />
       </div>
     </>
