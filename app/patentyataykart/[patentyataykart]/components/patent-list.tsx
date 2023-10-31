@@ -1,16 +1,26 @@
-import { Database } from '@/app/database.types'
 import PatentCardYatay from './patent-card-yatay'
+import { Database } from '@/app/supabase'
 
-interface ProductListProps {
-  items: Database[]
-  bilgiler: Database[]
-}
 
-const PatentList: React.FC<ProductListProps> = ({
+type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
+
+interface PatentListProps {
+    items: PatentlerX[] | null
+    bilgiler: PatentlerX[]
+    userid: string
+    patentResimler:
+    | {
+        patent_resim_url: string | null;
+        patent_id: string;
+      }[]
+    | null;
+  };
+
+const PatentList: React.FC<PatentListProps> = ({
   items,
   bilgiler,
   patentResimler,
-  user,
+  userid,
 }) => {
   return (
     <div className="space-y-4">
@@ -22,7 +32,7 @@ const PatentList: React.FC<ProductListProps> = ({
             bilgiler={bilgiler[index]}
             patent_id={item.id}
             patentResimler={patentResimler}
-            user={user}
+            userid={userid}
           />
         ))}
       </div>

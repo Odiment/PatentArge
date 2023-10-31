@@ -1,132 +1,130 @@
-import React from 'react'
-import { cookies } from 'next/headers'
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { redirect } from 'next/navigation'
-import { Database } from '../../database.types'
-import PatentList from './components/patent-list'
-import NextUiDataTable from './components/nextui-data-table'
-import Filter from '@/components/filter'
+import React from "react";
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { redirect } from "next/navigation";
+import PatentList from "./components/patent-list";
+import Filter from "@/components/filter";
 
-interface RootPageProps {
+import { Database } from "@/app/supabase";
+
+type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
+
+interface PatentIdPageProps {
   searchParams: {
-    name: string | null
-  }
+    name: string | null;
+    kategori: string | null;
+  };
 }
 
 export default async function PatentKart({ searchParams }: PatentIdPageProps) {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  const supabase = createServerComponentClient<Database>({ cookies });
 
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
-
-  let ad = `${searchParams.name}`
-  let durum = ad === 'undefined' || ad === null
-
-  /*   const { data: secilenPatentler } = await supabase
-    .from('patentler')
-    .select(`patent_title`)
-    .textSearch(`patent_title`, `%${searchParams.name}%`) */
-
-  /*   const { data: patentler } = await supabase
-    .from('patentler')
-    .select(`patent_title`) */
-
-  const { data: profil } = await supabase
-    .from('profiles')
-    .select(`id, firma_ad, yetki`)
-    .eq('id', user.id)
-
-  const { data: firma } = await supabase
-    .from('firma_profil')
-    .select('firma_id')
-    .eq('user_email', user.email)
-
-  /*   {
-    profil[0].yetki === 'admin'
-      ? console.log('yönetici')
-      : console.log('müşteri')
-  } */
-
-  // admin yetkisinde tüm patentlerin görülebilmesi - erişilebilmesi
-  let patentlerx: array | null
-
-  if (profil[0].yetki !== 'admin') {
-    const { data: patent_firma } = await supabase
-      .from('patentler')
-      .select()
-      .eq('firma_id', firma[0].firma_id)
-    patentlerx = patent_firma
-  } else {
-    const { data: patent_tum } = await supabase.from('patentler').select()
-
-    patentlerx = patent_tum
-  }
-
-  /*   const { data: patent_firma_id } = await supabase
-    .from('patentler')
-    .select('firma_id') */
-
-  /*   const { data: patentBilgiler } = await supabase
-    .from('patentler')
-    .select('patent_id') */
-
-  /*   let result = patentlerx.map(({ patent }) => patent) */
-
-  // Arama çubuğundan yazılan anahtar kelimeye göre getitirilecek patentler
-  var aranan = patentlerx.reduce((aranan, thing) => {
-    if (thing.patent_title.includes(`${searchParams.name}`)) {
-      aranan.push(thing)
-    }
-    return aranan
-  }, [])
-
-  // Arama yapılan patentlerin id bilgileri
-  let arananPatentler_id = aranan.map(({ id }) => id)
-
-  // Tüm patentlerin id bilgileri
-  /*  let secilenPatent_id = patentlerx.map(({ id }) => id) */
-
-  const { data: tumPatentResimler } = await supabase
-    .from('patent_resimler')
-    .select('patent_resim_url, patent_id')
-
-  let tumPatentResimlerPatent_id = tumPatentResimler.map(
-    ({ patent_id }) => patent_id
-  )
-
-  var arananPatentResimler = tumPatentResimler.reduce(
-    (arananPatentResimler, thing) => {
-      if (thing.patent_id.includes(`${arananPatentler_id}`)) {
-        arananPatentResimler.push(thing)
-      }
-      return arananPatentResimler
-    },
-    []
-  )
-
-  /*   let patent_resim_url = secilenPatentResimler.map(
-    ({ patent_resim_url }) => patent_resim_url
-  ) */
-
-  /*   const { data: arananPatentResimler } = await supabase
-    .from('patent_resimler')
-    .select('patent_resim_url, id')
-    .eq('patent_id', arananPatentler_id) */
+  } = await supabase.auth.getUser();
 
   if (!session) {
-    redirect('/')
+    redirect("/");
   }
 
-  /* const searchFilter = (array) => {
-    return array.filter((el) => el.firma_ad.toLowerCase().includes('aras den'))
+  let ad = `${searchParams.name}`;
+  let durum = ad === "undefined" || ad === null;
+
+  let kategori = `${searchParams.kategori}`;
+  let durumKategori = kategori === "undefined" || kategori === null;
+
+  type Profil =
+    | { id: string | null; firma_ad: string | null; yetki: string | null }[]
+    | null;
+
+  let profil: Profil | undefined;
+
+  type Firma = { firma_id: string }[] | null;
+  let firma: Firma | undefined;
+
+  if (user != null || user != undefined) {
+    const { data: profiltek } = await supabase
+      .from("profiles")
+      .select(`id, firma_ad, yetki`)
+      .eq("id", user.id);
+
+    profil = profiltek;
+
+    const useremail: string = user.email || "";
+
+    const { data: firmatek } = await supabase
+      .from("firma_profil")
+      .select("firma_id")
+      .eq("user_email", useremail);
+
+    firma = firmatek;
   }
 
-  const filtered = searchFilter(patent_firma) */
+  let patentlerx: PatentlerX[] | null = [];
+  let patentResimlerx:
+    | {
+        patent_resim_url: string | null;
+        patent_id: string;
+      }[]
+    | null = [];
+  // admin yetkisinde tüm patentlerin görülebilmesi - erişilebilmesi
+
+  if (profil != null) {
+    if (profil[0].yetki !== "admin" && (firma != null || firma != undefined)) {
+      const { data: patent_firma } = await supabase
+        .from("patentler")
+        .select()
+        .eq("firma_id", firma[0].firma_id);
+      patentlerx = patent_firma;
+    } else {
+      const { data: patent_tum } = await supabase.from("patentler").select();
+
+      patentlerx = patent_tum;
+    }
+
+    // Arama çubuğundan yazılan anahtar kelimeye göre getitirilecek patentler
+    var aranan = patentlerx?.reduce((result: any, thing) => {
+      if (
+        thing.patent_title != null &&
+        thing.patent_title.includes(`${searchParams.name}`)
+      ) {
+        result.push(thing);
+      }
+      return result;
+    }, []);
+
+    // Arama yapılan patentlerin id bilgileri
+    let arananPatentler_id = aranan.map(({ id }: any) => id);
+
+    // Tüm patentlerin id bilgileri
+    /*  let secilenPatent_id = patentlerx.map(({ id }) => id) */
+
+    const { data: tumPatentResimler } = await supabase
+      .from("patent_resimler")
+      .select("patent_resim_url, patent_id");
+
+    patentResimlerx = tumPatentResimler;
+
+    if (tumPatentResimler != null) {
+      let tumPatentResimlerPatent_id = tumPatentResimler.map(
+        ({ patent_id }) => patent_id
+      );
+
+      var arananPatentResimler = tumPatentResimler.reduce(
+        (result: any, thing) => {
+          if (thing.patent_id.includes(`${arananPatentler_id}`)) {
+            result.push(thing);
+          }
+          return result;
+        },
+        []
+      );
+    }
+  }
 
   return (
     <>
@@ -136,11 +134,11 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
           <PatentList
             items={durum ? patentlerx : aranan}
             bilgiler={durum ? patentlerx : aranan}
-            patentResimler={durum ? tumPatentResimler : arananPatentResimler}
-            user={user}
+            patentResimler={durum ? patentResimlerx : arananPatentResimler}
+            userid={user?.id!}
           />
         </div>
       </div>
     </>
-  )
+  );
 }
