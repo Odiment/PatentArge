@@ -62,7 +62,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
 
     firma = firmatek;
   }
-  
+
   let patentlerx: PatentlerX[] | null = [];
   let patentResimlerx:
     | {
@@ -105,7 +105,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
       .from("patent_resimler")
       .select("patent_resim_url, patent_id");
 
-      patentResimlerx = tumPatentResimler
+    patentResimlerx = tumPatentResimler;
 
     if (tumPatentResimler != null) {
       let tumPatentResimlerPatent_id = tumPatentResimler.map(
@@ -126,8 +126,9 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
 
   return (
     <>
-      <div className="flex-none object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
+      <div key={1} className="flex-none object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
         <PatentList
+          key={user?.id}
           items={durum ? patentlerx : aranan}
           bilgiler={durum ? patentlerx : aranan}
           patentResimler={durum ? patentResimlerx : arananPatentResimler}

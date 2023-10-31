@@ -1,7 +1,6 @@
 import PatentCardYatay from './patent-card-yatay'
 import { Database } from '@/app/supabase'
 
-
 type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
 
 interface PatentListProps {
