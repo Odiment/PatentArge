@@ -3,13 +3,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { DeleteDocumentIcon } from '@/icons/DeleteDocumentIcon'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { EditIcon } from '@/icons/EditIcon'
+import { EyeIcon } from '@/icons/EyeIcon'
+/* import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { GiPlainCircle } from 'react-icons/gi'
 import { Chip, Avatar } from '@nextui-org/react'
 import { NotificationIcon } from '@/icons/NotificationIcon'
 import { CheckIcon } from '@/icons/CheckIcon'
 import { EyeIcon } from '@/icons/EyeIcon'
-import { EditIcon } from '@/icons/EditIcon'
+import { EditIcon } from '@/icons/EditIcon' */
 import {
   /*   Button,
   Link, */
@@ -35,40 +37,63 @@ import {
   Image,
 } from '@nextui-org/react'
 
-import { Database } from '@/app/database.types'
+import { Database } from '@/app/supabase'
 
+type PatentlerX = Database['public']['Tables']['patentler']['Row']
 interface PatentCard {
-  data: Database[]
-  bilgiler: Database[]
+  data: PatentlerX
+  bilgiler: PatentlerX
+  patentResimler: {
+    patent_resim_url: string | null;
+    patent_id: string;
+}[] | null
+  kullanici: string
+  patent_id: string | null
 }
 
-type Patentler = Database['public']['Tables']['patentler']['Row']
+
 
 const ImageItem: React.FC<PatentCard> = ({
   data,
   bilgiler,
-  patent_id,
   patentResimler,
   kullanici,
+  patent_id,
 }) => {
+
+   
+
+    let patentResimler_idx: string[] | null
+    let patentResimler_resim_urlx: (string | null)[]
+    let patent_resimler_urlx: (string | null)[] = []
+
+if (patentResimler != null) {
+
   let patentResimler_id = patentResimler.map(({ patent_id }) => patent_id)
+
+  patentResimler_idx = patentResimler_id
+
   let patentResimler_resim_url = patentResimler.map(
     ({ patent_resim_url }) => patent_resim_url
   )
+  patentResimler_resim_urlx = patentResimler_resim_url
+
 
   var ilgiliPatentResimler = patentResimler.reduce(
-    (ilgiliPatentResimler, thing) => {
+    (result: any, thing) => {
       if (thing.patent_id.includes(`${patent_id}`)) {
-        ilgiliPatentResimler.push(thing)
+        result.push(thing)
       }
-      return ilgiliPatentResimler
+      return result
     },
     []
   )
 
   let patent_resimler_url = ilgiliPatentResimler.map(
-    ({ patent_resim_url }) => patent_resim_url
+    ({ patent_resim_url }: any) => patent_resim_url
   )
+  patent_resimler_urlx = patent_resimler_url
+}
 
   const supabase = createClientComponentClient<Database>()
   const [currentPatentIndex, setCurrentPatentIndex] = useState(0)
@@ -90,15 +115,15 @@ const ImageItem: React.FC<PatentCard> = ({
   let sari = patentdurumu === 'basvuru'
   let kirmizi = patentdurumu === 'iptal'
 
-  const [patent_url, setPatentUrl] = useState<Patentler['patent_figure_url']>(
-    patent_resimler_url[currentPatentIndex]
+  const [patent_url, setPatentUrl] = useState<PatentlerX['patent_figure_url']>(
+    patent_resimler_urlx[currentPatentIndex]
   )
-  const [url, setUrl] = useState<Patentler['patent_figure_url']>(
-    patent_resimler_url[currentPatentIndex]
+  const [url, setUrl] = useState<PatentlerX['patent_figure_url']>(
+    patent_resimler_urlx[currentPatentIndex]
   )
   const [patent_figure_url, setPatentFigureUrl] = useState<
-    Patentler['patent_figure_url']
-  >(patent_resimler_url[currentPatentIndex])
+    PatentlerX['patent_figure_url']
+  >(patent_resimler_urlx[currentPatentIndex])
 
   useEffect(() => {
     async function downloadPatentFigure(path: string) {
@@ -126,7 +151,7 @@ const ImageItem: React.FC<PatentCard> = ({
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`full_name, username, avatar_url, yetki, pozisyon`)
-        .eq('id', kullanici?.id)
+        .eq('id', kullanici)
         .single()
 
       if (error && status !== 406) {
@@ -160,7 +185,7 @@ const ImageItem: React.FC<PatentCard> = ({
 
       if (error) throw error
       window.location.reload()
-    } catch (error) {
+    } catch (error: any) {
       alert(error.message)
     }
   }
@@ -172,20 +197,20 @@ const ImageItem: React.FC<PatentCard> = ({
   const prevPatentSlide = () => {
     const isFirstSlide = currentPatentIndex === 0
     const newIndex = isFirstSlide
-      ? patent_resimler_url.length - 1
+      ? patent_resimler_urlx.length - 1
       : currentPatentIndex - 1
     setCurrentPatentIndex(newIndex)
-    setPatentUrl(patent_resimler_url[currentPatentIndex])
+    setPatentUrl(patent_resimler_urlx[currentPatentIndex])
   }
 
   const nextPatentSlide = () => {
-    const isLastSlide = currentPatentIndex === patent_resimler_url.length - 1
+    const isLastSlide = currentPatentIndex === patent_resimler_urlx.length - 1
     const newIndex = isLastSlide ? 0 : currentPatentIndex + 1
     setCurrentPatentIndex(newIndex)
-    setPatentUrl(patent_resimler_url[currentPatentIndex])
+    setPatentUrl(patent_resimler_urlx[currentPatentIndex])
   }
 
-  if ((url === null) | (url === undefined)) {
+  if ((url === null) || (url === undefined)) {
     resim_url =
       'https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/patentFigure/format.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXRlbnRGaWd1cmUvZm9ybWF0LnBuZyIsImlhdCI6MTY5NzM3Mjc3OSwiZXhwIjoxNzkxOTgwNzc5fQ.2s1NRy0rUx9cDryhuovBt4Uuy6BFQPrVCfzXDfp5BpI&t=2023-10-15T12%3A26%3A19.101Z'
   } else {
@@ -204,7 +229,14 @@ const ImageItem: React.FC<PatentCard> = ({
   return (
     <>
       <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 items-center justify-center">
-        <div className="relative col-span-6 md:col-span-4">
+        <div className="relative col-span-6 md:col-span-4" >
+        <Card
+          shadow="sm"
+          key={data?.id}
+          isPressable
+          onPress={onOpen}
+          className="border-1 border-primary bg-primary/5 hover:bg-primary/20"
+        >
           <Image
             isZoomed
             shadow="sm"
@@ -212,9 +244,10 @@ const ImageItem: React.FC<PatentCard> = ({
             alt="Album cover"
             className="object-cover "
             height={170}            
-            src={resim_url}
+            src={resim_url!}
             width={170}
           />
+          </Card>
         </div>
 
         <div className="flex flex-col col-span-6 md:col-span-8">
@@ -260,7 +293,7 @@ const ImageItem: React.FC<PatentCard> = ({
                   height="100%"
                   alt="patent_figure"
                   className="relative opacity-0 shadow-black/5 data-[loaded=true]:opacity-100 shadow-none transition-transform-opacity motion-reduce:transition-none !duration-300 rounded-large z-0 w-full h-full object-cover"
-                  src={resim_url}
+                  src={resim_url!}
                 />
                 <div>
                   <p className="font-bold text-lg text-sky-400">
@@ -290,29 +323,28 @@ const ImageItem: React.FC<PatentCard> = ({
                 </div>
               </ModalBody>
               <ModalFooter>
+              <Button asChild className="bg-primary hover:bg-primary/50">
+                  <Link href={`/markadetay/${bilgiler?.referans_no}`}>
+                    <EyeIcon className={cn(iconClasses, 'text-white')} />
+                    Marka Detay
+                  </Link>
+                </Button>
                 {yetki === 'admin' && (
                   <>
                     <Button
-                      href={`/ptcard/${bilgiler.referans_no}`}
-                      as={Link}
-                      color="primary"
-                      showAnchorIcon
-                      variant="solid"
+                      asChild
+                      className="bg-yellow-700 hover:bg-yellow-400"
                     >
-                      Düzenle
+                      <Link href={`/tmcard/${bilgiler?.referans_no}`}>
+                        <EditIcon className={cn(iconClasses, 'text-white')} />
+                        Düzenle
+                      </Link>
                     </Button>
-                    <Button
-                      onClick={deletePatent}
-                      color="danger"
-                      variant="bordered"
-                      className="font-bold"
-                      startContent={
-                        <DeleteDocumentIcon
-                          className={cn(iconClasses, 'text-danger')}
-                        />
-                      }
-                    >
-                      Patent Kartını Sil
+                    <Button onClick={deletePatent} variant="destructive">
+                      <DeleteDocumentIcon
+                        className={cn(iconClasses, 'text-white')}
+                      />
+                      Markayı Sil
                     </Button>
                   </>
                 )}

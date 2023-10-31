@@ -32,6 +32,7 @@ import { SearchIcon } from '../icons/SearchIcon'
 import { VerticalDotsIcon } from '../icons/VerticalDotsIcon'
 import { columns, statusOptions } from '../utils/data'
 import { capitalize } from '../utils/utils'
+import { Database } from '@/app/supabase'
 
 const statusColorMap: Record<string, ChipProps['color']> = {
   tescil: 'success',
@@ -48,8 +49,18 @@ const INITIAL_VISIBLE_COLUMNS = [
   'actions',
 ]
 
-export default function NextUiDataTable({ veri, user }) {
-  const supabase = createClientComponentClient<Database>()
+type MarkalarX = Database['public']['Tables']['markalar']['Row']
+
+interface MarkaTableProps {
+  veri: MarkalarX[]
+  userid: string 
+}
+
+export default function NextUiDataTable({ veri, userid }: MarkaTableProps) {
+  
+    type User = typeof veri[0];
+
+    const supabase = createClientComponentClient<Database>()
   const [fullname, setFullname] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
@@ -59,7 +70,7 @@ export default function NextUiDataTable({ veri, user }) {
 
   const router = useRouter()
 
-  const onNavigate = (url: string, pro: boolean, user: string) => {
+  const onNavigate = (url: string) => {
     return router.push(url)
   }
 
@@ -70,7 +81,7 @@ export default function NextUiDataTable({ veri, user }) {
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`full_name, username, avatar_url, yetki, pozisyon`)
-        .eq('id', user?.id)
+        .eq('id', userid)
         .single()
 
       if (error && status !== 406) {
@@ -89,11 +100,11 @@ export default function NextUiDataTable({ veri, user }) {
     } finally {
       setLoading(false)
     }
-  }, [user, supabase])
+  }, [userid, supabase])
 
   useEffect(() => {
     getProfile()
-  }, [user, getProfile])
+  }, [userid, getProfile])
 
   const [filterValue, setFilterValue] = React.useState('')
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]))
@@ -101,7 +112,7 @@ export default function NextUiDataTable({ veri, user }) {
     new Set(INITIAL_VISIBLE_COLUMNS)
   )
   const [statusFilter, setStatusFilter] = React.useState<Selection>('all')
-  const [rowsPerPage, setRowsPerPage] = React.useState('100')
+  const [rowsPerPage, setRowsPerPage] = React.useState(100)
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: 'age',
     direction: 'ascending',
@@ -124,7 +135,7 @@ export default function NextUiDataTable({ veri, user }) {
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
-        user.marka.toLowerCase().includes(filterValue.toLowerCase())
+        user?.marka!.toLowerCase().includes(filterValue.toLowerCase())
       )
     }
     if (
@@ -132,7 +143,7 @@ export default function NextUiDataTable({ veri, user }) {
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+        Array.from(statusFilter).includes(user?.status!)
       )
     }
 
@@ -149,17 +160,19 @@ export default function NextUiDataTable({ veri, user }) {
   }, [page, filteredItems, rowsPerPage])
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number
-      const second = b[sortDescriptor.column as keyof User] as number
+    return [...items].sort((a: any, b: any) => {
+      const first = a[sortDescriptor.column as keyof any] as number
+      const second = b[sortDescriptor.column as keyof any] as number
       const cmp = first < second ? -1 : first > second ? 1 : 0
 
       return sortDescriptor.direction === 'descending' ? -cmp : cmp
     })
   }, [sortDescriptor, items])
 
+  
+
   const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey]
+    const cellValue = user[columnKey as keyof User]
 
     switch (columnKey) {
       case 'marka':
@@ -167,7 +180,7 @@ export default function NextUiDataTable({ veri, user }) {
           <User
             avatarProps={{
               radius: 'sm',
-              src: user.tp_avatar,
+              src: user.tp_avatar!,
               size: 'lg',
             }}
             description={user.basvuru_no}
@@ -180,7 +193,7 @@ export default function NextUiDataTable({ veri, user }) {
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[user.status]}
+            color={statusColorMap[user?.status!]}
             size="lg"
             variant="flat"
           >
@@ -193,7 +206,7 @@ export default function NextUiDataTable({ veri, user }) {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
+                  <VerticalDotsIcon size={24} width={24} height={24} className="text-default-300" />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
@@ -325,7 +338,7 @@ export default function NextUiDataTable({ veri, user }) {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Toplam {veri.length} adet marka
+            Toplam {veri?.length} adet marka
           </span>
         </div>
       </div>
