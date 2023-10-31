@@ -2,15 +2,12 @@ import React from "react";
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
-/* import { Database } from '../../database.types' */
 import MarkaList from "./components/marka-list";
-/* import { SearchInput } from '@/components/search-input'*/
 import Filter from "@/components/filter";
 
 import { Database } from "@/app/supabase";
 
 type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
-/*  type Profil = Database['public']['Tables']['profiles']['Row'] */
 
 interface MarkaIdPageProps {
   searchParams: {
@@ -18,8 +15,6 @@ interface MarkaIdPageProps {
     kategori: string | null;
   };
 }
-
-/* type user = Object | null; */
 
 export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -50,8 +45,6 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
 
   type Firma = { firma_id: string }[] | null;
   let firma: Firma | undefined;
-
-  /* const userid: string = user?.id || '' */
 
   if (user != null || user != undefined) {
     const { data: profiltek } = await supabase

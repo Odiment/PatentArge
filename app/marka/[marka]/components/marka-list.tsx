@@ -1,4 +1,3 @@
-/* import { Database } from '@/app/database.types' */
 import MarkaCard from './marka-card'
 import { Database } from '@/app/supabase'
 

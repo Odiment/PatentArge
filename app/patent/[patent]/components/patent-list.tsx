@@ -1,19 +1,30 @@
-import { Database } from '@/app/database.types'
 import PatentCard from './patent-card'
+import { Database } from '@/app/supabase'
 
-interface ProductListProps {
-  items: Database[]
-  bilgiler: Database[]
-}
 
-const PatentList: React.FC<ProductListProps> = ({
+type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
+
+interface PatentListProps {
+    items: PatentlerX[] | null
+    bilgiler: PatentlerX[] | null
+    userid: string
+    patentResimler:
+    | {
+        patent_resim_url: string | null;
+        patent_id: string;
+      }[]
+    | null;
+  };
+
+const PatentList: React.FC<PatentListProps> = ({
   items,
   bilgiler,
   patentResimler,
-  user,
+  userid,
 }) => {
   return (
     <div className="space-y-4">
+        {bilgiler != null && 
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {items?.map((item, index) => (
           <>
@@ -23,11 +34,12 @@ const PatentList: React.FC<ProductListProps> = ({
               bilgiler={bilgiler[index]}
               patent_id={item.id}
               patentResimler={patentResimler}
-              user={user}
+              userid={userid}
             />
           </>
         ))}
       </div>
+      }
     </div>
   )
 }
