@@ -31,16 +31,17 @@ import {
   Image,
 } from '@nextui-org/react'
 
-import { Database } from '@/app/database.types'
+import { Database } from '@/app/supabase'
 
-interface PatentCard {
-  data: Database[]
-  bilgiler: Database[]
-}
+type PatentlerX = Database['public']['Tables']['markalar']['Row']
 
-type Patentler = Database['public']['Tables']['patentler']['Row']
+interface PatentCardProps {
+    data: PatentlerX | null
+    bilgiler: PatentlerX | null
+    userid: string
+  }
 
-const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
+const PatentDetayCard: React.FC<PatentCardProps> = ({ data, bilgiler, userid }) => {
   const supabase = createClientComponentClient<Database>()
   const [fullname, setFullname] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
@@ -49,14 +50,14 @@ const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
   const [pozisyon, setPozisyon] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const [url, setUrl] = useState<Markalar['logo_url']>(bilgiler.logo_url)
+  const [url, setUrl] = useState<PatentlerX['logo_url']>(bilgiler?.logo_url!)
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const iconClasses =
     'text-xl text-default-500 pointer-events-none flex-shrink-0'
 
-  let markadurumu = `${bilgiler.status}`
+  let markadurumu = `${bilgiler?.status}`
 
   let yesil = markadurumu === 'tescil'
   let sari = markadurumu === 'basvuru'
@@ -88,7 +89,7 @@ const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`full_name, username, avatar_url, yetki, pozisyon`)
-        .eq('id', user?.id)
+        .eq('id', userid)
         .single()
 
       if (error && status !== 406) {
@@ -107,22 +108,22 @@ const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
     } finally {
       setLoading(false)
     }
-  }, [user, supabase])
+  }, [userid, supabase])
 
   useEffect(() => {
     getProfile()
-  }, [user, getProfile])
+  }, [userid, getProfile])
 
   async function deleteMarka() {
     try {
       const { error } = await supabase
         .from('markalar')
         .delete()
-        .eq('id', bilgiler.id)
+        .eq('id', bilgiler?.id!)
 
       if (error) throw error
       window.location.reload()
-    } catch (error) {
+    } catch (error: any) {
       alert(error.message)
     }
   }
@@ -130,17 +131,17 @@ const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
   let resim_url: string | null
 
   if (url === null) {
-    resim_url = bilgiler.tp_logo_url
+    resim_url = bilgiler?.tp_logo_url!
   } else {
     resim_url = url
   }
 
   return (
     <>
-      <div key={data.id} className="aspect-square rounded-lg ">
+      <div key={data?.id} className="aspect-square rounded-lg ">
         <Card
           shadow="sm"
-          key={data.id}
+          key={data?.id}
           isPressable
           onPress={onOpen}
           className="border-1 border-primary bg-primary/5 hover:bg-primary/20"
@@ -154,11 +155,11 @@ const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
               height="100%"
               alt="MarkaLogo"
               className="relative opacity-0 data-[loaded=true]:opacity-100 shadow-none transition-transform-opacity motion-reduce:transition-none !duration-300 rounded-large z-0 w-full h-full object-cover"
-              src={resim_url}
+              src={resim_url!}
             />
           </CardBody>
           <CardFooter className="flex text-small justify-between  h-20 ">
-            <b className="text-left">{data.marka}</b>
+            <b className="text-left">{data?.marka}</b>
             <b
               className={classNames('text-xl', 'font-bold', 'flex', {
                 'text-emerald-500': yesil,
@@ -179,14 +180,14 @@ const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-2xl justify-center items-center border-b border-primary text-primary font-bold">
-                {data.marka}
+                {data?.marka}
               </ModalHeader>
               <ModalBody>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Image
                       className="aspect-square object-cover rounded-lg transition-all duration-300 hover:scale-105"
-                      src={resim_url}
+                      src={resim_url!}
                       alt="MarkaLogo"
                       width={200}
                       height={200}
@@ -200,7 +201,7 @@ const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
                       })}
                     >
                       <GiPlainCircle size={200} className="h-5 w-5" />
-                      {bilgiler.status}
+                      {bilgiler?.status}
                     </p>
                   </div>
                   <div>
@@ -208,34 +209,34 @@ const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
                       {data.marka}
                     </p> */}
                     <p className="font-semibold text-2xl">
-                      {bilgiler.basvuru_no}
+                      {bilgiler?.basvuru_no}
                     </p>
                     <p>Başvuru Tarihi:</p>
                     <p className="text-xl text-primary/80 font-bold">
-                      {bilgiler.basvuru_tarihi}
+                      {bilgiler?.basvuru_tarihi}
                     </p>
                     {/* <p className="font-semibold text-lg">{yetki}</p> */}
                     <p>Sınıflar:</p>
                     <p className="text-xl text-primary/80">
-                      {bilgiler.class_no}
+                      {bilgiler?.class_no}
                     </p>
 
                     <p className="text-sm text-primary/80">
-                      Ref: {bilgiler.referans_no}
+                      Ref: {bilgiler?.referans_no}
                     </p>
                     <p className="text-sm text-primary/80 text-sky-400">
-                      {bilgiler.firma_ad}
+                      {bilgiler?.firma_ad}
                     </p>
                   </div>
                 </div>
                 <div>
-                  <p>{bilgiler.durum_aciklamasi}</p>
+                  <p>{bilgiler?.durum_aciklamasi}</p>
                 </div>
               </ModalBody>
               <ModalFooter>
                 <div>
                   <Button asChild className="bg-primary hover:bg-primary/50">
-                    <Link href={`/markadetay/${bilgiler.referans_no}`}>
+                    <Link href={`/markadetay/${bilgiler?.referans_no}`}>
                       <EditIcon className={cn(iconClasses, 'text-white')} />
                       Marka Detay
                     </Link>
@@ -246,7 +247,7 @@ const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
                         asChild
                         className="bg-yellow-700 hover:bg-yellow-400"
                       >
-                        <Link href={`/tmcard/${bilgiler.referans_no}`}>
+                        <Link href={`/tmcard/${bilgiler?.referans_no}`}>
                           <EditIcon className={cn(iconClasses, 'text-white')} />
                           Düzenle
                         </Link>
@@ -268,4 +269,4 @@ const PatentDetayCard: React.FC<PatentCard> = ({ data, bilgiler, user }) => {
     </>
   )
 }
-export default MarkaDetayCard
+export default PatentDetayCard
