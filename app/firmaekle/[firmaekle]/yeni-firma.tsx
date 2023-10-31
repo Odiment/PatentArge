@@ -1,10 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
-import { redirect } from 'next/navigation'
+/* import { useCallback, useEffect, useState } from 'react'
+import { redirect } from 'next/navigation' */
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
-  Session,
+  /* Session, */
   createClientComponentClient,
 } from '@supabase/auth-helpers-nextjs'
 import { useForm } from 'react-hook-form'
@@ -23,19 +23,14 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-/* import MarkaCardTek from '@/components/marka-card-tek'
-import MarkaForm from '@/components/marka-form' */
 
-/* import { Database } from '@/database.types' */
-/* import IdeaMarkaLogo from './ideamarka-logo' */
-
-import {
+/* import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select' */
 
 import { Database } from '@/app/database.types'
 
