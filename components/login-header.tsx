@@ -1,21 +1,21 @@
-import React from 'react'
-import { cookies } from 'next/headers'
-import Link from 'next/link'
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import MarkaGorunum from './MarkaGorunum'
-import PatentGorunum from './PatentGorunum'
+import React from "react";
+import { cookies } from "next/headers";
+import Link from "next/link";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import MarkaGorunum from "./MarkaGorunum";
+import PatentGorunum from "./PatentGorunum";
 
 /* import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button" */
 
 /* import LogoutButton from './LogoutButton' */
-import { UserMenu } from './UserMenu'
+import { UserMenu } from "./UserMenu";
 
 export default async function LoginHeader() {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createServerComponentClient({ cookies });
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   return (
     <nav className="flex justify-center border-0 border-b-foreground/10 h-16">
@@ -26,8 +26,8 @@ export default async function LoginHeader() {
               {/*               Hey!, {user.email} */}
               {/*  <LogoutButton full_name={full_name} /> */}
               {/* <LogoutButton user={user} /> */}
-              <MarkaGorunum user={user} />
-              <PatentGorunum user={user} />
+              <MarkaGorunum />
+              <PatentGorunum />
               <UserMenu user={user} />
             </div>
           ) : (
@@ -44,5 +44,5 @@ export default async function LoginHeader() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
