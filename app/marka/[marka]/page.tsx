@@ -52,6 +52,11 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   } = await supabase.auth.getUser();  */
   /* const {session, user, supabase} = await getSession() */
 
+  const createServerSupabaseClient = cache(() => {
+    const cookieStore = cookies();
+    return createServerComponentClient<Database>({ cookies: () => cookieStore });
+  });
+
   const session = await getSession();
   const user = await getUser();
 
