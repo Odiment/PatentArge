@@ -1,12 +1,12 @@
-import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+/* import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"; */
 
 /* import { Database } from "../database.types" */
 import AccountForm from "./account-form";
 
-import { cache } from "react";
+/* import { cache } from "react";
 
-import { Database } from "@/app/supabase";
+import { Database } from "@/app/supabase"; */
 
 import { redirect } from "next/navigation";
 
