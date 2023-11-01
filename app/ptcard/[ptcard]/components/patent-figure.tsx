@@ -9,35 +9,41 @@ import { Wand2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
-import { Database } from '../../../database.types'
+/* import { Database } from '../../../database.types'
 
 type Patentler = Database['public']['Tables']['patentler']['Row']
-
+ */
 /* type Profiles = Database["public"]["Tables"]["profiles"]["Row"] */
 
 /* const url = "ebdd1d12-fcff-46c2-bbb7-2408dc29d7f7-0.9834786322138155.jpg" */
 // const url = "ebdd1d12-fcff-46c2-bbb7-2408dc29d7f7-0.9834786322138154.png"
 
-export default function PatentFigure({
+import { Database } from "@/app/supabase";
+
+type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
+
+interface PatentFigureProps {
+    uid: string[]
+    patent_url: string | null
+    size: number
+    txt: string
+    onUpload: any
+}
+
+const PatentFigure: React.FC<PatentFigureProps> = ({
   uid,
   patent_url,
   size,
   txt,
   onUpload,
-}: {
-  uid: string
-  patent_url: Patentler['patent_figure_url']
-  size: number
-  txt: string
-  onUpload: (patent_figure_url: string) => void
-}) {
+}) => {
   const supabase = createClientComponentClient<Database>()
   const [patent_figure_url, setPatentFigureUrl] =
-    useState<Patentler['patent_figure_url']>(patent_url)
-  const [url, setUrl] = useState<Patentler['patent_figure_url']>(patent_url)
+    useState<PatentlerX['patent_figure_url']>(patent_url)
+  const [url, setUrl] = useState<PatentlerX['patent_figure_url']>(patent_url)
   const [uploading, setUploading] = useState(false)
   const [images, setImages] = useState([])
-  const [LogoFilePath, setLogoFilePath] = useState([])
+  const [LogoFilePath, setLogoFilePath] = useState<string>()
 
   /*   console.log(`prop - url ${url}`) */
 
@@ -94,17 +100,21 @@ export default function PatentFigure({
 
   const hiddenFileInput = useRef(null)
 
-  const handleClick = (event) => {
-    hiddenFileInput.current.click()
+  const handleClick: any = () => {
+    (hiddenFileInput as any).current.click()
   }
 
   let resim_url: string | null
 
-  if (patent_url !== undefined && patent_url.includes('http')) {
+  
+
+  if (patent_url !== (undefined || null)) {
+    if (patent_url.includes('http')) {
     resim_url = patent_url
   } else {
     resim_url = patent_figure_url
   }
+}
 
   /*  resim_url = patent_figure_url */
 
@@ -124,7 +134,7 @@ export default function PatentFigure({
           width={size}
           height={size}
           className="aspect-square object-cover rounded-lg transition-all duration-300 hover:scale-105"
-          src={resim_url}
+          src={resim_url!}
           alt="patent_figure_url"
         />
       </div>
@@ -153,3 +163,5 @@ export default function PatentFigure({
     </div>
   )
 }
+
+export default PatentFigure

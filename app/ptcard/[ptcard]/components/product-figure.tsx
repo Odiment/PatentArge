@@ -10,39 +10,39 @@ import { Wand2, ArrowLeftSquare, ArrowRightSquare } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
-import { Database } from '../../../database.types'
-
-type Patentler = Database['public']['Tables']['patentler']['Row']
-
-/* type Profiles = Database["public"]["Tables"]["profiles"]["Row"] */
-
 /* const url = "ebdd1d12-fcff-46c2-bbb7-2408dc29d7f7-0.9834786322138155.jpg" */
 // const url = "ebdd1d12-fcff-46c2-bbb7-2408dc29d7f7-0.9834786322138154.png"
 
-export default function ProductFigure({
+import { Database } from "@/app/supabase";
+
+type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
+
+interface ProductFigureProps {
+    uid: string[]
+    product_url: string | null
+    product_remote_url: string | null
+    size: number
+    txt: string
+    onUpload: any
+}
+
+const ProductFigure: React.FC<ProductFigureProps> = ({
   uid,
   product_url,
   product_remote_url,
   size,
   txt,
   onUpload,
-}: {
-  uid: string
-  product_url: Patentler['product_figure_url']
-  product_remote_url: Patentler['product_remote_url']
-  size: number
-  txt: string
-  onUpload: (url: string) => void
-}) {
+}) => {
   const supabase = createClientComponentClient<Database>()
 
   const [product_figure_url, setProductFigureUrl] =
-    useState<Patentler['product_figure_url']>(product_url)
-  const [url, setUrl] = useState<Patentler['product_figure_url']>(product_url)
+    useState<PatentlerX['product_figure_url']>(product_url)
+  const [url, setUrl] = useState<PatentlerX['product_figure_url']>(product_url)
 
   const [uploading, setUploading] = useState(false)
   const [images, setImages] = useState([])
-  const [LogoFilePath, setLogoFilePath] = useState([])
+  const [LogoFilePath, setLogoFilePath] = useState<string>()
 
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -94,8 +94,8 @@ export default function ProductFigure({
 
   const hiddenFileInput = useRef(null)
 
-  const handleClick = (event) => {
-    hiddenFileInput.current.click()
+  const handleClick: any = () => {
+    (hiddenFileInput as any).current.click()
   }
 
   let resim_url: string | null
@@ -139,7 +139,7 @@ export default function ProductFigure({
         width={size}
         height={size}
         className="aspect-square object-cover rounded-lg transition-all duration-300"
-        src={resim_url}
+        src={resim_url!}
         alt="product_figure_url"
       />
 
@@ -177,3 +177,5 @@ export default function ProductFigure({
     </div>
   )
 }
+
+export default ProductFigure

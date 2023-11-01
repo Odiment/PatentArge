@@ -1,48 +1,75 @@
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import { Database } from '@/database.types'
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from "next/headers";
+/* import { redirect } from 'next/navigation' */
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import PatentCardTek from './components/patent-card-tek'
-import PatentForm from './components/patent-form'
+import PatentCardTek from "./components/patent-card-tek";
+import PatentForm from "./components/patent-form";
+
+import { Database } from "@/app/supabase";
+
+type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
 
 interface PatentCardYazProps {
   params: {
-    referans_no: string
-  }
+    referans_no: string;
+    ptcard: string;
+  };
 }
 
 const PatentCardYaz = async ({ params }: PatentCardYazProps) => {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  const supabase = createServerComponentClient<Database>({ cookies });
 
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   const { data: secilenPatent } = await supabase
-    .from('patentler')
+    .from("patentler")
     .select()
-    .eq('referans_no', `${params.ptcard}`)
+    .eq("referans_no", `${params.ptcard}`);
 
   // Patent resim seçimi
-  const { data: secilenPatentResimler } = await supabase
-    .from('patent_resimler')
-    .select('patent_resim_url, id')
-    .eq('patent_id', `${secilenPatent[0].id}`)
 
-  let patent_resim_url = secilenPatentResimler.map(
-    ({ patent_resim_url }) => patent_resim_url
-  )
+  let secilenPatentResimlerx: {
+    patent_resim_url: string | null;
+    id: string;
+  }[] = [];
 
+  if (secilenPatent != null) {
+    let secilenPatent_id = secilenPatent.map(({ id }) => id);
+    const { data: secilenPatentResimler } = await supabase
+      .from("patent_resimler")
+      .select("patent_resim_url, id")
+      .eq("patent_id", secilenPatent_id);
+    if (secilenPatentResimler != null) {
+      let patent_resim_url = secilenPatentResimler.map(
+        ({ patent_resim_url }) => patent_resim_url
+      );
+      secilenPatentResimlerx = secilenPatentResimler;
+    }
+  }
   // Ürün resim seçimi
-  const { data: secilenProductResimler } = await supabase
-    .from('product_resimler')
-    .select('product_resim_url, product_remote_url, id')
-    .eq('patent_id', `${secilenPatent[0].id}`)
 
-  let product_resim_url = secilenProductResimler.map(
-    ({ product_resim_url }) => product_resim_url
-  )
+  let secilenProductResimlerx: {
+    product_resim_url: string | null;
+    product_remote_url: string | null;
+    id: string;
+  }[] = [];
+
+  if (secilenPatent != (null || undefined)) {
+    let secilenPatent_id = secilenPatent.map(({ id }) => id);
+    const { data: secilenProductResimler } = await supabase
+      .from("product_resimler")
+      .select("product_resim_url, product_remote_url, id")
+      .eq("patent_id", secilenPatent_id);
+
+    if (secilenProductResimler != null) {
+      let product_resim_url = secilenProductResimler.map(
+        ({ product_resim_url }) => product_resim_url
+      );
+      secilenProductResimlerx = secilenProductResimler;
+    }
+  }
 
   /*   console.log("secilenPatentResimler")
   console.log(secilenPatentResimler)
@@ -55,16 +82,16 @@ const PatentCardYaz = async ({ params }: PatentCardYazProps) => {
         <h1>Patent Bilgileri Düzenleme/Güncelleme Ekranı</h1>
       </div>
       <PatentCardTek
-        veri={secilenPatent}
-        patent_resimler={secilenPatentResimler}
-        product_resimler={secilenProductResimler}
+        veri={secilenPatent!}
+        patent_resimler={secilenPatentResimlerx}
+        product_resimler={secilenProductResimlerx}
       />
 
       <div className="container py-10 mx-auto">
         <PatentForm session={session} secilenPatent={secilenPatent} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PatentCardYaz
+export default PatentCardYaz;
