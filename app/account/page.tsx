@@ -1,21 +1,24 @@
 import { cookies } from "next/headers"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
-import { Database } from "../database.types"
+/* import { Database } from "../database.types" */
 import AccountForm from "./account-form"
+
+import { redirect } from 'next/navigation'
+
 
 export const getSession = async () => {
     const cookieStore = cookies()
     const supabase = createServerComponentClient({ cookies: () => cookieStore })
-   const {
+/*    const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await supabase.auth.getUser(); */
 
       const {
         data: { session },
       } = await supabase.auth.getSession()
 
-      return {session, user, supabase}
+      return {session}
 }
 
 export default async function Account() {
@@ -27,7 +30,11 @@ export default async function Account() {
     data: { session },
   } = await supabase.auth.getSession() */
 
-  const {session, user, supabase} = await getSession()
+  const {session} = await getSession()
+
+  if (!session) {
+    redirect('/')
+  }
 
   return (
     <>
