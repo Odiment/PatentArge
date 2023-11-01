@@ -1,5 +1,5 @@
 /* import ThemeSwitcher from "@/components/ThemeSwitcher"; */
-export const dynamic = 'auto'
+export const dynamic = 'force dynamic'
 export const dynamicParams = true
 export const revalidate = false
 export const fetchCache = 'auto'
