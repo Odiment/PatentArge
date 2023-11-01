@@ -1,4 +1,5 @@
 /* import ThemeSwitcher from "@/components/ThemeSwitcher"; */
+export const dynamic = 'force-dynamic'
 import { Button } from '@nextui-org/react'
 import { LandingHero } from '@/components/landing-hero'
 import { LandingContent } from '@/components/landing-content'
