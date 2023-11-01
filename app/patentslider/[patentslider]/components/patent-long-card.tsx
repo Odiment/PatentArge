@@ -195,7 +195,7 @@ if (productRemoteResimler != null) {
   >(product_resimler_urlx[currentProductIndex]);
 
   const [product_remote_url, setProductRemoteUrl] = useState<
-    PatentlerX["product_remote_figure_url"]
+    PatentlerX["product_figure_url"]
   >(product_remote_resimler_urlx[currentProductIndex]);
 
   const [product_remote_figure_url, setProductRemoteFigureUrl] = useState<

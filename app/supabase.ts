@@ -206,7 +206,7 @@ export interface Database {
           patent_figure_url: string | null
           patent_title: string | null
           product_figure_url: string | null
-          product_remote_figure_url: string | null
+          /* product_remote_figure_url: string | null */
           referans_no: string | null
           status: string | null
         }
@@ -226,7 +226,7 @@ export interface Database {
           patent_figure_url?: string | null
           patent_title?: string | null
           product_figure_url?: string | null
-          product_remote_figure_url: string | null
+          /* product_remote_figure_url: string | null */
           referans_no?: string | null
           status?: string | null
         }
@@ -246,7 +246,7 @@ export interface Database {
           patent_figure_url?: string | null
           patent_title?: string | null
           product_figure_url?: string | null
-          product_remote_figure_url: string | null
+          /* product_remote_figure_url: string | null */
           referans_no?: string | null
           status?: string | null
         }

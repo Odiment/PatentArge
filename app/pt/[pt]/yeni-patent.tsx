@@ -23,8 +23,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
-import { Database } from '../database.types'
-
 import {
   Select,
   SelectContent,
@@ -32,6 +30,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+
+import { Database } from "@/app/supabase";
+
+type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
+
+interface YeniPatentProps {
+    firmabilgi: {
+        id: string;
+        firma: string | null;
+        firma_ad: string | null;
+        firma_unvan: string;
+    }[] | null
+  }
 
 const FormSchema = z.object({
   patent_title: z.string().min(2, {
@@ -45,13 +56,13 @@ const FormSchema = z.object({
   }),
 })
 
-export default function YeniPatent({ firmabilgi }) {
+export default function YeniPatent({ firmabilgi }: YeniPatentProps) {
   /*   console.log('firmabilgi')
   console.log(firmabilgi) */
 
-  let firmalar = firmabilgi.map(({ firma_unvan }) => firma_unvan)
-  console.log('firmalar')
-  console.log(firmalar)
+
+/*   console.log('firmalar')
+  console.log(firmalar) */
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -59,44 +70,53 @@ export default function YeniPatent({ firmabilgi }) {
 
   const supabase = createClientComponentClient<Database>()
 
-  const [basvuruNo, setBasvuruNo] = useState<string | null>(null)
+/*   const [basvuruNo, setBasvuruNo] = useState<string | null>(null) */
   const [patent_title, setPatent_title] = useState<string | null>(null)
-  const [patentler, setPatentler] = useState<string | null>(null)
-  const [buton, setButon] = useState<string | null>(null)
+  /* const [patentler, setPatentler] = useState<string | null>(null) */
+  /* const [buton, setButon] = useState<string | null>(null) */
   const [deger, setDeger] = useState<string | null>(null)
   const [referans, setReferans] = useState<string | null>(null)
-  const [firma_ad, setFirma_ad] = useState<string | null>(null)
+const [firma_ad, setFirma_ad] = useState<string | null>(null)
   const [firma_id, setFirma_id] = useState<string | null>(null)
 
   const [loading, setLoading] = useState(true)
-  const [patent_figure_url, setPatentFigureUrl] = useState<string | null>(null)
+ /*  const [patent_figure_url, setPatentFigureUrl] = useState<string | null>(null) */
   const [uid, setUid] = useState<string | null>(null)
 
   let firma: string | null
+  let firmalarx: string[]
+  let secilenFirmax: any
+
+  if(firmabilgi != null) {
+  let firmalar = firmabilgi.map(({ firma_unvan }) => firma_unvan)
+  firmalarx = firmalar
+}
 
   async function onSubmitYeniPatent(veri: z.infer<typeof FormSchema>) {
     /*     console.log('veri.firma')
     console.log(veri.firma) */
-
-    var secilenFirma = firmabilgi.reduce((secilenFirma, thing) => {
+    if(firmabilgi != null) {
+    var secilenFirma = firmabilgi.reduce((result: any, thing) => {
       if (thing.firma_unvan.includes(`${veri.firma_unvan}`)) {
-        secilenFirma.push(thing)
+        result.push(thing)
       }
-      return secilenFirma
+      return result
     }, [])
+    secilenFirmax = secilenFirma
+}
 
-    console.log('secilenFirma.id')
+/*     console.log('secilenFirma.id')
     console.log(secilenFirma[0].id)
 
     console.log('secilenFirma.firma_unvan')
-    console.log(secilenFirma[0].firma_unvan)
+    console.log(secilenFirma[0].firma_unvan) */
 
     const frontId = `${veri.patent_title}-${Math.random()}`
     setDeger(frontId)
     setPatent_title(veri.patent_title)
     setReferans(veri.referans)
     setFirma_ad(secilenFirma[0].firma_ad)
-    setFirma_ad(veri.firma_ad)
+    /* setFirma_ad(veri.firma_ad) */
     setFirma_id(secilenFirma[0].id)
 
     try {
@@ -124,7 +144,7 @@ export default function YeniPatent({ firmabilgi }) {
           </pre>
         ),
       })
-    } catch (error) {
+    } catch (error: any) {
       alert(error.message)
     }
   }
@@ -136,7 +156,7 @@ export default function YeniPatent({ firmabilgi }) {
       let { data, error, status } = await supabase
         .from('patentler')
         .select(`patent_title, deger, id, referans_no, patent_figure_url`)
-        .eq('deger', deger)
+        .eq('deger', deger!)
         .single()
 
       if (error && status !== 406) {
@@ -145,10 +165,10 @@ export default function YeniPatent({ firmabilgi }) {
 
       if (data) {
         setUid(data.id)
-        setPatentler(data)
+        /* setPatentler(data) */
       }
     } catch (error) {
-      alert('Error loading patent data!', error)
+      alert('Error loading patent data!')
     } finally {
       setLoading(false)
     }
@@ -207,7 +227,7 @@ export default function YeniPatent({ firmabilgi }) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="italic">
-                      {firmalar.map((firma_unvan, index) => (
+                      {firmalarx.map((firma_unvan, index) => (
                         <SelectItem key={index} value={firma_unvan}>
                           {firma_unvan}
                         </SelectItem>
