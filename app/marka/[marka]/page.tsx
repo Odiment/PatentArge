@@ -8,10 +8,7 @@ import Filter from "@/components/filter";
 import { cache } from "react";
 import { Database } from "@/app/supabase";
 
-export const createServerSupabaseClient = cache(() => {
-  const cookieStore = cookies();
-  return createServerComponentClient<Database>({ cookies: () => cookieStore });
-});
+/* ß */
 type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
 
 interface MarkaIdPageProps {
@@ -25,7 +22,6 @@ import { getSession } from "@/app/auth/getSession/getSession";
 import { getUser } from "@/app/auth/getUser/getUser";
 
 export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
-    const supabase = createServerSupabaseClient();
   /* const supabase = createServerComponentClient<Database>({ cookies }); */
   /* const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore }); */
@@ -41,8 +37,17 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
 
 
 
+ 
+
+  const createServerSupabaseClient = cache(() => {
+    const cookieStore = cookies();
+    return createServerComponentClient<Database>({ cookies: () => cookieStore });
+  });
+
   const session = await getSession();
   const user = await getUser();
+
+  const supabase = createServerSupabaseClient();
 
   
 
