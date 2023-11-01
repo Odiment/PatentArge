@@ -15,7 +15,8 @@ import TopNavigation from "@/components/topnavigation";
 import SideNavigation from "@/components/sidenavigation";
 import Nav from "@/components/Nav";
 
-import { Database } from "./database.types";
+import { getSession } from "@/app/auth/getSession/getSession";
+import { getUser } from "@/app/auth/getUser/getUser";
 
 /* export const metadata: Metadata = {
   title: {
@@ -54,18 +55,21 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   /* const supabase = createServerComponentClient<Database>({ cookies }) */
-   const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  /*  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore }); */
 
-  const {
+/*   const {
     data: { session },
   } = await supabase.auth.getSession();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser(); 
+  } = await supabase.auth.getUser();  */
 
   /* const {session, user, supabase} = await getSession() */
+
+  const session = await getSession();
+  const user = await getUser();
 
   return (
     <>

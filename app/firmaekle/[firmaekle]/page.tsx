@@ -2,10 +2,17 @@ import React from 'react'
 import { cookies } from 'next/headers'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { redirect } from 'next/navigation'
-import { Database } from '../../database.types'
 import YeniFirma from './yeni-firma'
 
 import { getSession } from "@/app/auth/getSession/getSession"
+
+import { cache } from "react";
+import { Database } from "@/app/supabase";
+
+export const createServerSupabaseClient = cache(() => {
+  const cookieStore = cookies();
+  return createServerComponentClient<Database>({ cookies: () => cookieStore });
+});
 
 
 /* export const getSession = async () => {
@@ -24,8 +31,8 @@ import { getSession } from "@/app/auth/getSession/getSession"
 
 export default async function YeniFirmaOlustur() {
   /* const supabase = createServerComponentClient<Database>({ cookies }) */
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  /* const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore }); */
 
   /* const {
     data: { session },
@@ -38,6 +45,8 @@ export default async function YeniFirmaOlustur() {
   /* const {session, user, supabase} = await getSession() */
 
   const session = await getSession()
+
+  const supabase = createServerSupabaseClient();
 
 
   const { data: firma_bilgi } = await supabase

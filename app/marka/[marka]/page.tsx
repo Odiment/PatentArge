@@ -5,8 +5,13 @@ import { redirect } from "next/navigation";
 import MarkaList from "./components/marka-list";
 import Filter from "@/components/filter";
 
+import { cache } from "react";
 import { Database } from "@/app/supabase";
 
+export const createServerSupabaseClient = cache(() => {
+  const cookieStore = cookies();
+  return createServerComponentClient<Database>({ cookies: () => cookieStore });
+});
 type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
 
 interface MarkaIdPageProps {
@@ -30,16 +35,15 @@ interface MarkaIdPageProps {
       return {session, user, supabase}
 } */
 
-import { getSession } from "@/app/auth/getSession/getSession"
-import { getUser } from "@/app/auth/getUser/getUser"
-
+import { getSession } from "@/app/auth/getSession/getSession";
+import { getUser } from "@/app/auth/getUser/getUser";
 
 export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   /* const supabase = createServerComponentClient<Database>({ cookies }); */
-   const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  /* const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore }); */
 
- /*  const {
+  /*  const {
     data: { session },
   } = await supabase.auth.getSession();
 
@@ -48,8 +52,10 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   } = await supabase.auth.getUser();  */
   /* const {session, user, supabase} = await getSession() */
 
-  const session = await getSession()
-  const user = await getUser()
+  const session = await getSession();
+  const user = await getUser();
+
+  const supabase = createServerSupabaseClient();
 
 
   if (!session) {
@@ -201,8 +207,10 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     }
   }
 
-  let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as React.Key | null | undefined
-
+  let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as
+    | React.Key
+    | null
+    | undefined;
 
   return (
     <>
