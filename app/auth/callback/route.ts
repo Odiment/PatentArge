@@ -24,19 +24,19 @@ import { cookies } from "next/headers"
 import { NextRequest, NextResponse } from "next/server"
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 
-export const getCode = async () => {
+/* export const getCode = async () => {
     const cookieStore = cookies()
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
     
     return supabase
-}
+} */
 
 export async function GET(req: NextRequest) {
   /* const supabase = createRouteHandlerClient({ cookies }) */
-  /* const cookieStore = cookies();
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore }); */
+  const cookieStore = cookies();
+  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
-  const supabase = await getCode() 
+  /* const supabase = await getCode()  */
   
   const { searchParams } = new URL(req.url)
   const code = searchParams.get("code")
