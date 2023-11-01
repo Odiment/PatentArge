@@ -1,14 +1,14 @@
 'use client'
 
-import { ChangeEventHandler, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Search } from 'lucide-react'
+/* import { Search } from 'lucide-react' */
 import qs from 'query-string'
 
-import { useDebounce } from '@/hooks/use-debounce'
+/* import { useDebounce } from '@/hooks/use-debounce'
 import { Input } from '@/components/ui/input'
 import { BiSearch } from 'react-icons/bi'
-import { Button } from '@nextui-org/react'
+import { Button } from '@nextui-org/react' */
 
 import { Tabs, Tab } from '@nextui-org/react'
 

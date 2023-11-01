@@ -21,18 +21,34 @@ type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
     | null;
 } */
 
+export const getSession = async () => {
+    const cookieStore = cookies()
+    const supabase = createServerComponentClient({ cookies: () => cookieStore })
+   const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      return {session, user, supabase}
+}
+
 export default async function YeniPatentOlustur() {
   /* const supabase = createServerComponentClient<Database>({ cookies }); */
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  /* const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore }); */
 
-  const {
+  /* const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await supabase.auth.getSession(); */
 
-  const {
+  /* const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser(); */
+
+  const {session, user, supabase} = await getSession()
 
   if (!session) {
     redirect("/");

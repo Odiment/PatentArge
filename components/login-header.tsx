@@ -11,14 +11,22 @@ import { buttonVariants } from "@/components/ui/button" */
 /* import LogoutButton from './LogoutButton' */
 import { UserMenu } from "./UserMenu";
 
+export const getUser = async () => {
+    const cookieStore = cookies()
+    const supabase = createServerComponentClient({ cookies: () => cookieStore })
+    const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      return user
+}
+
 export default async function LoginHeader() {
   /* const supabase = createServerComponentClient({ cookies }); */
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  /* const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore }); */
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+const user = await getUser()
 
   return (
     <nav className="flex justify-center border-0 border-b-foreground/10 h-16">

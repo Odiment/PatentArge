@@ -15,14 +15,26 @@ interface MarkaCardYazProps {
   };
 }
 
+export const getSession = async () => {
+    const cookieStore = cookies()
+    const supabase = createServerComponentClient({ cookies: () => cookieStore })
+   /*  const {
+        data: { user },
+      } = await supabase.auth.getUser(); */
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      return {session, supabase}
+}
+
 const MarkaCardYaz = async ({ params }: MarkaCardYazProps) => {
   /* const supabase = createServerComponentClient<Database>({ cookies }) */
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  /* const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore }); */
+  
+  const {session, supabase} = await getSession()
 
   const { data: secilenMarka } = await supabase
     .from('markalar')
