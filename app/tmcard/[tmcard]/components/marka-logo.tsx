@@ -9,8 +9,6 @@ import { Wand2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
-import { Database } from '../../../database.types'
-
 //https://iaxdtlsmlrqyczqwvzhk.supabase.co/storage/v1/object/public/markalar/ebdd1d12-fcff-46c2-bbb7-2408dc29d7f7-0.9834786322138155.jpg
 
 /* const CDNURL =
@@ -19,30 +17,34 @@ import { Database } from '../../../database.types'
 /* const CDNURL =
   "https://iaxdtlsmlrqyczqwvzhk.supabase.co/storage/v1/object/public/markaLogo/" */
 
-type Markalar = Database['public']['Tables']['markalar']['Row']
-
 /* type Profiles = Database["public"]["Tables"]["profiles"]["Row"] */
 
 /* const url = "ebdd1d12-fcff-46c2-bbb7-2408dc29d7f7-0.9834786322138155.jpg" */
 // const url = "ebdd1d12-fcff-46c2-bbb7-2408dc29d7f7-0.9834786322138154.png"
 
-export default function MarkaLogo({
+import { Database } from "@/app/supabase";
+
+type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
+
+interface MarkaLogoProps {
+    uid: string[]
+    url: string | null
+    tp_logo_url: string | null
+    size: number
+    onUpload: any
+}
+
+const MarkaLogo: React.FC<MarkaLogoProps> = ({
   uid,
   url,
   tp_logo_url,
   size,
   onUpload,
-}: {
-  uid: string
-  url: Markalar['logo_url']
-  tp_logo_url: string
-  size: number
-  onUpload: (url: string) => void
-}) {
+}) => {
   const supabase = createClientComponentClient<Database>()
   //const [logoUrl, setLogoUrl] = useState<Markalar["logo_url"]>("")
 
-  const [markaLogoUrl, setMarkaLogoUrl] = useState<Markalar['logo_url']>(url)
+  const [markaLogoUrl, setMarkaLogoUrl] = useState<MarkalarX['logo_url']>(url)
 
   const [uploading, setUploading] = useState(false)
 
@@ -50,7 +52,7 @@ export default function MarkaLogo({
   const [urlGlob, setUrlGlob] = useState<Profiles["avatar_url"]>(url) */
 
   const [images, setImages] = useState([])
-  const [LogoFilePath, setLogoFilePath] = useState([])
+  const [LogoFilePath, setLogoFilePath] = useState<string>()
 
   console.log(`prop - url ${url}`)
 
@@ -119,14 +121,24 @@ export default function MarkaLogo({
 
   const hiddenFileInput = useRef(null)
 
-  const handleClick = (event) => {
-    hiddenFileInput.current.click()
+  const handleClick = () => {
+    (hiddenFileInput as any).current.click()
   }
+
+/*   let resim_url: string | null  
+
+  if (markaLogoUrl !== (undefined || null)) {
+    if (markaLogoUrl.includes('blob' || 'data')) {
+    resim_url = markaLogoUrl
+  } else {
+    resim_url = tp_logo_url
+  }
+}   */
 
   return (
     <div className="flex flex-col">
       <div>
-        {markaLogoUrl !== null && markaLogoUrl.includes('blob' | 'data') ? (
+        {markaLogoUrl !== null && markaLogoUrl.includes('blob' || 'data') ? (
           <Image
             width={size}
             height={size}
@@ -148,7 +160,7 @@ export default function MarkaLogo({
             width={size}
             height={size}
             className="aspect-square object-cover rounded-lg transition-all duration-300 hover:scale-105"
-            src={tp_logo_url}
+            src={tp_logo_url!}
             /*             src="https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/avatars/aec65205-9440-482f-a539-9293fb7bb8a0-0.5921580138461082.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzL2FlYzY1MjA1LTk0NDAtNDgyZi1hNTM5LTkyOTNmYjdiYjhhMC0wLjU5MjE1ODAxMzg0NjEwODIucG5nIiwiaWF0IjoxNjk1NzU5Nzc4LCJleHAiOjE3MjcyOTU3Nzh9.rAgx9t6ExaXl_Y-M9peTr3IHA1TD9gHf9wsGd-PWsbw&t=2023-09-26T20%3A22%3A55.712Z"
             alt="MarkaLogo" */
             /* fill */
@@ -183,3 +195,5 @@ export default function MarkaLogo({
     </div>
   )
 }
+
+export default MarkaLogo

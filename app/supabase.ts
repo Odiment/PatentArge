@@ -96,7 +96,7 @@ export interface Database {
           firma_ad: string | null
           firma_id: string
           firma_unvan: string
-          id: string | null
+          id: string
           logo_url: string | null
           marka: string | null
           marka_durumu: string | null
@@ -117,7 +117,7 @@ export interface Database {
           firma_ad?: string | null
           firma_id: string
           firma_unvan: string
-          id?: string | null
+          id?: string
           logo_url?: string | null
           marka?: string | null
           marka_durumu?: string | null
@@ -138,7 +138,7 @@ export interface Database {
           firma_ad?: string | null
           firma_id?: string
           firma_unvan?: string
-          id?: string | null
+          id?: string
           logo_url?: string | null
           marka?: string | null
           marka_durumu?: string | null

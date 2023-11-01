@@ -1,15 +1,18 @@
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import { Database } from '@/database.types'
+/* mport { redirect } from 'next/navigation' */
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 
 import MarkaCardTek from './components/marka-card-tek'
 import MarkaForm from './components/marka-form'
+import { Database } from "@/app/supabase";
+
+type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
 
 interface MarkaCardYazProps {
   params: {
-    referans_no: string
-  }
+    referans_no: string;
+    tmcard: string;
+  };
 }
 
 const MarkaCardYaz = async ({ params }: MarkaCardYazProps) => {
@@ -26,10 +29,10 @@ const MarkaCardYaz = async ({ params }: MarkaCardYazProps) => {
 
   return (
     <div className="flex flex-col content-center mx-auto pt-10 gap-y-8  px-4 sm:px-6 lg:px-8">
-      <MarkaCardTek data={secilenMarka} />
+      <MarkaCardTek data={secilenMarka!} />
 
       <div className="container py-10 mx-auto">
-        <MarkaForm session={session} secilenMarka={secilenMarka} />
+        <MarkaForm session={session} secilenMarka={secilenMarka!} />
       </div>
     </div>
   )

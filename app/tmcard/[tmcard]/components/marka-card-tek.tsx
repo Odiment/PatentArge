@@ -1,18 +1,17 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import classNames from 'classnames'
-import Image from 'next/image'
+/* import Image from 'next/image'
 import Link from 'next/link'
-import spaceman from '@/assets/spaceman-1.png'
-import { Database } from '@/database.types'
+import spaceman from '@/assets/spaceman-1.png' */
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Wand2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+/* import { Label } from '@/components/ui/label' */
 
 import MarkaLogo from './marka-logo'
 
@@ -46,8 +45,12 @@ const FormSchema = z.object({
   }),
 })
 
+import { Database } from "@/app/supabase";
+
+type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
+
 interface MarkaCardTek {
-  data: Database[]
+  data: MarkalarX[],
 }
 
 const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
@@ -57,16 +60,18 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
   console.log('data[0].logo_url')
   console.log(data[0].logo_url) */
 
-  const [logo_url, setLogoUrl] = useState<string | null>(
-    data && data[0].logo_url
+  const [logo_url, setLogoUrl] = useState<string>(
+    data && data[0]?.logo_url!
   )
-  const [tp_logo_url, setTPLogoUrl] = useState<string | null>(
-    data[0].tp_logo_url
+  const [tp_logo_url, setTPLogoUrl] = useState<string>(
+    data[0]?.tp_logo_url!
   )
-  const [tp_avatar, setTPAvatar] = useState<string | null>(data[0].tp_avatar)
+  const [tp_avatar, setTPAvatar] = useState<string>(data[0]?.tp_avatar!)
   /*  const [name, setName] = useState<string | null>(data[0].name) */
 
   const [loading, setLoading] = useState(true)
+
+  let data_id = data.map(({ id }) => id)
 
   let markadurumu = `${data[0].status}`
 
@@ -86,7 +91,8 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
           <code className="text-white">
-            {JSON.stringify(data.logo_url, null, 2)}
+          BAŞARIYLA GERÇEKLEŞTİ!!!
+            {/* {JSON.stringify(data.logo_url, null, 2)} */}
           </code>
         </pre>
       ),
@@ -94,15 +100,44 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
   }
 
   async function updateMarkaLogo({
-    name,
-    deger,
     logo_url,
+  }: {
+    logo_url: string | null
+  }) {
+    try {
+      setLoading(true)
+
+      let { error } = await supabase
+        .from('markalar')
+        .update({
+          logo_url: logo_url,
+        })
+        .eq('id', data[0]?.id!)
+      if (error) throw error
+      /*  alert('Marka Logo güncellendi!') */
+      toast({
+        title: 'You submitted the following values:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
+            <code className="text-white">
+            MARKA ŞEKLİ BAŞARIYLA GÜNCELLENDİ
+             {/*  {JSON.stringify(data.[logo_url], null, 2)} */}
+            </code>
+          </pre>
+        ),
+      })
+    } catch (error) {
+      alert(error)
+    } finally {
+      setLoading(false)
+    }
+    window.location.reload()
+  }
+
+  async function updateTPMarkaLogo({
     tp_logo_url,
     tp_avatar,
   }: {
-    name: string | null
-    deger: string | null
-    logo_url: string | null
     tp_logo_url: string | null
     tp_avatar: string | null
   }) {
@@ -112,13 +147,10 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
       let { error } = await supabase
         .from('markalar')
         .update({
-          name: name,
-          deger: deger,
-          logo_url: logo_url,
           tp_logo_url: tp_logo_url,
           tp_avatar: tp_avatar,
         })
-        .eq('id', data[0].id)
+        .eq('id', data[0]?.id!)
       if (error) throw error
       /*  alert('Marka Logo güncellendi!') */
       toast({
@@ -126,7 +158,8 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
-              {JSON.stringify(data.logo_url, null, 2)}
+            MARKA ŞEKLİ BAŞARIYLA GÜNCELLENDİ
+             {/*  {JSON.stringify(data.[logo_url], null, 2)} */}
             </code>
           </pre>
         ),
@@ -144,11 +177,11 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
       const { error } = await supabase
         .from('markalar')
         .delete()
-        .eq('id', data[0].id)
+        .eq('id', data[0]?.id!)
 
       if (error) throw error
       window.location.reload()
-    } catch (error) {
+    } catch (error: any) {
       alert(error.message)
     }
   }
@@ -171,15 +204,13 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
                   className="aspect-square object-cover rounded-lg transition-all duration-300 hover:scale-105"
                 /> */}
                 <MarkaLogo
-                  uid={data[0].id}
+                  uid={data_id}
                   url={logo_url}
                   tp_logo_url={tp_logo_url}
                   size={400}
-                  onUpload={(url) => {
+                  onUpload={(url: any) => {
                     setLogoUrl(url)
                     updateMarkaLogo({
-                      name,
-                      deger,
                       logo_url,
                     })
                   }}
@@ -190,7 +221,7 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
               <>
                 <Form {...form}>
                   <form
-                    onSubmit={form.handleSubmit(updateMarkaLogo)}
+                    onSubmit={form.handleSubmit(updateTPMarkaLogo)}
                     className="w-full space-y-6"
                   >
                     <FormField
@@ -264,14 +295,14 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
           </Card>
           {/* </Link> */}
         </div>
-        <div clasName="flex justify-center items-center">
+        <div className="flex justify-center items-center">
           {/* <p>logo_url: {logo_url}</p> */}
           {/* <p>name: {name}</p> */}
           <Button
             className="bg-yellow-500 hover:bg-yellow-200 font-bold"
             size="lg"
             /* disabled={loading} */
-            onClick={() => updateMarkaLogo({ name, logo_url })}
+            onClick={() => updateMarkaLogo({ logo_url })}
           >
             Güncelle
             <Wand2 className="w-4 h-4 ml-2" />
@@ -280,7 +311,7 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
             className="bg-red-500 font-bold hover:bg-red-300"
             size="lg"
             /* disabled={loading} */
-            onClick={() => deleteMarka({ name, logo_url })}
+            onClick={() => deleteMarka()}
           >
             Markayı Sil
             <Wand2 className="w-4 h-4 ml-2" />

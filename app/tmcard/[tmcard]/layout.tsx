@@ -2,7 +2,11 @@
 
 import { Toaster } from '@/components/ui/toaster'
 
-export default function MarkaCardYazLayout({ children }) {
+interface RootLayoutProps {
+    children: React.ReactNode
+  }
+
+export default function MarkaCardYazLayout({ children }: RootLayoutProps) {
   return (
     <section>
       <div className="container py-4 rounded">

@@ -83,7 +83,7 @@ const [firma_ad, setFirma_ad] = useState<string | null>(null)
  /*  const [patent_figure_url, setPatentFigureUrl] = useState<string | null>(null) */
   const [uid, setUid] = useState<string | null>(null)
 
-  let firma: string | null
+ /*  let firma: string | null */
   let firmalarx: string[]
   let secilenFirmax: any
 

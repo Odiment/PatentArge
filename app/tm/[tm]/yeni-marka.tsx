@@ -1,17 +1,17 @@
-'use client'
+"use client";
 
-import { useCallback, useEffect, useState } from 'react'
-import { redirect } from 'next/navigation'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useCallback, useEffect, useState } from "react";
+import { redirect } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Session,
   createClientComponentClient,
-} from '@supabase/auth-helpers-nextjs'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+} from "@supabase/auth-helpers-nextjs";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { Button } from '@/components/ui/button'
-import { Link } from '@nextui-org/react'
+import { Button } from "@/components/ui/button";
+import { Link } from "@nextui-org/react";
 import {
   Form,
   FormControl,
@@ -20,14 +20,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { toast } from '@/components/ui/use-toast'
-import MarkaCardTek from '@/components/marka-card-tek'
-import MarkaForm from '@/components/marka-form'
-
-import { Database } from '../database.types'
-import IdeaMarkaLogo from './ideamarka-logo'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
+/* import MarkaCardTek from '@/components/marka-card-tek'
+import MarkaForm from '@/components/marka-form' */
 
 import {
   Select,
@@ -35,66 +32,88 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select";
+
+import { Database } from "@/app/supabase";
+
+type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
+
+interface YeniMarkaProps {
+  firmabilgi:
+    | {
+        id: string;
+        firma: string | null;
+        firma_ad: string | null;
+        firma_unvan: string;
+      }[]
+    | null;
+}
 
 const FormSchema = z.object({
   marka: z.string().min(2, {
-    message: 'Marka en az 2 karakterden oluşmalıdır.',
+    message: "Marka en az 2 karakterden oluşmalıdır.",
   }),
 
   firma_unvan: z.string({
-    required_error: 'Lütfen bir firma seçiniz.',
+    required_error: "Lütfen bir firma seçiniz.",
   }),
 
   referans: z.string().min(3, {
-    message: 'Referans en az 3 karakterden oluşmalıdır.',
+    message: "Referans en az 3 karakterden oluşmalıdır.",
   }),
-})
+});
 
-export default function YeniMarka({ firmabilgi }) {
-  let firmalar = firmabilgi.map(({ firma_unvan }) => firma_unvan)
-
+export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  })
+  });
 
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClientComponentClient<Database>();
 
-  const [basvuruNo, setBasvuruNo] = useState<string | null>(null)
-  const [marka, setMarka] = useState<string | null>(null)
-  const [markalar, setMarkalar] = useState<string | null>(null)
-  const [buton, setButon] = useState<string | null>(null)
-  const [markaId, setMarkaId] = useState<string | null>(null)
-  const [deger, setDeger] = useState<string | null>(null)
-  const [referans, setReferans] = useState<string | null>(null)
-  const [firma_ad, setFirma_ad] = useState<string | null>(null)
-  const [firma_id, setFirma_id] = useState<string | null>(null)
+  const [basvuruNo, setBasvuruNo] = useState<string | null>(null);
+  const [marka, setMarka] = useState<string | null>(null);
+  const [markalar, setMarkalar] = useState<string | null>(null);
+  const [buton, setButon] = useState<string | null>(null);
+  const [markaId, setMarkaId] = useState<string | null>(null);
+  const [deger, setDeger] = useState<string | null>(null);
+  const [referans, setReferans] = useState<string | null>(null);
+  const [firma_ad, setFirma_ad] = useState<string | null>(null);
+  const [firma_id, setFirma_id] = useState<string | null>(null);
 
-  const [loading, setLoading] = useState(true)
-  const [logo_url, setLogoUrl] = useState<string | null>(null)
-  const [uid, setUid] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true);
+  const [logo_url, setLogoUrl] = useState<string | null>(null);
+  const [uid, setUid] = useState<string | null>(null);
 
-  let firma: string | null
+  let firmalarx: string[];
+  let secilenFirmax: any;
+
+  if (firmabilgi != null) {
+    let firmalar = firmabilgi.map(({ firma_unvan }) => firma_unvan);
+    firmalarx = firmalar;
+  }
 
   async function onSubmitYeniMarka(veri: z.infer<typeof FormSchema>) {
-    var secilenFirma = firmabilgi.reduce((secilenFirma, thing) => {
-      if (thing.firma_unvan.includes(`${veri.firma_unvan}`)) {
-        secilenFirma.push(thing)
-      }
-      return secilenFirma
-    }, [])
+    if (firmabilgi != null) {
+      var secilenFirma = firmabilgi.reduce((result: any, thing) => {
+        if (thing.firma_unvan.includes(`${veri.firma_unvan}`)) {
+            result.push(thing);
+        }
+        return result;
+      }, []);
+      secilenFirmax = secilenFirma
+    }
 
-    const frontId = `${veri.marka}-${Math.random()}`
-    setDeger(frontId)
-    setMarka(veri.marka.toLowerCase())
-    setReferans(veri.referans)
-    setFirma_ad(secilenFirma[0].firma_ad)
-    setFirma_ad(veri.firma_ad)
-    setFirma_id(secilenFirma[0].id)
+    const frontId = `${veri.marka}-${Math.random()}`;
+    setDeger(frontId);
+    setMarka(veri.marka.toLowerCase());
+    setReferans(veri.referans);
+    setFirma_ad(secilenFirma[0].firma_ad);
+    /* setFirma_ad(veri.firma_ad); */
+    setFirma_id(secilenFirma[0].id);
 
     try {
       const { data, error, status } = await supabase
-        .from('markalar')
+        .from("markalar")
         .insert({
           marka: veri.marka,
           deger: frontId,
@@ -102,13 +121,13 @@ export default function YeniMarka({ firmabilgi }) {
           firma_id: secilenFirma[0].id,
           firma_unvan: secilenFirma[0].firma_unvan,
         })
-        .single()
+        .single();
 
-      if (error) throw error
+      if (error) throw error;
 
       toast({
-        variant: 'affirmative',
-        title: 'Veri tabanında marka için bir id oluşturuldu',
+        variant: "affirmative",
+        title: "Veri tabanında marka için bir id oluşturuldu",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
@@ -116,40 +135,40 @@ export default function YeniMarka({ firmabilgi }) {
             </code>
           </pre>
         ),
-      })
-    } catch (error) {
-      alert(error.message)
+      });
+    } catch (error: any) {
+      alert(error.message);
     }
   }
 
   const getirYeniMarka = useCallback(async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       let { data, error, status } = await supabase
-        .from('markalar')
+        .from("markalar")
         .select(`marka, deger, id, referans_no, logo_url`)
-        .eq('deger', deger)
-        .single()
+        .eq("deger", deger!)
+        .single();
 
       if (error && status !== 406) {
-        throw error
+        throw error;
       }
 
       if (data) {
-        setUid(data.id)
-        setMarkalar(data)
+        setUid(data.id);
+        /* setMarkalar(data); */
       }
     } catch (error) {
-      alert('Error loading marka data!', error)
+      alert(`Error loading marka data!", ${error}`);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [deger, supabase])
+  }, [deger, supabase]);
 
   useEffect(() => {
-    getirYeniMarka()
-  }, [marka, getirYeniMarka])
+    getirYeniMarka();
+  }, [marka, getirYeniMarka]);
 
   return (
     <section className="md:ml-14 lg:ml-20 container grid items-center gap-6 pb-8 pt-6 md:py-10">
@@ -162,8 +181,7 @@ export default function YeniMarka({ firmabilgi }) {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmitYeniMarka)}
-            className="w-2/3 space-y-6 bg-background"
-          >
+            className="w-2/3 space-y-6 bg-background">
             <FormField
               control={form.control}
               name="marka"
@@ -192,20 +210,18 @@ export default function YeniMarka({ firmabilgi }) {
                   <FormLabel>Firma Adını Seçiniz</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                    defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="text-primary italic">
                         <SelectValue placeholder="Kayıtlı firmalar arasından seçim yapınız..." />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="italic">
-                      {firmalar.map((firma_unvan, index) => (
+                    {firmalarx.map((firma_unvan, index) => (
                         <SelectItem
                           value={firma_unvan}
                           key={index}
-                          className="italic"
-                        >
+                          className="italic">
                           {firma_unvan}
                         </SelectItem>
                       ))}
@@ -247,5 +263,5 @@ export default function YeniMarka({ firmabilgi }) {
         </Form>
       )}
     </section>
-  )
+  );
 }
