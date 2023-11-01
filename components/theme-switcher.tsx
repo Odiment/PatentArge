@@ -16,7 +16,7 @@ export default function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
 
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set(['tema']))
+  const [selectedKeys, setSelectedKeys] = React.useState<any>(new Set(['tema']))
 
   const selectedValue = React.useMemo(
     () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
@@ -32,7 +32,7 @@ export default function ThemeSwitcher() {
   return (
     <Dropdown placement="bottom-end" className='bg-primary text-'>
       <DropdownTrigger>
-        <Button isIconOnly aria-label="Tema" color="transparent">
+        <Button isIconOnly aria-label="Tema" color="default">
           <SunMoon />
           {/* {selectedValue} */}
         </Button>

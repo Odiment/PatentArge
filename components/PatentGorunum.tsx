@@ -12,11 +12,11 @@ import {
 import { useTheme } from 'next-themes'
 import { ChevronDownIcon } from '@/icons/ChevronDownIcon'
 
-export default function MarkaGorunum({ user }) {
+export default function MarkaGorunum() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
 
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set(['Görünüm']))
+  const [selectedKeys, setSelectedKeys] = React.useState<any>(new Set(['Görünüm']))
 
   const selectedValue = React.useMemo(
     () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
@@ -32,7 +32,7 @@ export default function MarkaGorunum({ user }) {
 
   if (!mounted) return null
 
-  const onNavigate = (url: string, pro: boolean) => {
+  const onNavigate = (url: string) => {
     return router.push(url)
   }
 

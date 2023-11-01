@@ -27,7 +27,7 @@ const Filter = () => {
 
   const kategori = searchParams.get('kategori')
 
-  const [value, setValue] = useState(kategori || 'tumu')
+  const [value, setValue] = useState<any>(kategori || 'tumu')
 
   useEffect(() => {
     const query = {
@@ -50,14 +50,14 @@ const Filter = () => {
       <div className="flex flex-wrap gap-4">
         <Tabs
           /* key={color} */
-          electedKey={value}
+          selectedKey={value}
           onSelectionChange={setValue}
           color="primary"
           aria-label="Tabs colors"
           radius="full"
         >
           <Tab key="tumu" title="Tümü" />
-          <Tab key="tescil" title="Tescil" s>
+          <Tab key="tescil" title="Tescil">
             {/* <Button onClick={() => setValue('tescil')}>Tescil</Button> */}
           </Tab>
           <Tab key="basvuru" title="Başvuru" />

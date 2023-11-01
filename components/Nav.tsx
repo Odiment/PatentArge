@@ -13,6 +13,7 @@ import { IconType } from 'react-icons'
 import { usePathname } from 'next/navigation'
 
 interface navData {
+    id: number
   icon: IconType
   text: string
   path: string

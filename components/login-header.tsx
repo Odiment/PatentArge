@@ -8,7 +8,7 @@ import PatentGorunum from './PatentGorunum'
 /* import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button" */
 
-import LogoutButton from './LogoutButton'
+/* import LogoutButton from './LogoutButton' */
 import { UserMenu } from './UserMenu'
 
 export default async function LoginHeader() {

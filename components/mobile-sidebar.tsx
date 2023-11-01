@@ -3,9 +3,9 @@
 import { Menu } from 'lucide-react'
 
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Sidebar } from '@/components/sidebar'
+/* import { Sidebar } from '@/components/sidebar' */
 import { Session } from '@supabase/auth-helpers-nextjs'
-import SideNavigation from './sidenavigation'
+/* import SideNavigation from './sidenavigation' */
 import { HiHome } from 'react-icons/hi'
 import { usePathname, useRouter } from 'next/navigation'
 import { IconType } from 'react-icons'
@@ -16,6 +16,7 @@ import { PiShieldCheckeredBold } from 'react-icons/pi'
 import { LuGalleryVertical } from 'react-icons/lu'
 import { FiSettings } from 'react-icons/fi'
 interface MenuItem {
+    id: number
   icon: IconType
   text: string
   pathname: string
