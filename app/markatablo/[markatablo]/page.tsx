@@ -17,7 +17,9 @@ interface RootPageProps {
 }
 
 export default async function MarkaTablo({ searchParams }: RootPageProps) {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  /* const supabase = createServerComponentClient<Database>({ cookies }); */
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { session },

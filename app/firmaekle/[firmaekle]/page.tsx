@@ -6,7 +6,9 @@ import { Database } from '../../database.types'
 import YeniFirma from './yeni-firma'
 
 export default async function YeniFirmaOlustur() {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  /* const supabase = createServerComponentClient<Database>({ cookies }) */
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { session },

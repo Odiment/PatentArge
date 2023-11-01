@@ -15,7 +15,9 @@ interface MarkaDetay {
 }
 
 const MarkaDetay = async ({ params }: MarkaDetay) => {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  /* const supabase = createServerComponentClient<Database>({ cookies }); */
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { session },

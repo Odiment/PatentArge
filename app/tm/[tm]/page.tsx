@@ -9,7 +9,9 @@ import { Database } from "@/app/supabase";
 type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
 
 export default async function YeniMarkaOlustur() {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  /* const supabase = createServerComponentClient<Database>({ cookies }) */
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { session },

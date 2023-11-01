@@ -1,21 +1,21 @@
-import './globals.css'
+import "./globals.css";
 /* import { Metadata } from "next"; */
-import { cookies } from 'next/headers'
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 /* import { siteConfig } from '@/config/site' */
-import { fontSans } from '@/lib/fonts'
-import { cn } from '@/lib/utils'
+import { fontSans } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
 /* import { Sidebar } from '@/components/sidebar'
 import { SiteHeader } from '@/components/site-header' */
 
-import Providers from './providers'
+import Providers from "./providers";
 
-import TopNavigation from '@/components/topnavigation'
-import SideNavigation from '@/components/sidenavigation'
-import Nav from '@/components/Nav'
+import TopNavigation from "@/components/topnavigation";
+import SideNavigation from "@/components/sidenavigation";
+import Nav from "@/components/Nav";
 
-import { Database } from './database.types'
+import { Database } from "./database.types";
 
 /* export const metadata: Metadata = {
   title: {
@@ -35,19 +35,21 @@ import { Database } from './database.types'
 } */
 
 interface RootLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  /* const supabase = createServerComponentClient<Database>({ cookies }) */
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   return (
     <>
@@ -55,15 +57,14 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            'min-h-screen bg-background font-sans antialiased',
+            "min-h-screen bg-background font-sans antialiased",
             fontSans.variable
-          )}
-        >
-          <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
+          )}>
+          <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
             <div className="relative flex min-h-screen flex-col">
               <TopNavigation session={session} />
               <div className="hidden md:flex w-20 flex-col fixed inset-y-0">
-                <SideNavigation session={session} userid={user?.id!}/>
+                <SideNavigation session={session} userid={user?.id!} />
               </div>
               <Nav session={session} />
 
@@ -75,5 +76,5 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         </body>
       </html>
     </>
-  )
+  );
 }

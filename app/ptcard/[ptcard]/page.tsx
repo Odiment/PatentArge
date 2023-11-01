@@ -17,7 +17,9 @@ interface PatentCardYazProps {
 }
 
 const PatentCardYaz = async ({ params }: PatentCardYazProps) => {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  /* const supabase = createServerComponentClient<Database>({ cookies }); */
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { session },

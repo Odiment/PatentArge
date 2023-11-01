@@ -15,7 +15,9 @@ interface PatentDetay {
 }
 
 const PatentDetay = async ({ params }: PatentDetay) => {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  /* const supabase = createServerComponentClient<Database>({ cookies }); */
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { session },
