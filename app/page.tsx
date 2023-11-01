@@ -1,5 +1,12 @@
 /* import ThemeSwitcher from "@/components/ThemeSwitcher"; */
-export const dynamic = 'force-dynamic'
+export const dynamic = 'auto'
+export const dynamicParams = true
+export const revalidate = false
+export const fetchCache = 'auto'
+export const runtime = 'nodejs'
+export const preferredRegion = 'auto'
+export const maxDuration = 5
+
 import { Button } from '@nextui-org/react'
 import { LandingHero } from '@/components/landing-hero'
 import { LandingContent } from '@/components/landing-content'

@@ -1,4 +1,10 @@
-export const dynamic = 'force-dynamic'
+export const dynamic = 'auto'
+export const dynamicParams = true
+export const revalidate = false
+export const fetchCache = 'auto'
+export const runtime = 'nodejs'
+export const preferredRegion = 'auto'
+export const maxDuration = 5
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 /* import { cookies } from 'next/headers'
