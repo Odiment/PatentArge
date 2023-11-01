@@ -10,7 +10,9 @@ import { Database } from "@/app/supabase";
 
 import { redirect } from "next/navigation";
 
-export const createServerSupabaseClient = cache(() => {
+import { getSession } from "@/app/auth/getSession/getSession"
+
+/* export const createServerSupabaseClient = cache(() => {
   const cookieStore = cookies();
   return createServerComponentClient<Database>({ cookies: () => cookieStore });
 });
@@ -33,7 +35,7 @@ export const getSession = async () => {
     console.error("Error", error);
     return null;
   }
-};
+}; */
 
 /* export const getUser = async () => {
     const supabase = createServerSupabaseClient();
