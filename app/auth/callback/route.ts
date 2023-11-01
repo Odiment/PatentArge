@@ -1,4 +1,4 @@
-export const dynamic = 'force dynamic'
+export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 export const revalidate = false
 export const fetchCache = 'auto'
