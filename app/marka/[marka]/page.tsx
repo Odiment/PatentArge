@@ -8,10 +8,10 @@ import Filter from "@/components/filter";
 import { cache } from "react";
 import { Database } from "@/app/supabase";
 
-export const createServerSupabaseClient = cache(() => {
+/* export const createServerSupabaseClient = cache(() => {
   const cookieStore = cookies();
   return createServerComponentClient<Database>({ cookies: () => cookieStore });
-});
+}); */
 type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
 
 interface MarkaIdPageProps {
