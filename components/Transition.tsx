@@ -1,3 +1,4 @@
+"use client"
 //framer motion
 import { motion } from "framer-motion";
 

@@ -12,7 +12,10 @@ import { buttonVariants } from "@/components/ui/button" */
 import { UserMenu } from "./UserMenu";
 
 export default async function LoginHeader() {
-  const supabase = createServerComponentClient({ cookies });
+  /* const supabase = createServerComponentClient({ cookies }); */
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
