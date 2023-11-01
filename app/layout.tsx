@@ -38,7 +38,7 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export const getSession = async () => {
+/* export const getSession = async () => {
     const cookieStore = cookies()
     const supabase = createServerComponentClient({ cookies: () => cookieStore })
    const {
@@ -50,11 +50,11 @@ export const getSession = async () => {
       } = await supabase.auth.getSession()
 
       return {session, user, supabase}
-}
+} */
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   /* const supabase = createServerComponentClient<Database>({ cookies }) */
-  /* const cookieStore = cookies();
+   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
@@ -63,9 +63,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 
   const {
     data: { user },
-  } = await supabase.auth.getUser(); */
+  } = await supabase.auth.getUser(); 
 
-  const {session, user, supabase} = await getSession()
+  /* const {session, user, supabase} = await getSession() */
 
   return (
     <>
