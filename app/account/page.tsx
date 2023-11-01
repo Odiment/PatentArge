@@ -7,34 +7,34 @@ import AccountForm from "./account-form"
 import { redirect } from 'next/navigation'
 
 
-export const getSession = async () => {
+/* export const getSession = async () => {
     const cookieStore = cookies()
     const supabase = createServerComponentClient({ cookies: () => cookieStore })
-/*    const {
+    const {
         data: { user },
-      } = await supabase.auth.getUser(); */
+      } = await supabase.auth.getUser();
 
       const {
         data: { session },
       } = await supabase.auth.getSession()
 
       return {session}
-}
+} */
 
 export default async function Account() {
   /* const supabase = createServerComponentClient<Database>({ cookies }) */
-  /* const cookieStore = cookies();
+  const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { session },
-  } = await supabase.auth.getSession() */
+  } = await supabase.auth.getSession()
 
-  const {session} = await getSession()
+/*   const {session} = await getSession()
 
   if (!session) {
     redirect('/')
-  }
+  } */
 
   return (
     <>
