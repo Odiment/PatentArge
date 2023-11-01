@@ -1,7 +1,8 @@
-import { cookies } from 'next/headers'
+
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+/* import { cookies } from 'next/headers'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs' */
 
 //components
 import ProjectsBtn from '@/components/ProjectsBtn'
@@ -11,11 +12,17 @@ import { motion } from 'framer-motion'
 //import variants
 import { fadeIn } from '@/variants'
 
+import { getSession } from "@/app/auth/getSession/getSession"
+
+
 export default async function IndexPage() {
-  const supabase = createServerComponentClient({ cookies })
+  /* const supabase = createServerComponentClient({ cookies })
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession() */
+
+  const session = await getSession()
+
 
   if (!session) {
     /* redirect("/unauthenticated") */

@@ -5,6 +5,9 @@ import { redirect } from 'next/navigation'
 import { Database } from '../../database.types'
 import YeniFirma from './yeni-firma'
 
+import { getSession } from "@/app/auth/getSession/getSession"
+
+
 /* export const getSession = async () => {
     const cookieStore = cookies()
     const supabase = createServerComponentClient({ cookies: () => cookieStore })
@@ -24,15 +27,18 @@ export default async function YeniFirmaOlustur() {
   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
-  const {
+  /* const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession() */
 
-  const {
+/*   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser() */
 
   /* const {session, user, supabase} = await getSession() */
+
+  const session = await getSession()
+
 
   const { data: firma_bilgi } = await supabase
     .from('firmalar')

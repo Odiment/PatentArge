@@ -5,6 +5,8 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import MarkaGorunum from "./MarkaGorunum";
 import PatentGorunum from "./PatentGorunum";
 
+import { getUser } from "@/app/auth/getUser/getUser"
+
 /* import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button" */
 
@@ -23,14 +25,16 @@ import { UserMenu } from "./UserMenu";
 
 export default async function LoginHeader() {
   /* const supabase = createServerComponentClient({ cookies }); */
-   const cookieStore = cookies();
+ /*   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore }); 
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser(); */
 
 /* const user = await getUser() */
+
+const user = await getUser()
 
   return (
     <nav className="flex justify-center border-0 border-b-foreground/10 h-16">

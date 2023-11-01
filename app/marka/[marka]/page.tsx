@@ -30,20 +30,27 @@ interface MarkaIdPageProps {
       return {session, user, supabase}
 } */
 
+import { getSession } from "@/app/auth/getSession/getSession"
+import { getUser } from "@/app/auth/getUser/getUser"
+
+
 export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   /* const supabase = createServerComponentClient<Database>({ cookies }); */
    const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
-  const {
+ /*  const {
     data: { session },
   } = await supabase.auth.getSession();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser(); 
-
+  } = await supabase.auth.getUser();  */
   /* const {session, user, supabase} = await getSession() */
+
+  const session = await getSession()
+  const user = await getUser()
+
 
   if (!session) {
     redirect("/");
