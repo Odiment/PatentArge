@@ -9,10 +9,10 @@ import { getSession } from "@/app/auth/getSession/getSession"
 import { cache } from "react";
 import { Database } from "@/app/supabase";
 
-export const createServerSupabaseClient = cache(() => {
+/* export const createServerSupabaseClient = cache(() => {
   const cookieStore = cookies();
   return createServerComponentClient<Database>({ cookies: () => cookieStore });
-});
+}); */
 
 
 /* export const getSession = async () => {
@@ -43,6 +43,11 @@ export default async function YeniFirmaOlustur() {
   } = await supabase.auth.getUser() */
 
   /* const {session, user, supabase} = await getSession() */
+
+  const createServerSupabaseClient = cache(() => {
+    const cookieStore = cookies();
+    return createServerComponentClient<Database>({ cookies: () => cookieStore });
+  });
 
   const session = await getSession()
 

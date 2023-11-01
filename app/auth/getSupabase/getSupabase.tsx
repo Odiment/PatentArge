@@ -23,7 +23,7 @@ export const getSupabase = async () => {
 
     if (!user) return null;
 
-    return supabase;
+    return user;
   } catch (error) {
     console.error("Error", error);
     return null;
