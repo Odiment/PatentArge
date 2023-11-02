@@ -33,10 +33,10 @@ const TopNavigation = ({ session }: { session: Session | null }) => {
       </div>
 
       <div className="flex item-center gap-3">
-        <div className="flex items-center p-3 rounded-full hover:bg-primary/40 cursor-pointer">
+        <div className="flex items-center bg-transparent p-3 rounded-full hover:bg-primary/40 cursor-pointer">
           <ThemeSwitcher />
         </div>
-        <div className="flex items-center p-3 rounded-full hover:bg-primary/40 cursor-pointer">
+        <div className="flex items-center p-6 rounded-full hover:bg-primary/40 cursor-pointer">
           <BsBell />
         </div>
 

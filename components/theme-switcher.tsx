@@ -32,7 +32,7 @@ export default function ThemeSwitcher() {
   return (
     <Dropdown placement="bottom-end" className='bg-primary text-'>
       <DropdownTrigger>
-        <Button isIconOnly aria-label="Tema" color="default">
+        <Button isIconOnly aria-label="Tema" color="default" className='bg-transparent'>
           <SunMoon />
           {/* {selectedValue} */}
         </Button>
