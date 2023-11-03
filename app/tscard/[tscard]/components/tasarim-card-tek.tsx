@@ -16,10 +16,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+/* import { Label } from '@/components/ui/label' */
 
-import PatentFigure from './patent-figure'
-import ProductFigure from './product-figure'
+import TasarimFigure from './tasarim-figure'
 
 import {
   Form,
@@ -40,12 +39,12 @@ import { toast } from '@/components/ui/use-toast'
 
 import { Database } from "@/app/supabase";
 
-type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
+type TasarimlarX = Database["public"]["Tables"]["tasarimlar"]["Row"];
 
-interface PatentCardTek {
-  veri: PatentlerX[],
-  patent_resimler: {
-    patent_resim_url: string | null;
+interface TasarimCardTek {
+  veri: TasarimlarX[],
+tasarim_resimler: {
+tasarim_resim_url: string | null;
     id: string;
 }[],
 product_resimler: {
@@ -55,13 +54,13 @@ product_resimler: {
 }[],
 }
 
-const PatentCardTek: React.FC<PatentCardTek> = ({
+const TasarimCardTek: React.FC<TasarimCardTek> = ({
   veri,
-  patent_resimler,
+tasarim_resimler,
   product_resimler,
 }) => {
-  let patent_resimler_url = patent_resimler.map(
-    ({ patent_resim_url }: any) => patent_resim_url
+  let tasarim_resimler_url =tasarim_resimler.map(
+    ({tasarimresim_url }: any) =>tasarimresim_url
   )
   let product_resimler_url = product_resimler.map(
     ({ product_resim_url }: any) => product_resim_url
@@ -70,18 +69,18 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     ({ product_remote_url }) => product_remote_url
   )
 
-  let patent_resimler_id = patent_resimler.map(({ id }) => id)
+  let tasarim_resimler_id =tasarim_resimler.map(({ id }) => id)
   let product_resimler_id = product_resimler.map(({ id }) => id)
   let veri_id = veri.map(({ id }) => id)
-  let patent_title = veri.map(({ patent_title }) => patent_title)
+  let tasarim_title = veri.map(({tasarim_title }) =>tasarim_title)
   let basvuru_no = veri.map(({ basvuru_no }) => basvuru_no)
   let basvuru_tarihi = veri.map(({ basvuru_tarihi }) => basvuru_tarihi)
   let referans_no = veri.map(({ referans_no }) => referans_no)
 
   const supabase = createClientComponentClient<Database>()
 
-  const [patent_figure_url, setPatentFigureUrl] = useState<any[]>(
-    patent_resimler_url
+  const [tasarim_figure_url, setTasarimFigureUrl] = useState<any[]>(
+    tasarim_resimler_url
   )
   const [product_figure_url, setProductFigureUrl] = useState<any[]>(
     product_resimler_url
@@ -92,17 +91,17 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
 
   const [loading, setLoading] = useState(true)
 
-  const [currentPatentIndex, setCurrentPatentIndex] = useState(0)
+  const [currentTasarimIndex, setCurrentTasarimIndex] = useState(0)
 
-  let patentdurumu: any = "basvuru"
+  let tasarimdurumu: any = "basvuru"
   if (veri != null) {
-    let patentdurumux = veri.map(({ status }: any) => status);
-    patentdurumu = patentdurumux
+    let tasarimdurumux = veri.map(({ status }: any) => status);
+    tasarimdurumu = tasarimdurumux
   }
 
-  let yesil = patentdurumu === 'tescil'
-  let sari = patentdurumu === 'basvuru'
-  let kirmizi = patentdurumu === 'iptal'
+  let yesil = tasarimdurumu === 'tescil'
+  let sari = tasarimdurumu === 'basvuru'
+  let kirmizi = tasarimdurumu === 'iptal'
 
   const FormSchema = z.object({
     product_remote_figure_url: z.string().min(2, {
@@ -114,20 +113,20 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     resolver: zodResolver(FormSchema),
   })
 
-  async function updatePatentFigure({
-    patent_figure_url,
+  async function updateTasarimFigure({
+    tasarim_figure_url,
   }: {
-    patent_figure_url: any
+    tasarim_figure_url: any
   }) {
     try {
       setLoading(true)
 
       let { error } = await supabase
-        .from('patent_resimler')
+        .from('tasarim_resimler')
         .update({
-          patent_resim_url: patent_figure_url,
+          tasarim_resim_url: tasarim_figure_url,
         })
-        .eq('id', patent_resimler_id[currentPatentIndex])
+        .eq('id', tasarim_resimler_id[currentTasarimIndex])
       if (error) throw error
       toast({
         title: 'Resim yükleme işlemi: başarıyla gerçekleşti:',
@@ -135,7 +134,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
               BAŞARIYLA GERÇEKLEŞTİ!!!
-              {/* {JSON.stringify(patent_figure_url, null, 2)} */}
+              {/* {JSON.stringify(tasarim_figure_url, null, 2)} */}
             </code>
           </pre>
         ),
@@ -155,6 +154,8 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
   }: {
     product_figure_url: any
   }) {
+/*     console.log('product_remote_ur - updateProductFigure')
+    console.log(product_remote_figure_url) */
     try {
       setLoading(true)
 
@@ -163,16 +164,16 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
         .update({
           product_resim_url: product_figure_url,
         })
-        .eq('id', product_resimler_id[currentPatentIndex])
+        .eq('id', product_resimler_id[currentTasarimIndex])
       if (error) throw error
-      /*  alert('Patent Figure güncellendi!') */
+      /*  alert('Tasarım Figure güncellendi!') */
       toast({
         title: 'Resim yükleme işlemi başarıyla gerçekleşti:',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
               ÜRÜN RESMİ BAŞARIYLA GÜNCELLENDİ
-              {JSON.stringify(product_resimler_id[currentPatentIndex], null, 2)}
+              {JSON.stringify(product_resimler_id[currentTasarimIndex], null, 2)}
             </code>
           </pre>
         ),
@@ -194,24 +195,27 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     /* product_figure_url: string | null */
     product_remote_figure_url: string | null
   }) {
+/*     console.log('product_remote_ur - updateProductFigure')
+    console.log(product_remote_figure_url) */
     try {
       setLoading(true)
 
       let { error } = await supabase
         .from('product_resimler')
         .update({
+         /*  product_resim_url: product_figure_url, */
           product_remote_url: product_remote_figure_url,
         })
-        .eq('id', product_resimler_id[currentPatentIndex])
+        .eq('id', product_resimler_id[currentTasarimIndex])
       if (error) throw error
-      /*  alert('Patent Figure güncellendi!') */
+      /*  alert('Tasarım Figure güncellendi!') */
       toast({
         title: 'Resim yükleme işlemi başarıyla gerçekleşti:',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
               ÜRÜN RESMİ BAŞARIYLA GÜNCELLENDİ
-              {JSON.stringify(product_resimler_id[currentPatentIndex], null, 2)}
+              {JSON.stringify(product_resimler_id[currentTasarimIndex], null, 2)}
             </code>
           </pre>
         ),
@@ -226,10 +230,10 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     window.location.reload()
   }
 
-  async function deletePatent() {
+  async function deleteTasarim() {
     try {
       const { error } = await supabase
-        .from('patentler')
+        .from('tasarimlar')
         .delete()
         .eq('id', veri[0].id)
 
@@ -240,14 +244,14 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     }
   }
 
-  // Yeni Bir PATENT Resmi İçin Veritabanında Kayıt Oluşturulması ve PlaceHolder Resmi Eklenmesi
-  async function newPatentFigure() {
+  // Yeni Bir TASARIM Resmi İçin Veritabanında Kayıt Oluşturulması ve PlaceHolder Resmi Eklenmesi
+  async function newTasarimFigure() {
     try {
       const { error } = await supabase
-        .from('patent_resimler')
+        .from('tasarim_resimler')
         .insert({
-          patent_id: veri[0].id,
-          patent_resim_url:
+          tasarim_id: veri[0].id,
+          tasarim_resim_url:
             'https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/avatars/aec65205-9440-482f-a539-9293fb7bb8a0-0.5921580138461082.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzL2FlYzY1MjA1LTk0NDAtNDgyZi1hNTM5LTkyOTNmYjdiYjhhMC0wLjU5MjE1ODAxMzg0NjEwODIucG5nIiwiaWF0IjoxNjk1NzU5Nzc4LCJleHAiOjE3MjcyOTU3Nzh9.rAgx9t6ExaXl_Y-M9peTr3IHA1TD9gHf9wsGd-PWsbw&t=2023-09-26T20%3A22%3A55.712Z',
         })
         .single()
@@ -256,7 +260,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
 
       toast({
         variant: 'affirmative',
-        title: 'Veri tabanında patent için bir id oluşturuldu',
+        title: 'Veri tabanında tasarim için bir id oluşturuldu',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
@@ -272,7 +276,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     }
   }
 
-  const getirYeniPatentResmi = useCallback(async () => {
+/*   const getirYeniTasarimResmi = useCallback(async () => {
     try {
       setLoading(true)
 
@@ -286,40 +290,41 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
         throw error
       }
     } catch (error) {
-      alert(`Error loading patent data! ${error}`)
+      alert(`Error loading tasarim data! ${error}`)
     } finally {
       setLoading(false)
     }
   }, [veri, supabase])
 
   useEffect(() => {
-    getirYeniPatentResmi()
-  }, [veri, patent_resimler, getirYeniPatentResmi])
+    getirYeniTasarimResmi()
+  }, [veri, tasarim_resimler, getirYeniTasarimResmi])
+  */
 
-  async function deletePatentResim() {
+  async function deleteTasarimResim() {
     try {
       const { error } = await supabase
-        .from('patent_resimler')
+        .from('tasarim_resimler')
         .delete()
-        .eq('id', patent_resimler_id[currentPatentIndex])
+        .eq('id', tasarim_resimler_id[currentTasarimIndex])
 
       if (error) throw error
       window.location.reload()
     } catch (error: any) {
       alert(error.message)
     }
-  }
+  } 
 
   // Yeni Bir Ürün Resmi İçin Veritabanında Kayıt Oluşturulması ve PlaceHolder Resmi Eklenmesi
   let null_url =
     'https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/patentFigure/format.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXRlbnRGaWd1cmUvZm9ybWF0LnBuZyIsImlhdCI6MTY5NzM3Mjc3OSwiZXhwIjoxNzkxOTgwNzc5fQ.2s1NRy0rUx9cDryhuovBt4Uuy6BFQPrVCfzXDfp5BpI&t=2023-10-15T12%3A26%3A19.101Z'
 
-  async function newProductFigure() {
+  /* async function newProductFigure() {
     try {
       const { error } = await supabase
         .from('product_resimler')
         .insert({
-          patent_id: veri[0].id,
+          tasarim_id: veri[0].id,
           product_resim_url: 'placeholder',
 
           product_remote_url: null_url,
@@ -330,7 +335,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
 
       toast({
         variant: 'affirmative',
-        title: 'Veri tabanında patent için bir id oluşturuldu',
+        title: 'Veri tabanında tasarim için bir id oluşturuldu',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
@@ -344,9 +349,9 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     } catch (error: any) {
       alert(error.message)
     }
-  }
+  } */
 
-  const getirYeniUrunResmi = useCallback(async () => {
+  /* const getirYeniUrunResmi = useCallback(async () => {
     try {
       setLoading(true)
 
@@ -360,7 +365,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
         throw error
       }
     } catch (error) {
-      alert(`Error loading patent data! ${error}`)
+      alert(`Error loading tasarim data! ${error}`)
     } finally {
       setLoading(false)
     }
@@ -368,36 +373,36 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
 
   useEffect(() => {
     getirYeniUrunResmi()
-  }, [product_resimler, getirYeniUrunResmi])
+  }, [product_resimler, getirYeniUrunResmi]) */
 
-  async function deleteUrunResim() {
+ /*  async function deleteUrunResim() {
     try {
       const { error } = await supabase
         .from('product_resimler')
         .delete()
-        .eq('id', product_resimler_id[currentPatentIndex])
+        .eq('id', product_resimler_id[currentTasarimIndex])
 
       if (error) throw error
       window.location.reload()
     } catch (error: any) {
       alert(error.message)
     }
-  }
+  } */
 
   // slider functions *************
-  // Patent Resimler ******************
-  const prevPatentSlide = () => {
-    const isFirstSlide = currentPatentIndex === 0
+  // Tasarim Resimler ******************
+  const prevTasarimSlide = () => {
+    const isFirstSlide = currentTasarimIndex === 0
     const newIndex = isFirstSlide
-      ? patent_resimler_url.length - 1
-      : currentPatentIndex - 1
-    setCurrentPatentIndex(newIndex)
+      ? tasarim_resimler_url.length - 1
+      : currentTasarimIndex - 1
+    setCurrentTasarimIndex(newIndex)
   }
 
-  const nextPatentSlide = () => {
-    const isLastSlide = currentPatentIndex === patent_resimler_url.length - 1
-    const newIndex = isLastSlide ? 0 : currentPatentIndex + 1
-    setCurrentPatentIndex(newIndex)
+  const nextTasarimSlide = () => {
+    const isLastSlide = currentTasarimIndex === tasarim_resimler_url.length - 1
+    const newIndex = isLastSlide ? 0 : currentTasarimIndex + 1
+    setCurrentTasarimIndex(newIndex)
   }
 
   // Ürün (Product) Resimler ******************
@@ -416,6 +421,9 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     const newIndex = isLastSlide ? 0 : currentProductIndex + 1
     setCurrentProductIndex(newIndex)
   }
+
+  console.log('product_remote_figure_url[currentProductIndex]')
+  console.log(product_remote_figure_url[currentProductIndex])
 
   // ************* *************
 
@@ -450,45 +458,42 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
                   <Button
                     className="bg-sky-600 font-bold"
                     size="lg"
-                    onClick={prevPatentSlide}
+                    onClick={prevTasarimSlide}
                   >
                     <ArrowLeftSquare className="w-4 h-4 ml-2" />
                   </Button>
                   <Button
                     className="bg-green-500 font-bold"
                     size="lg"
-                    onClick={newPatentFigure}
+                    onClick={newTasarimFigure}
                   >
                     <PlusSquare className="w-4 h-4 ml-2" />
                   </Button>
                   <Button
                     className="bg-red-500 font-bold"
                     size="lg"
-                    onClick={deletePatentResim}
+                    onClick={deleteTasarimResim}
                   >
                     <Trash2 className="w-4 h-4 ml-2" />
                   </Button>
                   <Button
                     className="bg-sky-600 font-bold"
                     size="lg"
-                    onClick={nextPatentSlide}
+                    onClick={nextTasarimSlide}
                   >
                     <ArrowRightSquare className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
-                <PatentFigure
+                <TasarimFigure
                   uid={veri_id}
-                  patent_url={patent_resimler_url[currentPatentIndex]}
+                  tasarim_url={tasarim_resimler_url[currentTasarimIndex]}
                   size={400}
-                  txt="Patent Resmi Yükle"
-                  onUpload={(patent_url: any) => {
-                    setPatentFigureUrl(patent_url)
-                    /*                     updatePatentFigure({
-                        patent_figure_url
-                    }) */
+                  txt="Tasarim Resmi Yükle"
+                  onUpload={(tasarim_url: any) => {
+                    setTasarimFigureUrl(tasarim_url)
                   }}
                 />
-                <div className="flex items-center justify-between mt-5 pb-2">
+               {/*  <div className="flex items-center justify-between mt-5 pb-2">
                   <Button
                     className="bg-sky-600 font-bold"
                     size="lg"
@@ -517,10 +522,10 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
                   >
                     <ArrowRightSquare className="w-4 h-4 ml-2" />
                   </Button>
-                </div>
-                <ProductFigure
+                </div> */}
+{/*                 <ProductFigure
                   uid={veri_id}
-                  /* url={product_resimler[currentProductIndex]} */
+                 
                   product_url={product_resimler_url[currentProductIndex]}
                   product_remote_url={
                     product_remote_figure_url[currentProductIndex]
@@ -529,11 +534,9 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
                   txt="Ürün Resmi Yükle"
                   onUpload={(product_url: any) => {
                     setProductFigureUrl(product_url)
-                    /*                     updateProductFigure({
-                      product_figure_url,
-                    }) */
+                   
                   }}
-                />
+                /> */}
               </div>
             </CardContent>
             <CardFooter className="w-[450px] flex-col items-start">
@@ -575,7 +578,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
                 </Form>
                 <div className="flex flex-col ">
                   <p className="gap-1 text-2xl justify-center items-center border-b border-primary text-primary font-bold text-center">
-                    {patent_title}
+                    {tasarim_title}
                   </p>
 
                   <div className="flex gap-2">
@@ -620,12 +623,12 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
           <Button
             className="bg-orange-500 hover:bg-yellow-200 font-bold gap-4"
             onClick={() =>
-              updatePatentFigure({
-                patent_figure_url,
+              updateTasarimFigure({
+                tasarim_figure_url,
               })
             }
           >
-            Patent Resim Güncelle
+            Tasarim Resim Güncelle
             <Wand2 className="w-4 h-4 ml-2" />
           </Button>
           <Button
@@ -642,10 +645,10 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
           <Button
             className="bg-red-500 font-bold hover:bg-red-300 gap-4"
             onClick={() =>
-              deletePatent()
+              deleteTasarim()
             }
           >
-            Patent Kaydını Sil
+            Tasarim Kaydını Sil
             <Wand2 className="w-4 h-4 ml-2" />
           </Button>
         </div>
@@ -654,4 +657,4 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
   )
 }
 
-export default PatentCardTek
+export default TasarimCardTek

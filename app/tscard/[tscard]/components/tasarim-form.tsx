@@ -2,7 +2,7 @@
 
 //import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+/* import { useRouter } from "next/navigation"; */
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Session,
@@ -37,16 +37,16 @@ import { Separator } from "@/components/ui/separator";
 
 import { Database } from "@/app/supabase";
 
-type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
+type TasarimlarX = Database["public"]["Tables"]["tasarimlar"]["Row"];
 
-interface PatentFormProps {
-  secilenPatent: PatentlerX;
+interface TasarimFormProps {
+  secilenTasarim: TasarimlarX;
   session: Session | null;
 }
 
 const formSchema = z.object({
   firma_ad: z.string(),
-  patent_title: z.string(),
+  tasarim_title: z.string(),
   basvuru_no: z.string(),
   basvuru_tarihi: z.string(),
   class_no: z.string(),
@@ -54,40 +54,33 @@ const formSchema = z.object({
   referans_no: z.string(),
 });
 
-export default function PatentForm({
-  secilenPatent,
+export default function TasarimForm({
+  secilenTasarim,
   session,
-}: PatentFormProps) {
+}: TasarimFormProps) {
   const supabase = createClientComponentClient<Database>();
 
   const [loading, setLoading] = useState(true);
-  /* const [firma_ad, setFirma_ad] = useState<string | null>(null);
-  const [patent_title, setPatent_title] = useState<string | null>(null); */
+  const [firma_ad, setFirma_ad] = useState<string | null>(null);
+  const [tasarim_title, setTasarim_title] = useState<string | null>(null);
   /*   const [deger, setDeger] = useState<string | null>(null)
   const [name, setName] = useState<string | null>(null) */
-  /* const [basvuruNo, setBasvuruNo] = useState<string | null>(null);
+  const [basvuruNo, setBasvuruNo] = useState<string | null>(null);
   const [referansNo, setReferansNo] = useState<string | null>(null);
   const [basvuruTarihi, setBasvuruTarihi] = useState<string | null>(null);
   const [classNo, setClassNo] = useState<string | null>(null);
-  const [status, setStatus] = useState<string | null>(null); */
+  const [status, setStatus] = useState<string | null>(null);
   /* const [logoUrl, setLogoUrl] = useState<string | null>(null) */
 
   const [formStep, setFormStep] = React.useState(0);
 
   const user = session?.user;
 
-/*   let veri_id = secilenPatent.id
-  let patent_title = secilenPatent.patent_title
-  let basvuru_no = secilenPatent.map(({ basvuru_no }) => basvuru_no)
-  let basvuru_tarihi = secilenPatent.map(({ basvuru_tarihi }) => basvuru_tarihi)
-  let referans_no = secilenPatent.map(({ referans_no }) => referans_no) */
-
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       firma_ad: "",
-      patent_title: "",
+      tasarim_title: "",
       basvuru_no: "",
       basvuru_tarihi: "",
       class_no: "",
@@ -98,79 +91,75 @@ export default function PatentForm({
 
   const isLoading = form.formState.isSubmitting;
 
-  async function updatePatent(values: z.infer<typeof formSchema>) {
+  async function updateTasarim(values: z.infer<typeof formSchema>) {
     values.firma_ad = values.firma_ad.toLowerCase();
 
-    if (secilenPatent != null) {
-      if (secilenPatent != undefined) {
-        if (values.patent_title === "") {
-          values.patent_title = secilenPatent.patent_title!;
-        }
-        if (values.basvuru_no === "") {
-          values.basvuru_no = secilenPatent.basvuru_no!;
-        }
-        if (values.basvuru_tarihi === "") {
-          values.basvuru_tarihi = secilenPatent.basvuru_tarihi!;
-        }
-        if (values.class_no === "") {
-          values.class_no = secilenPatent.class_no!;
-        }
-        if (values.status === "") {
-          values.status = secilenPatent.status!;
-        }
-        if (values.referans_no === "") {
-          values.referans_no = secilenPatent.referans_no!;
-        }
-        if (values.firma_ad === "") {
-          values.firma_ad = secilenPatent.firma_ad!;
-        }
+    if (secilenTasarim != null) {
+      if (values.tasarim_title === "") {        
+        values.tasarim_title = secilenTasarim.tasarim_title!;
+      }
+      if (values.basvuru_no === "") {
+        values.basvuru_no = secilenTasarim.basvuru_no!;
+      }
+      if (values.basvuru_tarihi === "") {
+        values.basvuru_tarihi = secilenTasarim.basvuru_tarihi!;
+      }
+      if (values.class_no === "") {
+        values.class_no = secilenTasarim.class_no!;
+      }
+      if (values.status === "") {
+        values.status = secilenTasarim.status!;
+      }
+      if (values.referans_no === "") {
+        values.referans_no = secilenTasarim.referans_no!;
+      }
+      if (values.firma_ad === "") {
+        values.firma_ad = secilenTasarim.firma_ad!;
+      }
 
-        try {
-          setLoading(true);
+      try {
+        setLoading(true);
 
-          let { error } = await supabase
-            .from("patentler")
-            .update({
-              patent_title: values.patent_title,
-              basvuru_no: values.basvuru_no,
-              basvuru_tarihi: values.basvuru_tarihi,
-              class_no: values.class_no,
-              status: values.status,
-              referans_no: values.referans_no,
-              /* referans_no: values.referans_no, */
-              firma_ad: values.firma_ad,
-            })
-            .eq("id", secilenPatent.id);
-          if (error) throw error;
-          window.location.reload();
-          /* alert("Patent Güncellendi!") */
-        } catch (error) {
-          alert("HATA: Patent güncelemesi gerçekleştirilemedi!");
-        } finally {
-          setLoading(false);
-        }
+        let { error } = await supabase
+          .from("tasarimlar")
+          .update({
+            tasarim_title: values.tasarim_title,
+            basvuru_no: values.basvuru_no,
+            basvuru_tarihi: values.basvuru_tarihi,
+            class_no: values.class_no,
+            status: values.status,
+            referans_no: values.referans_no,
+            /* referans_no: values.referans_no, */
+            firma_ad: values.firma_ad,
+          })
+          .eq("id", secilenTasarim.id);
+        if (error) throw error;
+        window.location.reload();
+        /* alert("Tasarim Güncellendi!") */
+      } catch (error) {
+        alert("HATA: Tasarim güncelemesi gerçekleştirilemedi!");
+      } finally {
+        setLoading(false);
       }
     }
   }
 
-/*   if (secilenPatent == null || secilenPatent == undefined) {
-    secilenPatent;
-  } */
+  
 
   return (
     <div className="h-full p-4 space-y-2 max-w-3xl mx-auto">
-      {secilenPatent != null && (
+      {secilenTasarim != (null || undefined) && (
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(updatePatent)}
+            onSubmit={form.handleSubmit(updateTasarim)}
             className="space-y-8 pb-10">
             <div className="space-y-2 w-full col-span-2">
               <div>
                 <h3 className="text-lg font-medium">
-                  Patent Bilgileri Giriş Ekranı
+                  Tasarim Bilgileri Giriş Ekranı
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Patent Başvurusuna ilişkin detay bilgileri girebilir veya
+                  Tasarim Başvurusuna ilişkin detay bilgileri girebilir veya
                   güncelleyebilirsiniz
                 </p>
               </div>
@@ -178,20 +167,20 @@ export default function PatentForm({
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
-                name="patent_title"
+                name="tasarim_title"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="col-span-2 md:col-span-1">
-                    <FormLabel>Patent</FormLabel>
+                    <FormLabel>Tasarim</FormLabel>
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.patent_title!}
+                        /* placeholder={`${secilenTasarim[0].tasarim_title}`} */
                         {...field}
                       />
                     </FormControl>
                     <FormDescription>
-                      Patentin Kurum sicilindeki alfabetik yazımı
+                      Tasarımın Kurum sicilindeki alfabetik yazımı
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -206,12 +195,12 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.basvuru_no!}
+                        placeholder={`${secilenTasarim.basvuru_no}`}
                         {...field}
                       />
                     </FormControl>
                     <FormDescription>
-                      Patent başvuru numarasını giriniz.
+                      Tasarim başvuru numarasını giriniz.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -226,7 +215,7 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.basvuru_tarihi!}
+                        placeholder={`${secilenTasarim.basvuru_tarihi}`}
                         {...field}
                         /* onChange={(e) => setBasvuruTarihi(e.target.value)} */
                       />
@@ -247,13 +236,13 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.class_no!}
+                        placeholder={`${secilenTasarim.class_no}`}
                         {...field}
                         /*  onChange={(e) => setClassNo(e.target.value)} */
                       />
                     </FormControl>
                     <FormDescription>
-                      Patent sınıf numaralarını giriniz
+                      Tasarim sınıf numaralarını giriniz
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -264,11 +253,11 @@ export default function PatentForm({
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Patent Durum Bilgisi</FormLabel>
+                    <FormLabel>Tasarim Durum Bilgisi</FormLabel>
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.status!}
+                        placeholder={`${secilenTasarim.status}`}
                         {...field}
                       />
                     </FormControl>
@@ -288,13 +277,13 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.referans_no!}
+                        placeholder={`${secilenTasarim.referans_no}`}
                         {...field}
                         /*  onChange={(e) => setReferansNo(e.target.value)} */
                       />
                     </FormControl>
                     <FormDescription>
-                      Patent sınıf numaralarını giriniz
+                      Tasarim sınıf numaralarını giriniz
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -309,7 +298,7 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.firma_ad!}
+                        placeholder={`${secilenTasarim.firma_ad}`}
                         {...field}
                         /*  onChange={(e) => setReferansNo(e.target.value)} */
                       />
@@ -328,7 +317,7 @@ export default function PatentForm({
                 size="lg"
                 type="submit"
                 disabled={isLoading}>
-                Patent Bilgilerni Güncelle
+                Tasarim Bilgilerni Güncelle
                 <Wand2 className="w-4 h-4 ml-2" />
               </Button>
             </div>

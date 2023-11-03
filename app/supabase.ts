@@ -293,6 +293,82 @@ export interface Database {
           }
         ]
       }
+      tasarimlar: {
+        Row: {
+          basvuru_no: string | null
+          basvuru_tarihi: string | null
+          blob_tasarim_figure_url: string | null
+          class_no: string | null
+          created_at: string
+          deger: string | null
+          firma_ad: string | null
+          firma_id: string
+          firma_unvan: string
+          id: string
+          ozet: string | null
+          tasarim_durumu: string | null
+          tasarim_figure_url: string | null
+          tasarim_title: string | null
+          ptasarim_figure_url: string | null
+          /* product_remote_figure_url: string | null */
+          referans_no: string | null
+          status: string | null
+        }
+        Insert: {
+          basvuru_no?: string | null
+          basvuru_tarihi?: string | null
+          blob_tasarim_figure_url?: string | null
+          class_no?: string | null
+          created_at?: string
+          deger?: string | null
+          firma_ad?: string | null
+          firma_id: string
+          firma_unvan: string
+          id?: string
+          ozet?: string | null
+          tasarim_durumu?: string | null
+          tasarim_figure_url?: string | null
+          tasarim_title?: string | null
+          ptasarim_figure_url?: string | null
+          /* product_remote_figure_url: string | null */
+          referans_no?: string | null
+          status?: string | null
+        }
+        Update: {
+          basvuru_no?: string | null
+          basvuru_tarihi?: string | null
+          blob_tasarim_figure_url?: string | null
+          class_no?: string | null
+          created_at?: string
+          deger?: string | null
+          firma_ad?: string | null
+          firma_id?: string
+          firma_unvan?: string
+          id?: string
+          ozet?: string | null
+          tasarim_durumu?: string | null
+          tasarim_figure_url?: string | null
+          tasarim_title?: string | null
+          ptasarim_figure_url?: string | null
+          /* product_remote_figure_url: string | null */
+          referans_no?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasarimlar_firma_id_fkey"
+            columns: ["firma_id"]
+            referencedRelation: "firmalar"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasarimlar_firma_unvan_fkey"
+            columns: ["firma_unvan"]
+            referencedRelation: "firmalar"
+            referencedColumns: ["firma_unvan"]
+          }
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

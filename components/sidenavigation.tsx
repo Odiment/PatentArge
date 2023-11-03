@@ -8,14 +8,16 @@ import { LuGalleryHorizontal } from "react-icons/lu";
 import { AiOutlinePlusSquare, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsShieldCheck } from "react-icons/bs";
 import { PiShieldCheckeredBold } from "react-icons/pi";
+import { SiSnapcraft } from "react-icons/si";
 import { LuGalleryVertical } from "react-icons/lu";
 import { FiSettings } from "react-icons/fi";
+import { PiTrademarkBold } from "react-icons/pi";
 import { Poppins, Sora } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/app/supabase";
 
-type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
+/* type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"]; */
 
 const font = Sora({ weight: "200", subsets: ["latin"] });
 
@@ -37,7 +39,7 @@ const MenuItems: Array<MenuItem> = [
   },
   {
     id: 1,
-    icon: LuGalleryHorizontal,
+    icon: PiTrademarkBold,
     text: "Markalar",
     pathname: "/marka/list",
     ytk: "admin, client",
@@ -58,27 +60,41 @@ const MenuItems: Array<MenuItem> = [
   },
   {
     id: 4,
-    icon: AiOutlinePlusSquare,
+    icon: SiSnapcraft,
+    text: "Tasarimlar",
+    pathname: "/tasarim/list",
+    ytk: "admin, client",
+  },
+  {
+    id: 5,
+    icon: PiTrademarkBold,
     text: "Marka Ekle",
     pathname: "/tm/new",
     ytk: "admin",
   },
   {
-    id: 5,
+    id: 6,
     icon: PiShieldCheckeredBold,
     text: "Patent Ekle",
     pathname: "/pt/new",
     ytk: "admin",
   },
   {
-    id: 6,
+    id: 7,
+    icon: SiSnapcraft,
+    text: "Tasarım Ekle",
+    pathname: "/tsrm/new",
+    ytk: "admin",
+  },
+  {
+    id: 8,
     icon: AiOutlinePlusCircle,
     text: "Firma Ekle",
     pathname: "/firmaekle/new",
     ytk: "admin",
   },
   {
-    id: 7,
+    id: 9,
     icon: FiSettings,
     text: "Ayarlar",
     pathname: "/settings",

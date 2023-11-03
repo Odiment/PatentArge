@@ -9,38 +9,29 @@ import { Wand2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
-/* import { Database } from '../../../database.types'
-
-type Patentler = Database['public']['Tables']['patentler']['Row']
- */
-/* type Profiles = Database["public"]["Tables"]["profiles"]["Row"] */
-
-/* const url = "ebdd1d12-fcff-46c2-bbb7-2408dc29d7f7-0.9834786322138155.jpg" */
-// const url = "ebdd1d12-fcff-46c2-bbb7-2408dc29d7f7-0.9834786322138154.png"
-
 import { Database } from "@/app/supabase";
 
-type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
+type TasarimlarX = Database["public"]["Tables"]["tasarimlar"]["Row"];
 
-interface PatentFigureProps {
+interface TasarimFigureProps {
     uid: string[]
-    patent_url: string | null
+    tasarim_url: string | null
     size: number
     txt: string
     onUpload: any
 }
 
-const PatentFigure: React.FC<PatentFigureProps> = ({
+const TasarimFigure: React.FC<TasarimFigureProps> = ({
   uid,
-  patent_url,
+  tasarim_url,
   size,
   txt,
   onUpload,
 }) => {
   const supabase = createClientComponentClient<Database>()
-  const [patent_figure_url, setPatentFigureUrl] =
-    useState<PatentlerX['patent_figure_url']>(patent_url)
-  const [url, setUrl] = useState<PatentlerX['patent_figure_url']>(patent_url)
+  const [tasarim_figure_url, setTasarimFigureUrl] =
+    useState<TasarimlarX['tasarim_figure_url']>(tasarim_url)
+  const [url, setUrl] = useState<TasarimlarX['tasarim_figure_url']>(tasarim_url)
   const [uploading, setUploading] = useState(false)
   const [images, setImages] = useState([])
   const [LogoFilePath, setLogoFilePath] = useState<string>()
@@ -48,25 +39,25 @@ const PatentFigure: React.FC<PatentFigureProps> = ({
   /*   console.log(`prop - url ${url}`) */
 
   useEffect(() => {
-    async function downloadPatentFigure(path: string) {
+    async function downloadTasarimFigure(path: string) {
       try {
         const { data, error } = await supabase.storage
-          .from('patentFigure')
+          .from('tasarimFigure')
           .download(path)
         if (error) {
           throw error
         }
         const url = URL.createObjectURL(data)
-        setPatentFigureUrl(url)
+        setTasarimFigureUrl(url)
       } catch (error) {
         console.log('Error downloading image: ', error)
       }
     }
 
-    if (patent_url) downloadPatentFigure(patent_url)
-  }, [patent_url, supabase])
+    if (tasarim_url) downloadTasarimFigure(tasarim_url)
+  }, [tasarim_url, supabase])
 
-  const uploadPatentFigure: React.ChangeEventHandler<HTMLInputElement> = async (
+  const uploadTasarimFigure: React.ChangeEventHandler<HTMLInputElement> = async (
     event
   ) => {
     try {
@@ -81,15 +72,10 @@ const PatentFigure: React.FC<PatentFigureProps> = ({
       const filePath = `${uid}-${Math.random()}.${fileExt}`
 
       let { error: uploadError } = await supabase.storage
-        .from('patentFigure')
+        .from('tasarimFigure')
         .upload(filePath, file)
 
       setLogoFilePath(filePath)
-      /*       console.log('patent-figure: filePath')
-      console.log(filePath) */
-
-      /*     console.log('patent-figure:patent_figure_url')
-      console.log(patent_figure_url) */
       onUpload(filePath)
     } catch (error) {
       console.log(error)
@@ -108,11 +94,11 @@ const PatentFigure: React.FC<PatentFigureProps> = ({
 
   
 
-  if ((patent_url !== null) && (patent_url !== undefined )) {
-    if (patent_url.includes('http')) {
-    resim_url = patent_url
+  if ((tasarim_url !== null) && (tasarim_url !== undefined)) {
+    if (tasarim_url.includes('http')) {
+    resim_url = tasarim_url
   } else {
-    resim_url = patent_figure_url
+    resim_url = tasarim_figure_url
   }
 }
 
@@ -124,7 +110,7 @@ const PatentFigure: React.FC<PatentFigureProps> = ({
           height={size}
           className="aspect-square object-cover rounded-lg transition-all duration-300 hover:scale-105"
           src={resim_url!}
-          alt="patent_figure_url"
+          alt="tasarim_figure_url"
         />
       </div>
       <div className="pt-2">
@@ -145,7 +131,7 @@ const PatentFigure: React.FC<PatentFigureProps> = ({
           id="single"
           ref={hiddenFileInput}
           accept="image/*"
-          onChange={uploadPatentFigure}
+          onChange={uploadTasarimFigure}
           disabled={uploading}
         />
       </div>
@@ -153,4 +139,4 @@ const PatentFigure: React.FC<PatentFigureProps> = ({
   )
 }
 
-export default PatentFigure
+export default TasarimFigure
