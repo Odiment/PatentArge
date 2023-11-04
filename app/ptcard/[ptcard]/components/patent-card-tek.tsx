@@ -1,25 +1,25 @@
-'use client'
+"use client";
 
-import { useCallback, useEffect, useState } from 'react'
-import classNames from 'classnames'
-import Image from 'next/image'
-import Link from 'next/link'
-import { GiPlainCircle } from 'react-icons/gi'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useCallback, useEffect, useState } from "react";
+import classNames from "classnames";
+import Image from "next/image";
+import Link from "next/link";
+import { GiPlainCircle } from "react-icons/gi";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {
   Wand2,
   ArrowLeftSquare,
   ArrowRightSquare,
   PlusSquare,
   Trash2,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-import PatentFigure from './patent-figure'
-import ProductFigure from './product-figure'
+import PatentFigure from "./patent-figure";
+import ProductFigure from "./product-figure";
 
 import {
   Form,
@@ -29,13 +29,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { toast } from '@/components/ui/use-toast'
+import { toast } from "@/components/ui/use-toast";
 /* import { UUID } from 'crypto' */
 
 import { Database } from "@/app/supabase";
@@ -43,16 +43,16 @@ import { Database } from "@/app/supabase";
 type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
 
 interface PatentCardTek {
-  veri: PatentlerX[],
+  veri: PatentlerX[];
   patent_resimler: {
     patent_resim_url: string | null;
     id: string;
-}[],
-product_resimler: {
+  }[];
+  product_resimler: {
     product_resim_url: string | null;
     product_remote_url: string | null;
     id: string;
-}[],
+  }[];
 }
 
 const PatentCardTek: React.FC<PatentCardTek> = ({
@@ -60,77 +60,77 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
   patent_resimler,
   product_resimler,
 }) => {
+  const [sil, setSil] = useState<boolean>(false);
+
   let patent_resimler_url = patent_resimler.map(
     ({ patent_resim_url }: any) => patent_resim_url
-  )
+  );
   let product_resimler_url = product_resimler.map(
     ({ product_resim_url }: any) => product_resim_url
-  )
+  );
   let product_remote_resimler_url = product_resimler.map(
     ({ product_remote_url }) => product_remote_url
-  )
+  );
 
-  let patent_resimler_id = patent_resimler.map(({ id }) => id)
-  let product_resimler_id = product_resimler.map(({ id }) => id)
-  let veri_id = veri.map(({ id }) => id)
-  let patent_title = veri.map(({ patent_title }) => patent_title)
-  let basvuru_no = veri.map(({ basvuru_no }) => basvuru_no)
-  let basvuru_tarihi = veri.map(({ basvuru_tarihi }) => basvuru_tarihi)
-  let referans_no = veri.map(({ referans_no }) => referans_no)
+  let patent_resimler_id = patent_resimler.map(({ id }) => id);
+  let product_resimler_id = product_resimler.map(({ id }) => id);
+  let veri_id = veri.map(({ id }) => id);
+  let patent_title = veri.map(({ patent_title }) => patent_title);
+  let basvuru_no = veri.map(({ basvuru_no }) => basvuru_no);
+  let basvuru_tarihi = veri.map(({ basvuru_tarihi }) => basvuru_tarihi);
+  let referans_no = veri.map(({ referans_no }) => referans_no);
 
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClientComponentClient<Database>();
 
-  const [patent_figure_url, setPatentFigureUrl] = useState<any[]>(
-    patent_resimler_url
-  )
-  const [product_figure_url, setProductFigureUrl] = useState<any[]>(
-    product_resimler_url
-  )
+  const [patent_figure_url, setPatentFigureUrl] =
+    useState<any[]>(patent_resimler_url);
+  const [product_figure_url, setProductFigureUrl] =
+    useState<any[]>(product_resimler_url);
   const [product_remote_figure_url, setProductFigureRemoteUrl] = useState<
-  any[]
-  >(product_remote_resimler_url)
+    any[]
+  >(product_remote_resimler_url);
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
-  const [currentPatentIndex, setCurrentPatentIndex] = useState(0)
+  const [currentPatentIndex, setCurrentPatentIndex] = useState(0);
 
-  let patentdurumu: any = "basvuru"
+  let patentdurumu: any = "basvuru";
   if (veri != null) {
     let patentdurumux = veri.map(({ status }: any) => status);
-    patentdurumu = patentdurumux
+    patentdurumu = patentdurumux;
   }
 
-  let yesil = patentdurumu === 'tescil'
-  let sari = patentdurumu === 'basvuru'
-  let kirmizi = patentdurumu === 'iptal'
+  let yesil = patentdurumu === "tescil";
+  let sari = patentdurumu === "basvuru";
+  let kirmizi = patentdurumu === "iptal";
 
   const FormSchema = z.object({
     product_remote_figure_url: z.string().min(2, {
-      message: 'Logo url must be at least 2 characters.',
+      message: "Logo url must be at least 2 characters.",
     }),
-  })
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  })
+  });
 
   async function updatePatentFigure({
     patent_figure_url,
   }: {
-    patent_figure_url: any
+    patent_figure_url: any;
   }) {
     try {
-      setLoading(true)
+      setLoading(true);
 
       let { error } = await supabase
-        .from('patent_resimler')
+        .from("patent_resimler")
         .update({
           patent_resim_url: patent_figure_url,
         })
-        .eq('id', patent_resimler_id[currentPatentIndex])
-      if (error) throw error
+        .eq("id", patent_resimler_id[currentPatentIndex]);
+      if (error) throw error;
       toast({
-        title: 'Resim yükleme işlemi: başarıyla gerçekleşti:',
+        title: "Resim yükleme işlemi: başarıyla gerçekleşti:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
@@ -139,35 +139,35 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
             </code>
           </pre>
         ),
-      })
+      });
     } catch (error) {
-      alert(error)
-      console.log('error')
-      console.log(error)
+      alert(error);
+      console.log("error");
+      console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-    window.location.reload()
+    window.location.reload();
   }
 
   async function updateProductFigure({
     product_figure_url,
   }: {
-    product_figure_url: any
+    product_figure_url: any;
   }) {
     try {
-      setLoading(true)
+      setLoading(true);
 
       let { error } = await supabase
-        .from('product_resimler')
+        .from("product_resimler")
         .update({
           product_resim_url: product_figure_url,
         })
-        .eq('id', product_resimler_id[currentPatentIndex])
-      if (error) throw error
+        .eq("id", product_resimler_id[currentPatentIndex]);
+      if (error) throw error;
       /*  alert('Patent Figure güncellendi!') */
       toast({
-        title: 'Resim yükleme işlemi başarıyla gerçekleşti:',
+        title: "Resim yükleme işlemi başarıyla gerçekleşti:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
@@ -176,15 +176,15 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
             </code>
           </pre>
         ),
-      })
+      });
     } catch (error) {
       /*  alert(error) */
-      console.log('error')
-      console.log(error)
+      console.log("error");
+      console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-    window.location.reload()
+    window.location.reload();
   }
 
   async function updateProductRemoteFigure({
@@ -192,21 +192,21 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
     product_remote_figure_url,
   }: {
     /* product_figure_url: string | null */
-    product_remote_figure_url: string | null
+    product_remote_figure_url: string | null;
   }) {
     try {
-      setLoading(true)
+      setLoading(true);
 
       let { error } = await supabase
-        .from('product_resimler')
+        .from("product_resimler")
         .update({
           product_remote_url: product_remote_figure_url,
         })
-        .eq('id', product_resimler_id[currentPatentIndex])
-      if (error) throw error
+        .eq("id", product_resimler_id[currentPatentIndex]);
+      if (error) throw error;
       /*  alert('Patent Figure güncellendi!') */
       toast({
-        title: 'Resim yükleme işlemi başarıyla gerçekleşti:',
+        title: "Resim yükleme işlemi başarıyla gerçekleşti:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
@@ -215,28 +215,30 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
             </code>
           </pre>
         ),
-      })
+      });
     } catch (error) {
       /*  alert(error) */
-      console.log('error')
-      console.log(error)
+      console.log("error");
+      console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-    window.location.reload()
+    window.location.reload();
   }
 
   async function deletePatent() {
     try {
       const { error } = await supabase
-        .from('patentler')
+        .from("patentler")
         .delete()
-        .eq('id', veri[0].id)
+        .eq("id", veri[0].id);
 
-      if (error) throw error
-      window.location.reload()
+      setSil(true);
+
+      if (error) throw error;
+      /* window.location.reload() */
     } catch (error: any) {
-      alert(error.message)
+      alert(error.message);
     }
   }
 
@@ -244,19 +246,19 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
   async function newPatentFigure() {
     try {
       const { error } = await supabase
-        .from('patent_resimler')
+        .from("patent_resimler")
         .insert({
           patent_id: veri[0].id,
           patent_resim_url:
-            'https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/avatars/aec65205-9440-482f-a539-9293fb7bb8a0-0.5921580138461082.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzL2FlYzY1MjA1LTk0NDAtNDgyZi1hNTM5LTkyOTNmYjdiYjhhMC0wLjU5MjE1ODAxMzg0NjEwODIucG5nIiwiaWF0IjoxNjk1NzU5Nzc4LCJleHAiOjE3MjcyOTU3Nzh9.rAgx9t6ExaXl_Y-M9peTr3IHA1TD9gHf9wsGd-PWsbw&t=2023-09-26T20%3A22%3A55.712Z',
+            "https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/avatars/aec65205-9440-482f-a539-9293fb7bb8a0-0.5921580138461082.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzL2FlYzY1MjA1LTk0NDAtNDgyZi1hNTM5LTkyOTNmYjdiYjhhMC0wLjU5MjE1ODAxMzg0NjEwODIucG5nIiwiaWF0IjoxNjk1NzU5Nzc4LCJleHAiOjE3MjcyOTU3Nzh9.rAgx9t6ExaXl_Y-M9peTr3IHA1TD9gHf9wsGd-PWsbw&t=2023-09-26T20%3A22%3A55.712Z",
         })
-        .single()
+        .single();
 
-      if (error) throw error
+      if (error) throw error;
 
       toast({
-        variant: 'affirmative',
-        title: 'Veri tabanında patent için bir id oluşturuldu',
+        variant: "affirmative",
+        title: "Veri tabanında patent için bir id oluşturuldu",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
@@ -264,73 +266,73 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
             </code>
           </pre>
         ),
-      })
+      });
 
-      window.location.reload()
+      window.location.reload();
     } catch (error: any) {
-      alert(error.message)
+      alert(error.message);
     }
   }
 
   const getirYeniPatentResmi = useCallback(async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       let { data, error, status } = await supabase
-        .from('product_resimler')
+        .from("product_resimler")
         .select(`product_resim_url`)
-        .eq('id', veri[0].id)
-        .single()
+        .eq("id", veri[0].id)
+        .single();
 
       if (error && status !== 406) {
-        throw error
+        throw error;
       }
     } catch (error) {
-      alert(`Error loading patent data! ${error}`)
+      alert(`Error loading patent data! ${error}`);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [veri, supabase])
+  }, [veri, supabase]);
 
   useEffect(() => {
-    getirYeniPatentResmi()
-  }, [veri, patent_resimler, getirYeniPatentResmi])
+    getirYeniPatentResmi();
+  }, [veri, patent_resimler, getirYeniPatentResmi]);
 
   async function deletePatentResim() {
     try {
       const { error } = await supabase
-        .from('patent_resimler')
+        .from("patent_resimler")
         .delete()
-        .eq('id', patent_resimler_id[currentPatentIndex])
+        .eq("id", patent_resimler_id[currentPatentIndex]);
 
-      if (error) throw error
-      window.location.reload()
+      if (error) throw error;
+      window.location.reload();
     } catch (error: any) {
-      alert(error.message)
+      alert(error.message);
     }
   }
 
   // Yeni Bir Ürün Resmi İçin Veritabanında Kayıt Oluşturulması ve PlaceHolder Resmi Eklenmesi
   let null_url =
-    'https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/patentFigure/format.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXRlbnRGaWd1cmUvZm9ybWF0LnBuZyIsImlhdCI6MTY5NzM3Mjc3OSwiZXhwIjoxNzkxOTgwNzc5fQ.2s1NRy0rUx9cDryhuovBt4Uuy6BFQPrVCfzXDfp5BpI&t=2023-10-15T12%3A26%3A19.101Z'
+    "https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/patentFigure/format.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXRlbnRGaWd1cmUvZm9ybWF0LnBuZyIsImlhdCI6MTY5NzM3Mjc3OSwiZXhwIjoxNzkxOTgwNzc5fQ.2s1NRy0rUx9cDryhuovBt4Uuy6BFQPrVCfzXDfp5BpI&t=2023-10-15T12%3A26%3A19.101Z";
 
   async function newProductFigure() {
     try {
       const { error } = await supabase
-        .from('product_resimler')
+        .from("product_resimler")
         .insert({
           patent_id: veri[0].id,
-          product_resim_url: 'placeholder',
+          product_resim_url: "placeholder",
 
           product_remote_url: null_url,
         })
-        .single()
+        .single();
 
-      if (error) throw error
+      if (error) throw error;
 
       toast({
-        variant: 'affirmative',
-        title: 'Veri tabanında patent için bir id oluşturuldu',
+        variant: "affirmative",
+        title: "Veri tabanında patent için bir id oluşturuldu",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
             <code className="text-white">
@@ -338,106 +340,100 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
             </code>
           </pre>
         ),
-      })
+      });
 
-      window.location.reload()
+      window.location.reload();
     } catch (error: any) {
-      alert(error.message)
+      alert(error.message);
     }
   }
 
   const getirYeniUrunResmi = useCallback(async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       let { data, error, status } = await supabase
-        .from('product_resimler')
+        .from("product_resimler")
         .select(`product_resim_url`)
-        .eq('id', veri[0].id)
-        .single()
+        .eq("id", veri[0].id)
+        .single();
 
       if (error && status !== 406) {
-        throw error
+        throw error;
       }
     } catch (error) {
-      alert(`Error loading patent data! ${error}`)
+      alert(`Error loading patent data! ${error}`);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [veri, supabase])
+  }, [veri, supabase]);
 
   useEffect(() => {
-    getirYeniUrunResmi()
-  }, [product_resimler, getirYeniUrunResmi])
+    getirYeniUrunResmi();
+  }, [product_resimler, getirYeniUrunResmi]);
 
   async function deleteUrunResim() {
     try {
       const { error } = await supabase
-        .from('product_resimler')
+        .from("product_resimler")
         .delete()
-        .eq('id', product_resimler_id[currentPatentIndex])
+        .eq("id", product_resimler_id[currentPatentIndex]);
 
-      if (error) throw error
-      window.location.reload()
+      if (error) throw error;
+      window.location.reload();
     } catch (error: any) {
-      alert(error.message)
+      alert(error.message);
     }
   }
 
   // slider functions *************
   // Patent Resimler ******************
   const prevPatentSlide = () => {
-    const isFirstSlide = currentPatentIndex === 0
+    const isFirstSlide = currentPatentIndex === 0;
     const newIndex = isFirstSlide
       ? patent_resimler_url.length - 1
-      : currentPatentIndex - 1
-    setCurrentPatentIndex(newIndex)
-  }
+      : currentPatentIndex - 1;
+    setCurrentPatentIndex(newIndex);
+  };
 
   const nextPatentSlide = () => {
-    const isLastSlide = currentPatentIndex === patent_resimler_url.length - 1
-    const newIndex = isLastSlide ? 0 : currentPatentIndex + 1
-    setCurrentPatentIndex(newIndex)
-  }
+    const isLastSlide = currentPatentIndex === patent_resimler_url.length - 1;
+    const newIndex = isLastSlide ? 0 : currentPatentIndex + 1;
+    setCurrentPatentIndex(newIndex);
+  };
 
   // Ürün (Product) Resimler ******************
-  const [currentProductIndex, setCurrentProductIndex] = useState(0)
+  const [currentProductIndex, setCurrentProductIndex] = useState(0);
 
   const prevProductSlide = () => {
-    const isFirstSlide = currentProductIndex === 0
+    const isFirstSlide = currentProductIndex === 0;
     const newIndex = isFirstSlide
       ? product_resimler_id.length - 1
-      : currentProductIndex - 1
-    setCurrentProductIndex(newIndex)
-  }
+      : currentProductIndex - 1;
+    setCurrentProductIndex(newIndex);
+  };
 
   const nextProductSlide = () => {
-    const isLastSlide = currentProductIndex === product_resimler_id.length - 1
-    const newIndex = isLastSlide ? 0 : currentProductIndex + 1
-    setCurrentProductIndex(newIndex)
-  }
+    const isLastSlide = currentProductIndex === product_resimler_id.length - 1;
+    const newIndex = isLastSlide ? 0 : currentProductIndex + 1;
+    setCurrentProductIndex(newIndex);
+  };
 
   // ************* *************
 
-  
-  
-
-
-  let durum_bilgisi: any = "default"
+  let durum_bilgisi: any = "default";
   if (veri != null) {
     let durum_bilgisix = veri.map(({ status }: any) => status);
-    durum_bilgisi = durum_bilgisix
- 
-  if (durum_bilgisi === 'basvuru') {
-    durum_bilgisi = 'Başvuru Sürecinde'
-  } else if (durum_bilgisi === 'tescil') {
-    durum_bilgisi = 'Tescil Edildi'
-  } else if (durum_bilgisi === 'iptal') {
-    durum_bilgisi = 'İptal/Geçersiz'
+    durum_bilgisi = durum_bilgisix;
+
+    if (durum_bilgisi === "basvuru") {
+      durum_bilgisi = "Başvuru Sürecinde";
+    } else if (durum_bilgisi === "tescil") {
+      durum_bilgisi = "Tescil Edildi";
+    } else if (durum_bilgisi === "iptal") {
+      durum_bilgisi = "İptal/Geçersiz";
+    }
   }
-}
-
-
 
   return (
     <div className="flex flex-col gap-x-2">
@@ -450,29 +446,25 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
                   <Button
                     className="bg-sky-600 font-bold"
                     size="lg"
-                    onClick={prevPatentSlide}
-                  >
+                    onClick={prevPatentSlide}>
                     <ArrowLeftSquare className="w-4 h-4 ml-2" />
                   </Button>
                   <Button
                     className="bg-green-500 font-bold"
                     size="lg"
-                    onClick={newPatentFigure}
-                  >
+                    onClick={newPatentFigure}>
                     <PlusSquare className="w-4 h-4 ml-2" />
                   </Button>
                   <Button
                     className="bg-red-500 font-bold"
                     size="lg"
-                    onClick={deletePatentResim}
-                  >
+                    onClick={deletePatentResim}>
                     <Trash2 className="w-4 h-4 ml-2" />
                   </Button>
                   <Button
                     className="bg-sky-600 font-bold"
                     size="lg"
-                    onClick={nextPatentSlide}
-                  >
+                    onClick={nextPatentSlide}>
                     <ArrowRightSquare className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
@@ -482,7 +474,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
                   size={400}
                   txt="Patent Resmi Yükle"
                   onUpload={(patent_url: any) => {
-                    setPatentFigureUrl(patent_url)
+                    setPatentFigureUrl(patent_url);
                     /*                     updatePatentFigure({
                         patent_figure_url
                     }) */
@@ -492,29 +484,25 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
                   <Button
                     className="bg-sky-600 font-bold"
                     size="lg"
-                    onClick={prevProductSlide}
-                  >
+                    onClick={prevProductSlide}>
                     <ArrowLeftSquare className="w-4 h-4 ml-2" />
                   </Button>
                   <Button
                     className="bg-green-500 font-bold"
                     size="lg"
-                    onClick={newProductFigure}
-                  >
+                    onClick={newProductFigure}>
                     <PlusSquare className="w-4 h-4 ml-2" />
                   </Button>
                   <Button
                     className="bg-red-500 font-bold"
                     size="lg"
-                    onClick={deleteUrunResim}
-                  >
+                    onClick={deleteUrunResim}>
                     <Trash2 className="w-4 h-4 ml-2" />
                   </Button>
                   <Button
                     className="bg-sky-600 font-bold"
                     size="lg"
-                    onClick={nextProductSlide}
-                  >
+                    onClick={nextProductSlide}>
                     <ArrowRightSquare className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
@@ -528,7 +516,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
                   size={400}
                   txt="Ürün Resmi Yükle"
                   onUpload={(product_url: any) => {
-                    setProductFigureUrl(product_url)
+                    setProductFigureUrl(product_url);
                     /*                     updateProductFigure({
                       product_figure_url,
                     }) */
@@ -541,8 +529,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
                 <Form {...form}>
                   <form
                     onSubmit={form.handleSubmit(updateProductRemoteFigure)}
-                    className="w-full space-y-6"
-                  >
+                    className="w-full space-y-6">
                     <FormField
                       control={form.control}
                       name="product_remote_figure_url"
@@ -567,8 +554,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
                     />
                     <Button
                       type="submit"
-                      className="w-full bg-primary hover:bg-primary/50 font-bold"
-                    >
+                      className="w-full bg-primary hover:bg-primary/50 font-bold">
                       Ürün Resmi İnternet Linkini Kaydet
                     </Button>
                   </form>
@@ -580,32 +566,26 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
 
                   <div className="flex gap-2">
                     <p
-                      className={classNames('text-2xl', 'font-bold', {
-                        'text-emerald-500': yesil,
-                        'text-yellow-500': sari,
-                        'text-red-500': kirmizi,
-                      })}
-                    >
+                      className={classNames("text-2xl", "font-bold", {
+                        "text-emerald-500": yesil,
+                        "text-yellow-500": sari,
+                        "text-red-500": kirmizi,
+                      })}>
                       <GiPlainCircle size={200} className="h-7 w-7" />
                     </p>
                     {/*  <p>Durum:</p> */}
                     <p
-                      className={classNames('text-2xl', 'font-bold', {
-                        'text-emerald-500': yesil,
-                        'text-yellow-500': sari,
-                        'text-red-500': kirmizi,
-                      })}
-                    >
+                      className={classNames("text-2xl", "font-bold", {
+                        "text-emerald-500": yesil,
+                        "text-yellow-500": sari,
+                        "text-red-500": kirmizi,
+                      })}>
                       {durum_bilgisi}
                     </p>
                   </div>
                   <div>
-                    <p className="font-semibold text-2xl">
-                      {basvuru_no}
-                    </p>
-                    <p className="font-semibold text-2xl">
-                      {basvuru_tarihi}
-                    </p>
+                    <p className="font-semibold text-2xl">{basvuru_no}</p>
+                    <p className="font-semibold text-2xl">{basvuru_tarihi}</p>
 
                     <p className="text-sm text-primary/80">
                       Ref: {referans_no}
@@ -623,8 +603,7 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
               updatePatentFigure({
                 patent_figure_url,
               })
-            }
-          >
+            }>
             Patent Resim Güncelle
             <Wand2 className="w-4 h-4 ml-2" />
           </Button>
@@ -634,24 +613,20 @@ const PatentCardTek: React.FC<PatentCardTek> = ({
               updateProductFigure({
                 product_figure_url,
               })
-            }
-          >
+            }>
             Ürün Resmi Güncelle
             <Wand2 className="w-4 h-4 ml-2" />
           </Button>
           <Button
             className="bg-red-500 font-bold hover:bg-red-300 gap-4"
-            onClick={() =>
-              deletePatent()
-            }
-          >
+            onClick={() => deletePatent()}>
             Patent Kaydını Sil
             <Wand2 className="w-4 h-4 ml-2" />
           </Button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PatentCardTek
+export default PatentCardTek;

@@ -38,16 +38,22 @@ const PatentList: React.FC<PatentListProps> = ({
   return (
     <div className="space-y-4">
       {items?.map((item, index) => (
-          <PatentLongCard
-            key={index}
-            data={item}
-            bilgiler={bilgiler[index]}
-            patent_id={item.id}
-            patentResimler={patentResimler}
-            productResimler={productResimler}
-            productRemoteResimler={productRemoteResimler}
-            userid={userid!}
-          />
+        <>
+          {item.basvuru_no != null && (
+            <div key={item.id}>
+              <PatentLongCard
+                key={index}
+                data={item}
+                bilgiler={bilgiler[index]}
+                patent_id={item.id}
+                patentResimler={patentResimler}
+                productResimler={productResimler}
+                productRemoteResimler={productRemoteResimler}
+                userid={userid!}
+              />
+            </div>
+          )}
+        </>
       ))}
     </div>
   );

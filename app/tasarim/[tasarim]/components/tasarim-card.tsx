@@ -399,7 +399,7 @@ const TasarimCard: React.FC<TasarimCardProps> = ({
                                 Düzenle
                               </Link>
                             </Button>
-                            <Button variant="destructive">
+                            <Button onClick={deleteTasarim} variant="destructive">
                               <DeleteDocumentIcon
                                 className={cn(iconClasses, "text-white")}
                               />

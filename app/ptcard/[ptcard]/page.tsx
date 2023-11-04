@@ -24,20 +24,6 @@ interface PatentCardYazProps {
   };
 }
 
-/* export const getSession = async () => {
-    const cookieStore = cookies()
-    const supabase = createServerComponentClient({ cookies: () => cookieStore })
-   const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-
-      return {session, user, supabase}
-} */
-
 const PatentCardYaz = async ({ params }: PatentCardYazProps) => {
   /* const supabase = createServerComponentClient<Database>({ cookies }); */
    const cookieStore = cookies();
@@ -46,8 +32,6 @@ const PatentCardYaz = async ({ params }: PatentCardYazProps) => {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
-  /* const {session, user, supabase} = await getSession() */
 
   const { data: secilenPatent } = await supabase
     .from("patentler")
@@ -96,11 +80,6 @@ const PatentCardYaz = async ({ params }: PatentCardYazProps) => {
       secilenProductResimlerx = secilenProductResimler;
     }
   }
-
-  /*   console.log("secilenPatentResimler")
-  console.log(secilenPatentResimler)
-  console.log("patent_resim_url")
-  console.log(patent_resim_url) */
 
   return (
     <div className="flex flex-col content-center mx-auto pt-10 gap-y-8  px-4 sm:px-6 lg:px-8">

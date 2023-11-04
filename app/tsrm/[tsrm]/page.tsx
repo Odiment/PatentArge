@@ -31,8 +31,6 @@ export default async function YeniTasarimOlustur() {
     data: { user },
   } = await supabase.auth.getUser(); 
 
-  /* const {session, user, supabase} = await getSession() */
-
   if (!session) {
     redirect("/");
   }
@@ -87,16 +85,10 @@ export default async function YeniTasarimOlustur() {
   .select("id, tasarim_title, referans_no, firma_unvan")
   .eq("class_no", "111");
 
-
-
-
 let eksikVeriTasarim: any = null;
 let eksikTasarimRef: any = null;
 let eksikTasarimId: any = null;
 let eksikTasarimFirma: any = null;
-
-
-
 
 if (eksikVeriTasarimlar != null) {
   

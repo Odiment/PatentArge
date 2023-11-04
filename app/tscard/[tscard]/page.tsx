@@ -32,8 +32,6 @@ const TasarimCardYaz = async ({ params }: TasarimCardYazProps) => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  /* const {session, user, supabase} = await getSession() */
-
   const { data: secilenTasarim } = await supabase
     .from("tasarimlar")
     .select()

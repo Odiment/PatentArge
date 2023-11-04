@@ -414,7 +414,7 @@ const PatentCard: React.FC<PatentCardProps> = ({
                                 Düzenle
                               </Link>
                             </Button>
-                            <Button variant="destructive">
+                            <Button onClick={deletePatent} variant="destructive">
                               <DeleteDocumentIcon
                                 className={cn(iconClasses, "text-white")}
                               />

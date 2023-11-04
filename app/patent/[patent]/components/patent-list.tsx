@@ -28,14 +28,20 @@ const PatentList: React.FC<PatentListProps> = ({
           key={2}
           className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {items?.map((item, index) => (
-            <PatentCard
-              key={index}
-              data={item}
-              bilgiler={bilgiler[index]}
-              patent_id={item.id}
-              patentResimler={patentResimler}
-              userid={userid}
-            />
+            <>
+              {item.basvuru_no != null && (
+                <div key={item.id}>
+                  <PatentCard
+                    key={index}
+                    data={item}
+                    bilgiler={bilgiler[index]}
+                    patent_id={item.id}
+                    patentResimler={patentResimler}
+                    userid={userid}
+                  />
+                </div>
+              )}
+            </>
           ))}
         </div>
       )}
