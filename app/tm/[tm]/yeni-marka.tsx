@@ -120,6 +120,14 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
           referans_no: veri.referans,
           firma_id: secilenFirma[0].id,
           firma_unvan: secilenFirma[0].firma_unvan,
+          basvuru_no: null,
+          basvuru_tarihi: null,
+          class_no: null,
+          durum_aciklamasi: null,
+          marka_durumu: null,
+          son_islem: null,
+          son_islem_tarihi: null,
+          status: null,
         })
         .single();
 
@@ -136,12 +144,16 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
           </pre>
         ),
       });
+
+      window.location.reload()
+      
+      
     } catch (error: any) {
       alert(error.message);
     }
   }
 
-  const getirYeniMarka = useCallback(async () => {
+/*   const getirYeniMarka = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -157,7 +169,7 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
 
       if (data) {
         setUid(data.id);
-        /* setMarkalar(data); */
+        redirect(`/tmcard/${referans}`)
       }
     } catch (error) {
       alert(`Error loading marka data!", ${error}`);
@@ -168,16 +180,16 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
 
   useEffect(() => {
     getirYeniMarka();
-  }, [marka, getirYeniMarka]);
+  }, [marka, getirYeniMarka]); */
 
   return (
     <section className="md:ml-14 lg:ml-20 container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <div>
         <h1 className="text-xl font-extrabold">Marka Giriş Ekranı</h1>
       </div>
-      {uid ? (
+{/*       {uid ? (
         redirect(`/tmcard/${referans}`)
-      ) : (
+      ) : ( */}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmitYeniMarka)}
@@ -261,7 +273,7 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
             </Button>
           </form>
         </Form>
-      )}
+    {/*   )} */}
     </section>
   );
 }

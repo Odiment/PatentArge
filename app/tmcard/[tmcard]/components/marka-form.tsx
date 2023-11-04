@@ -193,7 +193,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                       <Input
                         className="font-black italic"
                         disabled={isLoading}
-                        placeholder={`${secilenMarka[0].marka}`}
+                        placeholder={`${secilenMarka[0]?.marka!}`}
                         {...field}
                       />
                     </FormControl>
@@ -214,7 +214,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                       <Input
                         className="font-black italic"
                         disabled={isLoading}
-                        placeholder={`${secilenMarka[0].basvuru_no}`}
+                        placeholder={`${secilenMarka[0]?.basvuru_no!}`}
                         {...field}
                       />
                     </FormControl>
@@ -235,7 +235,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                       <Input
                         className="font-black italic"
                         disabled={isLoading}
-                        placeholder={`${secilenMarka[0].basvuru_tarihi}`}
+                        placeholder={`${secilenMarka[0]?.basvuru_tarihi!}`}
                         {...field}
                       />
                     </FormControl>
@@ -256,7 +256,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                       <Input
                         className="font-black italic"
                         disabled={isLoading}
-                        placeholder={`${secilenMarka[0].class_no}`}
+                        placeholder={`${secilenMarka[0]?.class_no!}`}
                         {...field}
                       />
                     </FormControl>
@@ -280,7 +280,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                       <FormControl>
                         <SelectTrigger className="font-black italic">
                           <SelectValue
-                            placeholder={`${secilenMarka[0].status}`}
+                            placeholder={`${secilenMarka[0]?.status!}`}
                             {...field}
                           />
                         </SelectTrigger>
@@ -314,7 +314,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                         className="font-black italic"
                         /* disabled={isLoading} */
                         disabled
-                        placeholder={`${secilenMarka[0].referans_no}`}
+                        placeholder={`${secilenMarka[0]?.referans_no!}`}
                         {...field}
                       />
                     </FormControl>
@@ -335,7 +335,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                       <Input
                         className="font-black italic"
                         disabled={isLoading}
-                        placeholder={`${secilenMarka[0].son_islem}`}
+                        placeholder={`${secilenMarka[0]?.son_islem!}`}
                         {...field}
                       />
                     </FormControl>
@@ -357,7 +357,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                       <Input
                         className="font-black italic"
                         disabled={isLoading}
-                        placeholder={`${secilenMarka[0].son_islem_tarihi}`}
+                        placeholder={`${secilenMarka[0]?.son_islem_tarihi!}`}
                         {...field}
                       />
                     </FormControl>
@@ -379,7 +379,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                     <Textarea
                       className="font-black resize italic"
                       {...field}
-                      placeholder={`${secilenMarka[0].durum_aciklamasi}`}
+                      placeholder={`${secilenMarka[0]?.durum_aciklamasi!}`}
                     />
                     {/*                   <Input
                     className="font-black italic "

@@ -123,7 +123,7 @@ const MarkaCard: React.FC<MarkaCardProps> = ({ data, bilgiler, userid }) => {
         .eq('id', bilgiler?.id!)
 
       if (error) throw error
-      window.location.reload()
+    /*   window.location.reload() */
     } catch (error: any) {
       alert(error.message)
     }

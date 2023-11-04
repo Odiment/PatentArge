@@ -73,7 +73,7 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
 
   let data_id = data.map(({ id }) => id)
 
-  let markadurumu = `${data[0].status}`
+  let markadurumu = `${data[0]?.status!}`
 
   let yesil = markadurumu === 'tescil'
   let sari = markadurumu === 'basvuru'
@@ -266,18 +266,18 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
                 </Form>
                 <div className="grid grid-cols-2 gap-4">
                   <p className="font-bold text-lg text-sky-400">
-                    {data[0].marka}
+                    {data[0]?.marka!}
                   </p>
-                  <p className="font-semibold text-lg">{data[0].basvuru_no}</p>
-                  <p className="text-lg text-primary/80">{data[0].class_no}</p>
+                  <p className="font-semibold text-lg">{data[0]?.basvuru_no!}</p>
+                  <p className="text-lg text-primary/80">{data[0]?.class_no!}</p>
                   <p className="text-lg text-primary/80">
-                    {data[0].basvuru_tarihi}
+                    {data[0]?.basvuru_tarihi!}
                   </p>
                   <p className="text-sm text-primary/80">
-                    {data[0].referans_no}
+                    {data[0]?.referans_no!}
                   </p>
                   <p className="text-sm text-primary/80 text-sky-400">
-                    {data[0].firma_ad}
+                    {data[0]?.firma_ad!}
                   </p>
                   <p
                     className={classNames('text-sm', 'font-bold', 'flex', {
@@ -287,7 +287,7 @@ const MarkaCardTek: React.FC<MarkaCardTek> = ({ data }) => {
                     })}
                   >
                     <GiPlainCircle size={200} className="h-5 w-5" />
-                    {data[0].status}
+                    {data[0]?.status!}
                   </p>
                 </div>
               </>

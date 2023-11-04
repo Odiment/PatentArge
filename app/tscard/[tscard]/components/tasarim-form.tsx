@@ -40,7 +40,7 @@ import { Database } from "@/app/supabase";
 type TasarimlarX = Database["public"]["Tables"]["tasarimlar"]["Row"];
 
 interface TasarimFormProps {
-  secilenTasarim: TasarimlarX;
+  secilenTasarim: TasarimlarX[] | null;
   session: Session | null;
 }
 
@@ -96,25 +96,25 @@ export default function TasarimForm({
 
     if (secilenTasarim != null) {
       if (values.tasarim_title === "") {        
-        values.tasarim_title = secilenTasarim.tasarim_title!;
+        values.tasarim_title = secilenTasarim[0].tasarim_title!;
       }
       if (values.basvuru_no === "") {
-        values.basvuru_no = secilenTasarim.basvuru_no!;
+        values.basvuru_no = secilenTasarim[0].basvuru_no!;
       }
       if (values.basvuru_tarihi === "") {
-        values.basvuru_tarihi = secilenTasarim.basvuru_tarihi!;
+        values.basvuru_tarihi = secilenTasarim[0].basvuru_tarihi!;
       }
       if (values.class_no === "") {
-        values.class_no = secilenTasarim.class_no!;
+        values.class_no = secilenTasarim[0].class_no!;
       }
       if (values.status === "") {
-        values.status = secilenTasarim.status!;
+        values.status = secilenTasarim[0].status!;
       }
       if (values.referans_no === "") {
-        values.referans_no = secilenTasarim.referans_no!;
+        values.referans_no = secilenTasarim[0].referans_no!;
       }
       if (values.firma_ad === "") {
-        values.firma_ad = secilenTasarim.firma_ad!;
+        values.firma_ad = secilenTasarim[0].firma_ad!;
       }
 
       try {
@@ -132,7 +132,7 @@ export default function TasarimForm({
             /* referans_no: values.referans_no, */
             firma_ad: values.firma_ad,
           })
-          .eq("id", secilenTasarim.id);
+          .eq("id", secilenTasarim[0].id);
         if (error) throw error;
         window.location.reload();
         /* alert("Tasarim Güncellendi!") */
@@ -195,7 +195,7 @@ export default function TasarimForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={`${secilenTasarim.basvuru_no}`}
+                        placeholder={`${secilenTasarim[0]?.basvuru_no!}`}
                         {...field}
                       />
                     </FormControl>
@@ -215,7 +215,7 @@ export default function TasarimForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={`${secilenTasarim.basvuru_tarihi}`}
+                        placeholder={`${secilenTasarim[0]?.basvuru_tarihi!}`}
                         {...field}
                         /* onChange={(e) => setBasvuruTarihi(e.target.value)} */
                       />
@@ -236,7 +236,7 @@ export default function TasarimForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={`${secilenTasarim.class_no}`}
+                        placeholder={`${secilenTasarim[0]?.class_no!}`}
                         {...field}
                         /*  onChange={(e) => setClassNo(e.target.value)} */
                       />
@@ -257,7 +257,7 @@ export default function TasarimForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={`${secilenTasarim.status}`}
+                        placeholder={`${secilenTasarim[0]?.status!}`}
                         {...field}
                       />
                     </FormControl>
@@ -277,7 +277,7 @@ export default function TasarimForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={`${secilenTasarim.referans_no}`}
+                        placeholder={`${secilenTasarim[0]?.referans_no!}`}
                         {...field}
                         /*  onChange={(e) => setReferansNo(e.target.value)} */
                       />
@@ -298,7 +298,7 @@ export default function TasarimForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={`${secilenTasarim.firma_ad}`}
+                        placeholder={`${secilenTasarim[0]?.firma_ad!}`}
                         {...field}
                         /*  onChange={(e) => setReferansNo(e.target.value)} */
                       />

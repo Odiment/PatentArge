@@ -114,7 +114,7 @@ const PatentCardYaz = async ({ params }: PatentCardYazProps) => {
       />
 
       <div className="container py-10 mx-auto">
-        <PatentForm session={session} secilenPatent={secilenPatent} />
+        <PatentForm session={session} secilenPatent={secilenPatent!} />
       </div>
     </div>
   );

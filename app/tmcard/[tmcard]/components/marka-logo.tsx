@@ -125,49 +125,40 @@ const MarkaLogo: React.FC<MarkaLogoProps> = ({
     (hiddenFileInput as any).current.click()
   }
 
-/*   let resim_url: string | null  
+let resim_url: string | null  
 
-  if (markaLogoUrl !== (undefined || null)) {
+  if ((markaLogoUrl !== null) && (markaLogoUrl !== undefined )) {
     if (markaLogoUrl.includes('blob' || 'data')) {
     resim_url = markaLogoUrl
   } else {
     resim_url = tp_logo_url
   }
-}   */
+} 
 
   return (
     <div className="flex flex-col">
       <div>
-        {markaLogoUrl !== null && markaLogoUrl.includes('blob' || 'data') ? (
+        {/* {markaLogoUrl !== null && markaLogoUrl.includes('blob' || 'data') ? ( */}
           <Image
             width={size}
             height={size}
             className="aspect-square object-cover rounded-lg transition-all duration-300 hover:scale-105"
             /* src={markaLogoUrl} */
-            src={markaLogoUrl}
+            src={resim_url!}
             alt="MarkaLogo"
             /* fill */
             /* className="avatar image" */
             /* style={{ height: size, width: size }} */
           />
-        ) : (
-          /*           <div
-            className="avatar no-image"
-            style={{ height: 300, width: 300 }}
-          /> */
+{/*         ) : (
           <Image
             alt="MarkaLogoStatic"
             width={size}
             height={size}
             className="aspect-square object-cover rounded-lg transition-all duration-300 hover:scale-105"
-            src={tp_logo_url!}
-            /*             src="https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/avatars/aec65205-9440-482f-a539-9293fb7bb8a0-0.5921580138461082.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJhdmF0YXJzL2FlYzY1MjA1LTk0NDAtNDgyZi1hNTM5LTkyOTNmYjdiYjhhMC0wLjU5MjE1ODAxMzg0NjEwODIucG5nIiwiaWF0IjoxNjk1NzU5Nzc4LCJleHAiOjE3MjcyOTU3Nzh9.rAgx9t6ExaXl_Y-M9peTr3IHA1TD9gHf9wsGd-PWsbw&t=2023-09-26T20%3A22%3A55.712Z"
-            alt="MarkaLogo" */
-            /* fill */
-            /* className="avatar image" */
-            /* style={{ height: size, width: size }} */
+            src={resim_url!}
           />
-        )}
+        )} */}
       </div>
       <div className="w-full">
         <Button

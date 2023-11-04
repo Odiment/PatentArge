@@ -23,20 +23,6 @@ interface TasarimCardYazProps {
   };
 }
 
-/* export const getSession = async () => {
-    const cookieStore = cookies()
-    const supabase = createServerComponentClient({ cookies: () => cookieStore })
-   const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-
-      return {session, user, supabase}
-} */
-
 const TasarimCardYaz = async ({ params }: TasarimCardYazProps) => {
   /* const supabase = createServerComponentClient<Database>({ cookies }); */
    const cookieStore = cookies();
@@ -108,7 +94,7 @@ const TasarimCardYaz = async ({ params }: TasarimCardYazProps) => {
       />
 
       <div className="container py-10 mx-auto">
-        <TasarimForm session={session} secilenTasarim={secilenTasarim} />
+        <TasarimForm session={session} secilenTasarim={secilenTasarim!} />
       </div>
     </div>
   );

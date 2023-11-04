@@ -40,7 +40,7 @@ import { Database } from "@/app/supabase";
 type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
 
 interface PatentFormProps {
-  secilenPatent: PatentlerX;
+  secilenPatent: PatentlerX[] | null;
   session: Session | null;
 }
 
@@ -104,25 +104,25 @@ export default function PatentForm({
     if (secilenPatent != null) {
       if (secilenPatent != undefined) {
         if (values.patent_title === "") {
-          values.patent_title = secilenPatent.patent_title!;
+          values.patent_title = secilenPatent[0].patent_title!;
         }
         if (values.basvuru_no === "") {
-          values.basvuru_no = secilenPatent.basvuru_no!;
+          values.basvuru_no = secilenPatent[0].basvuru_no!;
         }
         if (values.basvuru_tarihi === "") {
-          values.basvuru_tarihi = secilenPatent.basvuru_tarihi!;
+          values.basvuru_tarihi = secilenPatent[0].basvuru_tarihi!;
         }
         if (values.class_no === "") {
-          values.class_no = secilenPatent.class_no!;
+          values.class_no = secilenPatent[0].class_no!;
         }
         if (values.status === "") {
-          values.status = secilenPatent.status!;
+          values.status = secilenPatent[0].status!;
         }
         if (values.referans_no === "") {
-          values.referans_no = secilenPatent.referans_no!;
+          values.referans_no = secilenPatent[0].referans_no!;
         }
         if (values.firma_ad === "") {
-          values.firma_ad = secilenPatent.firma_ad!;
+          values.firma_ad = secilenPatent[0].firma_ad!;
         }
 
         try {
@@ -140,7 +140,7 @@ export default function PatentForm({
               /* referans_no: values.referans_no, */
               firma_ad: values.firma_ad,
             })
-            .eq("id", secilenPatent.id);
+            .eq("id", secilenPatent[0].id);
           if (error) throw error;
           window.location.reload();
           /* alert("Patent Güncellendi!") */
@@ -186,7 +186,7 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.patent_title!}
+                        placeholder={secilenPatent[0].patent_title!}
                         {...field}
                       />
                     </FormControl>
@@ -206,7 +206,7 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.basvuru_no!}
+                        placeholder={secilenPatent[0].basvuru_no!}
                         {...field}
                       />
                     </FormControl>
@@ -226,7 +226,7 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.basvuru_tarihi!}
+                        placeholder={secilenPatent[0].basvuru_tarihi!}
                         {...field}
                         /* onChange={(e) => setBasvuruTarihi(e.target.value)} */
                       />
@@ -247,7 +247,7 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.class_no!}
+                        placeholder={secilenPatent[0].class_no!}
                         {...field}
                         /*  onChange={(e) => setClassNo(e.target.value)} */
                       />
@@ -268,7 +268,7 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.status!}
+                        placeholder={secilenPatent[0].status!}
                         {...field}
                       />
                     </FormControl>
@@ -288,7 +288,7 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.referans_no!}
+                        placeholder={secilenPatent[0].referans_no!}
                         {...field}
                         /*  onChange={(e) => setReferansNo(e.target.value)} */
                       />
@@ -309,7 +309,7 @@ export default function PatentForm({
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        placeholder={secilenPatent.firma_ad!}
+                        placeholder={secilenPatent[0].firma_ad!}
                         {...field}
                         /*  onChange={(e) => setReferansNo(e.target.value)} */
                       />
