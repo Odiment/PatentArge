@@ -70,7 +70,7 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
 
   const supabase = createClientComponentClient<Database>();
 
-  const [basvuruNo, setBasvuruNo] = useState<string | null>(null);
+  const [basvuru_no, setBasvuru_no] = useState<string | null>(null);
   const [marka, setMarka] = useState<string | null>(null);
   const [markalar, setMarkalar] = useState<string | null>(null);
   const [buton, setButon] = useState<string | null>(null);
@@ -96,11 +96,11 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
     if (firmabilgi != null) {
       var secilenFirma = firmabilgi.reduce((result: any, thing) => {
         if (thing.firma_unvan.includes(`${veri.firma_unvan}`)) {
-            result.push(thing);
+          result.push(thing);
         }
         return result;
       }, []);
-      secilenFirmax = secilenFirma
+      secilenFirmax = secilenFirma;
     }
 
     const frontId = `${veri.marka}-${Math.random()}`;
@@ -122,7 +122,7 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
           firma_unvan: secilenFirma[0].firma_unvan,
           basvuru_no: null,
           basvuru_tarihi: null,
-          class_no: null,
+          class_no: "111",
           durum_aciklamasi: null,
           marka_durumu: null,
           son_islem: null,
@@ -145,21 +145,19 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
         ),
       });
 
-      window.location.reload()
-      
-      
+      window.location.reload();
     } catch (error: any) {
       alert(error.message);
     }
   }
 
-/*   const getirYeniMarka = useCallback(async () => {
+  const getirYeniMarka = useCallback(async () => {
     try {
       setLoading(true);
 
       let { data, error, status } = await supabase
         .from("markalar")
-        .select(`marka, deger, id, referans_no, logo_url`)
+        .select(`marka, deger, id, referans_no, logo_url, basvuru_no`)
         .eq("deger", deger!)
         .single();
 
@@ -169,7 +167,9 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
 
       if (data) {
         setUid(data.id);
-        redirect(`/tmcard/${referans}`)
+        setBasvuru_no(data.basvuru_no);
+        setMarka(data.marka);
+        /* redirect(`/tmcard/${referans}`) */
       }
     } catch (error) {
       alert(`Error loading marka data!", ${error}`);
@@ -180,100 +180,98 @@ export default function YeniMarka({ firmabilgi }: YeniMarkaProps) {
 
   useEffect(() => {
     getirYeniMarka();
-  }, [marka, getirYeniMarka]); */
+  }, [marka, getirYeniMarka]);
+
+  
 
   return (
     <section className="md:ml-14 lg:ml-20 container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <div>
+      <div> 
         <h1 className="text-xl font-extrabold">Marka Giriş Ekranı</h1>
       </div>
-{/*       {uid ? (
-        redirect(`/tmcard/${referans}`)
-      ) : ( */}
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmitYeniMarka)}
-            className="w-2/3 space-y-6 bg-background">
-            <FormField
-              control={form.control}
-              name="marka"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Marka</FormLabel>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmitYeniMarka)}
+          className="w-2/3 space-y-6 bg-background">
+          <FormField
+            control={form.control}
+            name="marka"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Marka</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-black italic"
+                    placeholder="marka ibaresini giriniz..."
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Küçük harfler kullanarak markanızı yazınız...
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="firma_unvan"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Firma Adını Seçiniz</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}>
                   <FormControl>
-                    <Input
-                      className="text-black italic"
-                      placeholder="marka ibaresini giriniz..."
-                      {...field}
-                    />
+                    <SelectTrigger className="text-primary italic">
+                      <SelectValue placeholder="Kayıtlı firmalar arasından seçim yapınız..." />
+                    </SelectTrigger>
                   </FormControl>
-                  <FormDescription>
-                    Küçük harfler kullanarak markanızı yazınız...
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="firma_unvan"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Firma Adını Seçiniz</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="text-primary italic">
-                        <SelectValue placeholder="Kayıtlı firmalar arasından seçim yapınız..." />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="italic">
+                  <SelectContent className="italic">
                     {firmalarx.map((firma_unvan, index) => (
-                        <SelectItem
-                          value={firma_unvan}
-                          key={index}
-                          className="italic">
-                          {firma_unvan}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Firma kayıtlı değilse lütfen yeni bir firma kaydı
-                    oluşturunuz <Link href="/idea/new">Yeni Firma Kaydı</Link>.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                      <SelectItem
+                        value={firma_unvan}
+                        key={index}
+                        className="italic">
+                        {firma_unvan}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  Firma kayıtlı değilse lütfen yeni bir firma kaydı oluşturunuz{" "}
+                  <Link href="/idea/new">Yeni Firma Kaydı</Link>.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="referans"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Referans No</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="text-black italic"
-                      placeholder="marka referans numaranız"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Markanıza erişim için bir referans numarası giriniz...
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="bg-primary hover:bg-primary/50">
-              Oluştur
-            </Button>
-          </form>
-        </Form>
-    {/*   )} */}
+          <FormField
+            control={form.control}
+            name="referans"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Referans No</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-black italic"
+                    placeholder="marka referans numaranız"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Markanıza erişim için bir referans numarası giriniz...
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="bg-primary hover:bg-primary/50">
+            Oluştur
+          </Button>
+        </form>
+      </Form>
     </section>
   );
 }
