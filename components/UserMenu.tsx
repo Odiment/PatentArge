@@ -74,12 +74,12 @@ export function UserMenu({ user }: any) {
       let { data, error, status } = await supabase
         .from("profiles")
         .select(`full_name, username, avatar_url, yetki, pozisyon`)
-        .eq("id", user?.id)
+        .eq("id", user?.id!)
         .single();
 
-      if (error && status !== 406) {
+/*       if (error && status !== 406) {
         throw error;
-      }
+      } */
 
       if (data) {
         setFullname(data.full_name);
@@ -89,15 +89,19 @@ export function UserMenu({ user }: any) {
         setPozisyon(data.pozisyon);
       }
     } catch (error) {
-      alert(error);
+      /* alert(`getProfile hatası - UserMenu ${error}`); */
+      console.log(`profil çekme hatası ${error}`)
     } finally {
       setLoading(false);
     }
   }, [user, supabase]);
 
+
+
   useEffect(() => {
     getProfile();
   }, [user, getProfile]);
+
 
   let url = avatar_url;
 

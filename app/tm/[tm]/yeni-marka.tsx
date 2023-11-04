@@ -36,8 +36,6 @@ import {
 
 import { Database } from "@/app/supabase";
 
-type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
-
 interface YeniMarkaProps {
   firmabilgi:
     | {

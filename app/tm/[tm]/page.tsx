@@ -6,8 +6,6 @@ export const runtime = "nodejs";
 export const preferredRegion = "auto";
 export const maxDuration = 5;
 
-import Link from "next/link";
-
 import React from "react";
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -17,7 +15,7 @@ import YeniMarka from "./yeni-marka";
 import { Database } from "@/app/supabase";
 import EksikBilgiMarka from "./eksikBilgiMarka";
 
-type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
+/* type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"]; */
 
 /* export const getSession = async () => {
     const cookieStore = cookies()
@@ -52,19 +50,19 @@ export default async function YeniMarkaOlustur() {
 
  /*  const { data: markalar } = await supabase.from("markalar").select(`marka`); */
 
-  const { data: profil } = await supabase
+/*   const { data: profil } = await supabase
     .from("profiles")
     .select(`id, firma_unvan, yetki`)
-    .eq("id", user?.id!);
+    .eq("id", user?.id!); */
 
-  const { data: firma } = await supabase
+/*   const { data: firma } = await supabase
     .from("firma_profil")
     .select("firma_id")
     .eq("user_email", user?.email!);
 
 
 
-let firma_id = firma?.map(({ id }: any) => id);
+let firma_id = firma?.map(({ id }: any) => id); */
 
   const { data: firma_bilgi } = await supabase
     .from("firmalar")
@@ -72,7 +70,7 @@ let firma_id = firma?.map(({ id }: any) => id);
     
 
   // admin yetkisinde tüm markaların görülebilmesi - erişilebilmesi
-  let markalarx: MarkalarX[] | null = [];
+/*   let markalarx: MarkalarX[] | null = [];
 
   if (firma != (null || undefined) && profil != (null || undefined)) {
     if (profil[0].yetki !== "admin") {
@@ -87,10 +85,10 @@ let firma_id = firma?.map(({ id }: any) => id);
       markalarx = marka_tum;
     }
   }
-
+ */
   const { data: eksikVeriMarkalar } = await supabase
     .from("markalar")
-    .select("marka, referans_no, firma_unvan")
+    .select("id, marka, referans_no, firma_unvan")
     .eq("class_no", "111");
 
 
@@ -147,7 +145,7 @@ let eksikMarkaFirmax = eksikVeriMarkalar.map(({ firma_unvan }: any) => firma_unv
                   eksikMarkaRef={eksikMarkaRef[index]}
                   /*  marka_id={item.id} */
                   userid={user?.id!}
-                  eksikMarkaId = {eksikMarkaId}
+                  eksikMarkaId = {eksikMarkaId[index]}
                 />
               </div>
             ))}

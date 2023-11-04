@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { redirect } from "next/navigation";
 import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -59,6 +60,8 @@ const TasarimCardTek: React.FC<TasarimCardTek> = ({
 tasarim_resimler,
   product_resimler,
 }) => {
+    const [sil, setSil] = useState<boolean>(false);
+
   let tasarim_resimler_url =tasarim_resimler.map(
     ({tasarimresim_url }: any) =>tasarimresim_url
   )
@@ -235,10 +238,12 @@ tasarim_resimler,
       const { error } = await supabase
         .from('tasarimlar')
         .delete()
-        .eq('id', veri[0].id)
+        .eq('id', veri[0]?.id)
+
+        setSil(true);
 
       if (error) throw error
-      window.location.reload()
+      /* window.location.reload() */
     } catch (error: any) {
       alert(error.message)
     }
@@ -422,8 +427,6 @@ tasarim_resimler,
     setCurrentProductIndex(newIndex)
   }
 
-  console.log('product_remote_figure_url[currentProductIndex]')
-  console.log(product_remote_figure_url[currentProductIndex])
 
   // ************* *************
 
@@ -448,6 +451,9 @@ tasarim_resimler,
 
 
   return (
+    <>
+    {sil === true && redirect("/tsrm/yeni")}
+
     <div className="flex flex-col gap-x-2">
       <div className="flex flex-col items-center pt-5 gap-2">
         <div className="items-center gap-4">
@@ -654,6 +660,7 @@ tasarim_resimler,
         </div>
       </div>
     </div>
+    </>
   )
 }
 

@@ -19,7 +19,7 @@ type TasarimlarX = Database["public"]["Tables"]["tasarimlar"]["Row"];
 interface TasarimCardYazProps {
   params: {
     referans_no: string;
-    ptcard: string;
+    tscard: string;
   };
 }
 
@@ -37,7 +37,7 @@ const TasarimCardYaz = async ({ params }: TasarimCardYazProps) => {
   const { data: secilenTasarim } = await supabase
     .from("tasarimlar")
     .select()
-    .eq("referans_no", `${params.ptcard}`);
+    .eq("referans_no", `${params.tscard}`);
 
   // Tasarim resim seçimi
 

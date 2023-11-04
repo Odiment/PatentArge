@@ -126,22 +126,27 @@ const SideNavigation = ({
         .eq("id", userid)
         .single();
 
-      if (error && status !== 406) {
+/*       if (error && status !== 406) {
         throw error;
-      }
+      } */
 
       if (data) {
         setYetki(data?.yetki!);
       }
     } catch (error) {
-      alert(error);
+     /*  alert(error); */
+     console.log(`profil çekme hatası ${error}`)
     } finally {
     }
   }, [userid, supabase]);
 
+
+ 
   useEffect(() => {
     getProfile();
   }, [userid, getProfile]);
+
+
 
   return (
     <div key={1} className="text-xs mt-20 p-[2px] lg:px-3 lg:w-[200px] pt-5">
