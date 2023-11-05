@@ -136,7 +136,6 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
   }
 
   return (
-    <>
       <div
         key={1}
         className="flex-none object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
@@ -148,6 +147,5 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
           userid={user?.id!}
         />
       </div>
-    </>
   );
 }

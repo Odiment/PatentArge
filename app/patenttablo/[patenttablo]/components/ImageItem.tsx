@@ -324,9 +324,9 @@ if (patentResimler != null) {
               </ModalBody>
               <ModalFooter>
               <Button asChild className="bg-primary hover:bg-primary/50">
-                  <Link href={`/markadetay/${bilgiler?.referans_no}`}>
+                  <Link href={`/patentdetay/${bilgiler?.referans_no}`}>
                     <EyeIcon className={cn(iconClasses, 'text-white')} />
-                    Marka Detay
+                    Patent Detay
                   </Link>
                 </Button>
                 {yetki === 'admin' && (
@@ -344,7 +344,7 @@ if (patentResimler != null) {
                       <DeleteDocumentIcon
                         className={cn(iconClasses, 'text-white')}
                       />
-                      Markayı Sil
+                      Patenti Sil
                     </Button>
                   </>
                 )}

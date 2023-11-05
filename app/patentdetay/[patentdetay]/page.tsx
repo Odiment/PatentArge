@@ -87,14 +87,14 @@ let tumPatentResimlerPatent_id: any
   return (
     <div key={8} className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px] ">
       {secilenPatent != null && (
-        <>        
+        <div key={9}>        
           <PatentDetayCard
           key={tumPatentResimlerPatent_id}
           bilgiler={secilenPatent}
           patent_id={secilenPatentid}
           patentResimler={arananPatentResimler}
           />
-        </>
+        </div>
       )}
     </div>
   );

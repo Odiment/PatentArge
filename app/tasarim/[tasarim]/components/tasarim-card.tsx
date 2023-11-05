@@ -213,9 +213,8 @@ const TasarimCard: React.FC<TasarimCardProps> = ({
   }
 
   return (
-    <>
-      <div className="aspect-square rounded-lg">
-        <Card shadow="sm" key={data?.id}>
+      <div key={data?.id} className="aspect-square rounded-lg">
+        <Card shadow="sm" >
           <CardHeader
             className="pb-0 pt-2 px-4 h-20 flex-col items-start hover:bg-primary/50"
             onClick={onOpen}>
@@ -416,7 +415,6 @@ const TasarimCard: React.FC<TasarimCardProps> = ({
           </CardFooter>
         </Card>
       </div>
-    </>
   );
 };
 

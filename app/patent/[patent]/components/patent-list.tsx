@@ -21,30 +21,36 @@ const PatentList: React.FC<PatentListProps> = ({
   patentResimler,
   userid,
 }) => {
+
+    let keyid: React.Key | null | undefined = items?.map(({ id }) => id) as
+    | React.Key
+    | null
+    | undefined;
+      
+
   return (
     <div className="space-y-4">
-      {bilgiler != null && (
-        <div
-          key={2}
-          className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {items?.map((item, index) => (
-            <>
-              {item.basvuru_no != null && (
-                <div key={item.id}>
-                  <PatentCard
-                    key={index}
-                    data={item}
-                    bilgiler={bilgiler[index]}
-                    patent_id={item.id}
-                    patentResimler={patentResimler}
-                    userid={userid}
-                  />
-                </div>
-              )}
-            </>
-          ))}
-        </div>
-      )}
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {bilgiler != null && (
+          <>
+            {items?.map((item, index) => (
+              <div key={keyid}>
+                {item.basvuru_no != null && (
+                  <div key={item.basvuru_no}>
+                    <PatentCard
+                      data={item}
+                      bilgiler={bilgiler[index]}
+                      patent_id={item.id}
+                      patentResimler={patentResimler}
+                      userid={userid}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
     </div>
   );
 };

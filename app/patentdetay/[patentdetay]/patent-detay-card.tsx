@@ -219,12 +219,12 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
                 </div>
               </div>
               <p className="font-semibold text-2xl">
-                {bilgiler[0].firma_unvan}
+                {bilgiler[0]?.firma_unvan}
               </p>
-              {bilgiler[0].durum_aciklamasi !== null && (
+              {bilgiler[0]?.durum_aciklamasi !== null && (
                 <div>
                   <p className="font-light">Durum Açıklaması:</p>
-                  <p className="font-semibold">{bilgiler[0].patent_durumu}</p>
+                  <p className="font-semibold">{bilgiler[0]?.patent_durumu}</p>
                 </div>
               )}
             </CardBody>

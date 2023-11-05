@@ -40,9 +40,9 @@ const TopNavigation = ({ session }: { session: Session | null }) => {
           <BsBell />
         </div>
 
-        <div className="flex items-center">
+         <div className="flex items-center">
           <LoginHeader />
-        </div>
+        </div>   
       </div>
     </div>
   )

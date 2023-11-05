@@ -1,10 +1,10 @@
-export const dynamic = 'force-dynamic'
-export const dynamicParams = true
-export const revalidate = false
-export const fetchCache = 'auto'
-export const runtime = 'nodejs'
-export const preferredRegion = 'auto'
-export const maxDuration = 5
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = false;
+export const fetchCache = "auto";
+export const runtime = "nodejs";
+export const preferredRegion = "auto";
+export const maxDuration = 5;
 import React from "react";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -12,7 +12,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import MarkaGorunum from "./MarkaGorunum";
 import PatentGorunum from "./PatentGorunum";
 
-import { getUser } from "@/app/auth/getUser/getUser"
+import { getUser } from "@/app/auth/getUser/getUser";
 
 /* import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button" */
@@ -32,16 +32,16 @@ import { UserMenu } from "./UserMenu";
 
 export default async function LoginHeader() {
   /* const supabase = createServerComponentClient({ cookies }); */
- /*   const cookieStore = cookies();
+  /*   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore }); 
 
   const {
     data: { user },
   } = await supabase.auth.getUser(); */
 
-/* const user = await getUser() */
+  /* const user = await getUser() */
 
-const user = await getUser()
+  const user = await getUser();
 
   return (
     <nav className="flex justify-center border-0 border-b-foreground/10 h-16">

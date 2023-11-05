@@ -10,31 +10,32 @@ interface MarkaListProps {
 }
 
 const MarkaList: React.FC<MarkaListProps> = ({ items, bilgiler, userid }) => {
-  let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as
+  let keyid: React.Key | null | undefined = items?.map(({ id }) => id) as
     | React.Key
     | null
     | undefined;
 
   return (
-    <div key={itemid} className="space-y-4">
-      {bilgiler != null && (
-        <div key={5} className="grid grid-cols-1 sm:grid-cols-2 min-[900px]:grid-cols-4 min-[1350px]:grid-cols-6 min-[1650px]:grid-cols-8 gap-4">
-          {items?.map((item, index) => (
-            <>
-              {item.basvuru_no != null && (
-                <div key={item.id}>
-                  <MarkaCard
-                    key={item.id}
-                    data={item}
-                    bilgiler={bilgiler[index]}
-                    userid={userid}
-                  />
-                </div>
-              )}
-            </>
-          ))}
-        </div>
-      )}
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 min-[900px]:grid-cols-4 min-[1350px]:grid-cols-6 min-[1650px]:grid-cols-8 gap-4">
+        {bilgiler != null && (
+          <>
+            {items?.map((item, index) => (
+              <div key={item.referans_no}>
+                {item.basvuru_no != null && (
+                  <div key={item.basvuru_no}>
+                    <MarkaCard
+                      data={item}
+                      bilgiler={bilgiler[index]}
+                      userid={userid}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
     </div>
   );
 };

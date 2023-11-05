@@ -28,11 +28,10 @@ const TasarimList: React.FC<TasarimListProps> = ({
           key={2}
           className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {items?.map((item, index) => (
-            <>
+            <div key={index}>
               {item.basvuru_no != null && (
                 <div key={item.id}>
                   <TasarimCard
-                    key={index}
                     data={item}
                     bilgiler={bilgiler[index]}
                     tasarim_id={item.id}
@@ -41,7 +40,7 @@ const TasarimList: React.FC<TasarimListProps> = ({
                   />
                 </div>
               )}
-            </>
+            </div>
           ))}
         </div>
       )}

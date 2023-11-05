@@ -137,18 +137,15 @@ export default async function TasarimKart({ searchParams }: TasarimIdPageProps) 
   }
 
   return (
-    <>
       <div
         key={1}
         className="flex-none object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
         <TasarimList
-          key={user?.id}
           items={durum ? tasarimlarx : aranan}
           bilgiler={durum ? tasarimlarx : aranan}
           tasarimResimler={durum ? tasarimResimlerx : arananTasarimResimler}
           userid={user?.id!}
         />
       </div>
-    </>
   );
 }
