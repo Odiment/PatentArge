@@ -201,21 +201,18 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
                       </Chip>
                     )}
                     <h3 className="text-3xl font-bold text-foreground/90">
-                      {bilgiler[0].patent_title}
+                      {bilgiler[0]?.patent_title}
                     </h3>
                     <p className="font-semibold text-2xl">
-                      {bilgiler[0].basvuru_no}
+                      {bilgiler[0]?.basvuru_no}
                     </p>
                     <p className="text-lg font-semibold text-foreground/80 ">
-                      {bilgiler[0].class_no}
+                      {bilgiler[0]?.class_no}
                     </p>
 
-                    {bilgiler[0].durum_aciklamasi !== null && (
+                    {bilgiler[0]?.durum_aciklamasi !== null && (
                       <div>
                         <p className="font-light">Durum Açıklaması:</p>
-                        <p className="font-semibold">
-                          {bilgiler[0].marka_durumu}
-                        </p>
                       </div>
                     )}
                   </div>

@@ -1,10 +1,10 @@
-export const dynamic = 'force-dynamic'
-export const dynamicParams = true
-export const revalidate = false
-export const fetchCache = 'auto'
-export const runtime = 'nodejs'
-export const preferredRegion = 'auto'
-export const maxDuration = 5
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = false;
+export const fetchCache = "auto";
+export const runtime = "nodejs";
+export const preferredRegion = "auto";
+export const maxDuration = 5;
 
 import React from "react";
 import { cookies } from "next/headers";
@@ -12,6 +12,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import MarkaList from "./components/marka-list";
 import Filter from "@/components/filter";
+import { FirmaFilter } from "@/components/firmaFilter";
 
 import { cache } from "react";
 import { Database } from "@/app/supabase";
@@ -23,6 +24,7 @@ interface MarkaIdPageProps {
   searchParams: {
     name: string | null;
     kategori: string | null;
+    firma: string | null;
   };
 }
 
@@ -43,22 +45,17 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   } = await supabase.auth.getUser();  */
   /* const {session, user, supabase} = await getSession() */
 
-
-
- 
-
   const createServerSupabaseClient = cache(() => {
     const cookieStore = cookies();
-    return createServerComponentClient<Database>({ cookies: () => cookieStore });
+    return createServerComponentClient<Database>({
+      cookies: () => cookieStore,
+    });
   });
 
   const session = await getSession();
   const user = await getUser();
 
   const supabase = createServerSupabaseClient();
-
-  
-
 
   if (!session) {
     redirect("/");
@@ -69,6 +66,9 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
 
   let kategori = `${searchParams.kategori}`;
   let durumKategori = kategori === "undefined" || kategori === null;
+
+  let firmaAd = `${searchParams.firma}`;
+  let durumFirma = firmaAd === "undefined" || firmaAd === null;
 
   type Profil =
     | { id: string | null; firma_ad: string | null; yetki: string | null }[]
@@ -120,6 +120,20 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
 
       return result;
     }, []);
+
+    var arananFirma = markalarx?.reduce((result: any, thing) => {
+      if (
+        thing.firma_unvan != null &&
+        thing.firma_unvan.includes(`${searchParams.firma}`)
+      ) {
+        result.push(thing);
+      }
+
+      return result;
+    }, []);
+
+  /*   console.log("arananFirma");
+    console.log(arananFirma); */
 
     var arananKategori = markalarx?.reduce((result: any, thing) => {
       if (
@@ -175,6 +189,10 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
       }
     }
 
+    if (durumFirma === true) {
+        items = markalarx;
+      } else items = arananFirma;
+
     if (durum === true) {
       items = markalarx;
     } else items = aranan;
@@ -213,11 +231,32 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     | React.Key
     | null
     | undefined;
+  let item_marka: React.Key | null | undefined = items?.map(({ marka }) => marka) as
+    | React.Key
+    | null
+    | undefined;
+  let basvuru_no: React.Key | null | undefined = items?.map(({ basvuru_no }) => basvuru_no) as
+    | React.Key
+    | null
+    | undefined;
+
 
   return (
     <>
-      <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
-        <Filter />
+      <div key={firmaAd} className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
+       {profil != null && (
+          <div key={profil[0].yetki} className="grid grid-cols-8 gap-4">
+            <div key={basvuru_no} className="col-span-4">
+              <Filter key={1} />
+            </div>
+            {profil[0].yetki === "admin" && (
+              <div key={item_marka} className="col-span-4">
+                <FirmaFilter key={2} />
+              </div>
+            )}
+          </div>
+        )}
+
         <MarkaList
           key={itemid}
           items={items}

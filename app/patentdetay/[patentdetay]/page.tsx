@@ -60,10 +60,14 @@ const PatentDetay = async ({ params }: PatentDetay) => {
 
     patentResimlerx = tumPatentResimler;
 
+let tumPatentResimlerPatent_id: any 
+
     if (tumPatentResimler != null) {
-        let tumPatentResimlerPatent_id = tumPatentResimler.map(
+        let tumPatentResimlerPatent_idx = tumPatentResimler.map(
           ({ patent_id }) => patent_id
         );
+
+        tumPatentResimlerPatent_id = tumPatentResimlerPatent_idx
 
         var arananPatentResimler = tumPatentResimler.reduce(
             (result: any, thing) => {
@@ -75,13 +79,17 @@ const PatentDetay = async ({ params }: PatentDetay) => {
             []
           );
         }
+/*         let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as
+    | React.Key
+    | null
+    | undefined; */
 
   return (
-    <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px] ">
+    <div key={8} className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px] ">
       {secilenPatent != null && (
-        <>
-        <h1>secilenPatent</h1>
-          <PatentDetayCard 
+        <>        
+          <PatentDetayCard
+          key={tumPatentResimlerPatent_id}
           bilgiler={secilenPatent}
           patent_id={secilenPatentid}
           patentResimler={arananPatentResimler}
