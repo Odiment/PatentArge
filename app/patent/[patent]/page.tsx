@@ -1,10 +1,10 @@
-export const dynamic = 'force-dynamic'
-export const dynamicParams = true
-export const revalidate = false
-export const fetchCache = 'auto'
-export const runtime = 'nodejs'
-export const preferredRegion = 'auto'
-export const maxDuration = 5
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = false;
+export const fetchCache = "auto";
+export const runtime = "nodejs";
+export const preferredRegion = "auto";
+export const maxDuration = 5;
 
 import React from "react";
 import { cookies } from "next/headers";
@@ -23,23 +23,8 @@ interface PatentIdPageProps {
   };
 }
 
-/* export const getSession = async () => {
-    const cookieStore = cookies()
-    const supabase = createServerComponentClient({ cookies: () => cookieStore })
-   const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-
-      return {session, user, supabase}
-} */
-
 export default async function PatentKart({ searchParams }: PatentIdPageProps) {
-  /* const supabase = createServerComponentClient<Database>({ cookies }); */
-   const cookieStore = cookies();
+  const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
@@ -48,7 +33,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
 
   const {
     data: { user },
-  } = await supabase.auth.getUser(); 
+  } = await supabase.auth.getUser();
 
   /* const {session, user, supabase} = await getSession() */
 
@@ -152,7 +137,9 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
 
   return (
     <>
-      <div key={1} className="flex-none object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
+      <div
+        key={1}
+        className="flex-none object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
         <PatentList
           key={user?.id}
           items={durum ? patentlerx : aranan}

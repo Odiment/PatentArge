@@ -1,10 +1,12 @@
-'use client'
+"use client";
 
-import { useCallback, useEffect, useState } from 'react'
-import classNames from 'classnames'
-import { DeleteDocumentIcon } from '@/icons/DeleteDocumentIcon'
-import { EditIcon } from '@/icons/EditIcon'
-import { GiPlainCircle } from 'react-icons/gi'
+import { useCallback, useEffect, useState } from "react";
+import { Chip, Avatar } from "@nextui-org/react";
+import classNames from "classnames";
+import { DeleteDocumentIcon } from "@/icons/DeleteDocumentIcon";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { EditIcon } from "@/icons/EditIcon";
+import { GiPlainCircle } from "react-icons/gi";
 import {
   /*   Button,
   Link, */
@@ -15,13 +17,13 @@ import {
   ModalHeader,
   useDisclosure,
   cn,
-} from '@nextui-org/react'
+} from "@nextui-org/react";
 
-import Link from 'next/link'
+import Link from "next/link";
 
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import {
   Card,
@@ -29,244 +31,281 @@ import {
   CardHeader,
   CardFooter,
   Image,
-} from '@nextui-org/react'
+} from "@nextui-org/react";
 
-import { Database } from '@/app/supabase'
+import { Database } from "@/app/supabase";
 
-type PatentlerX = Database['public']['Tables']['markalar']['Row']
+type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
 
 interface PatentCardProps {
-    data: PatentlerX | null
-    bilgiler: PatentlerX | null
-    userid: string
+  bilgiler: any | null;
+  patent_id: any;
+  patentResimler:
+    | {
+        patent_resim_url: string | null;
+        patent_id: string;
+      }[]
+    | null;
+}
+
+const PatentDetayCard: React.FC<PatentCardProps> = ({
+  bilgiler,
+  patent_id,
+  patentResimler,
+}) => {
+  const supabase = createClientComponentClient<Database>();
+  const [currentPatentIndex, setCurrentPatentIndex] = useState(0);
+
+  let patent_resimler_urlx: any;
+
+  if (patentResimler != null) {
+    var ilgiliPatentResimler = patentResimler.reduce((result: any, thing) => {
+      if (thing.patent_id.includes(`${patent_id}`)) {
+        result.push(thing);
+      }
+      return result;
+    }, []);
+
+    let patent_resimler_url = ilgiliPatentResimler.map(
+      ({ patent_resim_url }: any) => patent_resim_url
+    );
+    patent_resimler_urlx = patent_resimler_url;
   }
 
-const PatentDetayCard: React.FC<PatentCardProps> = ({ data, bilgiler, userid }) => {
-  const supabase = createClientComponentClient<Database>()
-  const [fullname, setFullname] = useState<string | null>(null)
-  const [username, setUsername] = useState<string | null>(null)
-  const [avatar_url, setAvatarUrl] = useState<string | null>(null)
-  const [yetki, setYetki] = useState<string | null>(null)
-  const [pozisyon, setPozisyon] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [patent_url, setPatentUrl] = useState<PatentlerX["patent_figure_url"]>(
+    patent_resimler_urlx[currentPatentIndex]
+  );
 
-  const [url, setUrl] = useState<PatentlerX['logo_url']>(bilgiler?.logo_url!)
+  const [url, setUrl] = useState<PatentlerX["patent_figure_url"]>(
+    patent_resimler_urlx[currentPatentIndex]
+  );
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-
-  const iconClasses =
-    'text-xl text-default-500 pointer-events-none flex-shrink-0'
-
-  let markadurumu = `${bilgiler?.status}`
-
-  let yesil = markadurumu === 'tescil'
-  let sari = markadurumu === 'basvuru'
-  let kirmizi = markadurumu === 'iptal'
+  const [patent_figure_url, setPatentFigureUrl] = useState<
+    PatentlerX["patent_figure_url"]
+  >(patent_resimler_urlx[currentPatentIndex]);
 
   useEffect(() => {
-    async function downloadMarkaLogo(path: string) {
+    async function downloadPatentFigure(path: string) {
       try {
         const { data, error } = await supabase.storage
-          .from('markaLogo')
-          .download(path)
+          .from("patentFigure")
+          .download(path);
         if (error) {
-          throw error
+          throw error;
         }
-        const url = URL.createObjectURL(data)
-        setUrl(url)
+        const url = URL.createObjectURL(data);
+        setPatentFigureUrl(url);
       } catch (error) {
-        console.log('Error downloading image: ', error)
+        console.log("Error downloading image: ", error);
       }
     }
 
-    if (url) downloadMarkaLogo(url)
-  }, [url, supabase])
+    if (patent_url) downloadPatentFigure(patent_url);
+  }, [patent_url, supabase]);
 
-  const getProfile = useCallback(async () => {
-    try {
-      setLoading(true)
+  let resim_url: string | null;
 
-      let { data, error, status } = await supabase
-        .from('profiles')
-        .select(`full_name, username, avatar_url, yetki, pozisyon`)
-        .eq('id', userid)
-        .single()
+  // slider functions *************
+  // Patent Resimler ******************
+  const prevPatentSlide = () => {
+    const isFirstSlide = currentPatentIndex === 0;
+    const newIndex = isFirstSlide
+      ? patent_resimler_urlx.length - 1
+      : currentPatentIndex - 1;
+    setCurrentPatentIndex(newIndex);
+    setPatentUrl(patent_resimler_urlx[currentPatentIndex]);
+  };
 
-      if (error && status !== 406) {
-        throw error
-      }
+  const nextPatentSlide = () => {
+    const isLastSlide = currentPatentIndex === patent_resimler_urlx.length - 1;
+    const newIndex = isLastSlide ? 0 : currentPatentIndex + 1;
+    setCurrentPatentIndex(newIndex);
+    setPatentUrl(patent_resimler_urlx[currentPatentIndex]);
+  };
 
-      if (data) {
-        setFullname(data.full_name)
-        setUsername(data.username)
-        setAvatarUrl(data.avatar_url)
-        setYetki(data.yetki)
-        setPozisyon(data.pozisyon)
-      }
-    } catch (error) {
-      alert(error)
-    } finally {
-      setLoading(false)
-    }
-  }, [userid, supabase])
-
-  useEffect(() => {
-    getProfile()
-  }, [userid, getProfile])
-
-  async function deleteMarka() {
-    try {
-      const { error } = await supabase
-        .from('markalar')
-        .delete()
-        .eq('id', bilgiler?.id!)
-
-      if (error) throw error
-      window.location.reload()
-    } catch (error: any) {
-      alert(error.message)
-    }
+  if (url === null || url === undefined) {
+    resim_url =
+      "https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/patentFigure/format.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXRlbnRGaWd1cmUvZm9ybWF0LnBuZyIsImlhdCI6MTY5ODkxODI3NSwiZXhwIjoxNzkzNTI2Mjc1fQ.lb7bGb--HDNNLsPPXqUNjPpZNPD7zlbrGoezrglkFEI&t=2023-11-02T09%3A44%3A35.926Z";
+  } else {
+    resim_url = patent_figure_url;
   }
 
-  let resim_url: string | null
-
-  if (url === null) {
-    resim_url = bilgiler?.tp_logo_url!
-  } else {
-    resim_url = url
+  let durum_bilgisi: string = "belirsiz";
+  if (bilgiler[0]?.status === "basvuru") {
+    durum_bilgisi = "Başvuru Sürecinde";
+  } else if (bilgiler[0]?.status === "tescil") {
+    durum_bilgisi = "Tescil";
+  } else if (bilgiler[0]?.status === "iptal") {
+    durum_bilgisi = "İptal";
   }
 
   return (
     <>
-      <div key={data?.id} className="aspect-square rounded-lg ">
-        <Card
-          shadow="sm"
-          key={data?.id}
-          isPressable
-          onPress={onOpen}
-          className="border-1 border-primary bg-primary/5 hover:bg-primary/20"
-        >
-          <CardBody className="overflow-visible p-0">
-            <Image
-              isZoomed
-              shadow="sm"
-              radius="lg"
-              width="100%"
-              height="100%"
-              alt="MarkaLogo"
-              className="relative opacity-0 data-[loaded=true]:opacity-100 shadow-none transition-transform-opacity motion-reduce:transition-none !duration-300 rounded-large z-0 w-full h-full object-cover"
-              src={resim_url!}
-            />
-          </CardBody>
-          <CardFooter className="flex text-small justify-between  h-20 ">
-            <b className="text-left">{data?.marka}</b>
-            <b
-              className={classNames('text-xl', 'font-bold', 'flex', {
-                'text-emerald-500': yesil,
-                'text-yellow-500': sari,
-                'text-red-500': kirmizi,
-              })}
-            >
-              <GiPlainCircle size={200} className="h-5 w-5" />
-              {/* {bilgiler.status} */}
-            </b>
-          </CardFooter>
-        </Card>
-      </div>
-
-      {/******* MODAL GÖRÜNÜMÜ *******/}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 text-2xl justify-center items-center border-b border-primary text-primary font-bold">
-                {data?.marka}
-              </ModalHeader>
-              <ModalBody>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Image
-                      className="aspect-square object-cover rounded-lg transition-all duration-300 hover:scale-105"
-                      src={resim_url!}
-                      alt="MarkaLogo"
-                      width={200}
-                      height={200}
-                    />
-                    <p>Durum:</p>
-                    <p
-                      className={classNames('text-xl', 'font-bold', {
-                        'text-emerald-500': yesil,
-                        'text-yellow-500': sari,
-                        'text-red-500': kirmizi,
-                      })}
-                    >
-                      <GiPlainCircle size={200} className="h-5 w-5" />
-                      {bilgiler?.status}
-                    </p>
-                  </div>
-                  <div>
-                    {/*                     <p className="font-bold text-lg text-sky-400">
-                      {data.marka}
-                    </p> */}
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 pb-2">
+      <div className="rounded-lg justify-center">
+          <Card
+            shadow="sm"
+            key={bilgiler?.id}
+            isBlurred
+            className=" hover:bg-primary/20">
+            <CardBody>
+              <div className="flex flex-col col-span-3 md:col-span-6 content-start">
+                <div className="flex justify-between ">
+                  <div className="flex flex-col gap-0">
+                    {bilgiler[0]?.status === "basvuru" && (
+                      <Chip
+                        variant="flat"
+                        color="warning"
+                        size="lg"
+                        avatar={
+                          <Avatar
+                            name={durum_bilgisi}
+                            size="lg"
+                            color="warning"
+                            getInitials={(name) => name.charAt(0)}
+                          />
+                        }>
+                        {durum_bilgisi}
+                      </Chip>
+                    )}
+                    {bilgiler[0]?.status === "tescil" && (
+                      <Chip
+                        variant="flat"
+                        color="success"
+                        size="lg"
+                        avatar={
+                          <Avatar
+                            name={durum_bilgisi}
+                            size="lg"
+                            color="success"
+                            getInitials={(name) => name.charAt(0)}
+                          />
+                        }>
+                        {durum_bilgisi}
+                      </Chip>
+                    )}
+                    {bilgiler[0]?.status === "iptal" && (
+                      <Chip
+                        variant="flat"
+                        color="danger"
+                        size="lg"
+                        avatar={
+                          <Avatar
+                            name={durum_bilgisi}
+                            size="lg"
+                            color="danger"
+                            getInitials={(name) => name.charAt(0)}
+                          />
+                        }>
+                        {durum_bilgisi}
+                      </Chip>
+                    )}
+                    <h3 className="text-3xl font-bold text-foreground/90">
+                      {bilgiler[0].patent_title}
+                    </h3>
                     <p className="font-semibold text-2xl">
-                      {bilgiler?.basvuru_no}
+                      {bilgiler[0].basvuru_no}
                     </p>
-                    <p>Başvuru Tarihi:</p>
-                    <p className="text-xl text-primary/80 font-bold">
-                      {bilgiler?.basvuru_tarihi}
-                    </p>
-                    {/* <p className="font-semibold text-lg">{yetki}</p> */}
-                    <p>Sınıflar:</p>
-                    <p className="text-xl text-primary/80">
-                      {bilgiler?.class_no}
+                    <p className="text-lg font-semibold text-foreground/80 ">
+                      {bilgiler[0].class_no}
                     </p>
 
-                    <p className="text-sm text-primary/80">
-                      Ref: {bilgiler?.referans_no}
-                    </p>
-                    <p className="text-sm text-primary/80 text-sky-400">
-                      {bilgiler?.firma_ad}
-                    </p>
+                    {bilgiler[0].durum_aciklamasi !== null && (
+                      <div>
+                        <p className="font-light">Durum Açıklaması:</p>
+                        <p className="font-semibold">
+                          {bilgiler[0].marka_durumu}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
+              </div>
+              <p className="font-semibold text-2xl">
+                {bilgiler[0].firma_unvan}
+              </p>
+              {bilgiler[0].durum_aciklamasi !== null && (
                 <div>
-                  <p>{bilgiler?.durum_aciklamasi}</p>
+                  <p className="font-light">Durum Açıklaması:</p>
+                  <p className="font-semibold">{bilgiler[0].patent_durumu}</p>
                 </div>
-              </ModalBody>
-              <ModalFooter>
-                <div>
-                  <Button asChild className="bg-primary hover:bg-primary/50">
-                    <Link href={`/markadetay/${bilgiler?.referans_no}`}>
-                      <EditIcon className={cn(iconClasses, 'text-white')} />
-                      Marka Detay
-                    </Link>
-                  </Button>
-                  {yetki === 'admin' && (
-                    <>
-                      <Button
-                        asChild
-                        className="bg-yellow-700 hover:bg-yellow-400"
-                      >
-                        <Link href={`/tmcard/${bilgiler?.referans_no}`}>
-                          <EditIcon className={cn(iconClasses, 'text-white')} />
-                          Düzenle
-                        </Link>
-                      </Button>
-                      <Button onClick={deleteMarka} variant="destructive">
-                        <DeleteDocumentIcon
-                          className={cn(iconClasses, 'text-white')}
-                        />
-                        Markayı Sil
-                      </Button>
-                    </>
-                  )}
+              )}
+            </CardBody>
+          </Card>
+        </div>
+        <div className="rounded-lg justify-center">
+          <Card
+            shadow="sm"
+            key={bilgiler[0]?.id}
+            isBlurred
+            className="border-1 border-primary  hover:bg-primary/20">
+            <CardBody className="overflow-visible p-0">
+              <div className="max-w-[1400px]  w-full m-auto  relative group">
+                <Image
+                  shadow="sm"
+                  radius="lg"
+                  width="100%"
+                  height={200}
+                  alt="patent_figure"
+                  className="relative opacity-0 shadow-black/5 data-[loaded=true]:opacity-100 shadow-none transition-transform-opacity motion-reduce:transition-none !duration-300 rounded-large z-0 w-full h-full object-cover"
+                  src={resim_url!}
+                />
+
+                <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                  <ChevronLeft onClick={prevPatentSlide} size={30} />
                 </div>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+
+                <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                  <ChevronRight onClick={nextPatentSlide} size={30} />
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="rounded-lg justify-center">
+          <Card
+            shadow="sm"
+            key={bilgiler?.id}
+            isBlurred
+            className="hover:bg-primary/20">
+            <CardBody>
+              {/* <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 justify-center">
+                <div className="flex flex-col col-span-3 md:col-span-8 content-start"> */}
+              <div className="flex justify-between ">
+                <div className="flex flex-col gap-0">
+                  <h3 className="text-3xl font-bold text-foreground/90">
+                    PATENT KORUMA KAPSAMI - ÖZEL NOTLAR
+                  </h3>
+                </div>
+              </div>
+              {/*                 </div>
+              </div> */}
+            </CardBody>
+          </Card>
+        </div>
+        <div className="rounded-lg justify-center">
+          <Card
+            shadow="sm"
+            key={bilgiler?.id}
+            isBlurred
+            className="hover:bg-primary/20">
+            <CardBody>
+              <div className="flex justify-between ">
+                <div className="flex flex-col gap-0">
+                  <h3 className="text-3xl font-bold text-foreground/90">
+                    PATENT İSTEMLER VE TARİFNAME
+                  </h3>
+                </div>
+                <div></div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      </div>
     </>
-  )
-}
-export default PatentDetayCard
+  );
+};
+export default PatentDetayCard;

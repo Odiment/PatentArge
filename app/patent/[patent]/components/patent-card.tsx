@@ -64,31 +64,25 @@ const PatentCard: React.FC<PatentCardProps> = ({
   patentResimler,
   userid,
 }) => {
-
   let patent_resimler_urlx: any;
 
   if (patentResimler != null) {
     /*     let patentResimler_id = patentResimler.map(({ patent_id }) => patent_id);*/
-/*     let patentResimler_resim_url = patentResimler.map(
+    /*     let patentResimler_resim_url = patentResimler.map(
       ({ patent_resim_url }) => patent_resim_url
     ); */
 
-    var ilgiliPatentResimler = patentResimler.reduce(
-      (result: any, thing) => {
-        if (thing.patent_id.includes(`${patent_id}`)) {
-            result.push(thing);
-        }
-        return result;
-      },
-      []
-    );
+    var ilgiliPatentResimler = patentResimler.reduce((result: any, thing) => {
+      if (thing.patent_id.includes(`${patent_id}`)) {
+        result.push(thing);
+      }
+      return result;
+    }, []);
 
     let patent_resimler_url = ilgiliPatentResimler.map(
       ({ patent_resim_url }: any) => patent_resim_url
     );
-    patent_resimler_urlx = patent_resimler_url
-
-
+    patent_resimler_urlx = patent_resimler_url;
   }
 
   const supabase = createClientComponentClient<Database>();
@@ -206,7 +200,7 @@ const PatentCard: React.FC<PatentCardProps> = ({
     setPatentUrl(patent_resimler_urlx[currentPatentIndex]);
   };
 
-  if ((url === null) || (url === undefined)) {
+  if (url === null || url === undefined) {
     resim_url =
       "https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/patentFigure/format.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXRlbnRGaWd1cmUvZm9ybWF0LnBuZyIsImlhdCI6MTY5ODkxODI3NSwiZXhwIjoxNzkzNTI2Mjc1fQ.lb7bGb--HDNNLsPPXqUNjPpZNPD7zlbrGoezrglkFEI&t=2023-11-02T09%3A44%3A35.926Z";
     /* resim_url =
@@ -414,7 +408,9 @@ const PatentCard: React.FC<PatentCardProps> = ({
                                 Düzenle
                               </Link>
                             </Button>
-                            <Button onClick={deletePatent} variant="destructive">
+                            <Button
+                              onClick={deletePatent}
+                              variant="destructive">
                               <DeleteDocumentIcon
                                 className={cn(iconClasses, "text-white")}
                               />
