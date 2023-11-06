@@ -111,7 +111,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
     var aranan = patentlerx?.reduce((result: any, thing) => {
       if (
         thing.patent_title != null &&
-        thing.patent_title.includes(`${searchParams.name}`)
+        thing.patent_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase())
       ) {
         result.push(thing);
       }
@@ -121,7 +121,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
     var arananFirma = patentlerx?.reduce((result: any, thing) => {
       if (
         thing.firma_unvan != null &&
-        thing.firma_unvan.includes(`${searchParams.firma}`)
+        thing.firma_unvan.toLowerCase().includes(`${searchParams.firma}`.toLowerCase())
       ) {
         result.push(thing);
       }
@@ -153,7 +153,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
     var arananVeKategori = patentlerx?.reduce((result: any, thing) => {
       if (thing.patent_title != null && thing.status != null) {
         if (
-          thing.patent_title.includes(`${searchParams.name}`) &&
+          thing.patent_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase()) &&
           thing.status.includes(`${searchParams.kategori}`)
         ) {
           result.push(thing);
@@ -167,7 +167,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
       (result: any, thing: any) => {
         if (thing.patent_title != null && thing.status != null) {
           if (
-            thing.patent_title.includes(`${searchParams.name}`) &&
+            thing.patent_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase()) &&
             thing.status.includes(`${searchParams.kategori}`)
           ) {
             result.push(thing);
@@ -212,7 +212,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
         var arananYalnizcaGecerli = yalnizcaGecerli.reduce(
           (result: any, thing) => {
             if (thing.patent_title != null) {
-              if (thing.patent_title.includes(`${searchParams.name}`)) {
+              if (thing.patent_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase())) {
                 result.push(thing);
               }
             }
@@ -227,7 +227,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
         var arananFirmaYalnizcaGecerli = firmaYalnizcaGecerli.reduce(
           (result: any, thing) => {
             if (thing.patent_title != null) {
-              if (thing.patent_title.includes(`${searchParams.name}`)) {
+              if (thing.patent_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase())) {
                 result.push(thing);
               }
             }
@@ -242,7 +242,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
     var firmadaAranan = arananFirma?.reduce((result: any, thing: any) => {
       if (
         thing.patent_title != null &&
-        thing.patent_title.includes(`${searchParams.name}`)
+        thing.patent_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase())
       ) {
         result.push(thing);
       }

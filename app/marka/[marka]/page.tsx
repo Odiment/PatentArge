@@ -107,7 +107,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     }
 
     var aranan = markalarx?.reduce((result: any, thing) => {
-      if (thing.marka != null && thing.marka.includes(`${searchParams.name}`)) {
+      if (thing.marka != null && thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase())) {
         result.push(thing);
       }
 
@@ -117,7 +117,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     var arananFirma = markalarx?.reduce((result: any, thing) => {
       if (
         thing.firma_unvan != null &&
-        thing.firma_unvan.includes(`${searchParams.firma}`)
+        thing.firma_unvan.toLowerCase().includes(`${searchParams.firma}`.toLowerCase())
       ) {
         result.push(thing);
       }
@@ -149,7 +149,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     var arananVeKategori = markalarx?.reduce((result: any, thing) => {
       if (thing.marka != null && thing.status != null) {
         if (
-          thing.marka.includes(`${searchParams.name}`) &&
+          thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase()) &&
           thing.status.includes(`${searchParams.kategori}`)
         ) {
           result.push(thing);
@@ -162,7 +162,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     var firmaArananVeKategori = arananFirma?.reduce((result: any, thing: any) => {
       if ((thing.marka != null) && (thing.status != null)){
         if (
-          thing.marka.includes(`${searchParams.name}`) &&
+          thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase()) &&
           thing.status.includes(`${searchParams.kategori}`)
         ) {
           result.push(thing);
@@ -202,7 +202,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
         var arananYalnizcaGecerli = yalnizcaGecerli.reduce(
           (result: any, thing) => {
             if (thing.marka != null) {
-              if (thing.marka.includes(`${searchParams.name}`)) {
+              if (thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase())) {
                 result.push(thing);
               }
             }
@@ -217,7 +217,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
         var arananFirmaYalnizcaGecerli = firmaYalnizcaGecerli.reduce(
           (result: any, thing) => {
             if (thing.marka != null) {
-              if (thing.marka.includes(`${searchParams.name}`)) {
+              if (thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase())) {
                 result.push(thing);
               }
             }

@@ -113,7 +113,7 @@ let items: TasarimlarX[] | null = [];
     var aranan = tasarimlarx?.reduce((result: any, thing) => {
       if (
         thing.tasarim_title != null &&
-        thing.tasarim_title.includes(`${searchParams.name}`)
+        thing.tasarim_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase())
       ) {
         result.push(thing);
       }
@@ -123,7 +123,7 @@ let items: TasarimlarX[] | null = [];
     var arananFirma = tasarimlarx?.reduce((result: any, thing) => {
         if (
           thing.firma_unvan != null &&
-          thing.firma_unvan.includes(`${searchParams.firma}`)
+          thing.firma_unvan.toLowerCase().includes(`${searchParams.firma}`.toLowerCase())
         ) {
           result.push(thing);
         }
@@ -144,7 +144,7 @@ let items: TasarimlarX[] | null = [];
       var arananKategori = tasarimlarx?.reduce((result: any, thing) => {
         if (
           thing.status != null &&
-          thing.status.includes(`${searchParams.kategori}`)
+          thing.status.toLowerCase().includes(`${searchParams.kategori}`.toLowerCase())
         ) {
           result.push(thing);
         }
@@ -155,7 +155,7 @@ let items: TasarimlarX[] | null = [];
       var arananVeKategori = tasarimlarx?.reduce((result: any, thing) => {
         if (thing.tasarim_title != null && thing.status != null) {
           if (
-            thing.tasarim_title.includes(`${searchParams.name}`) &&
+            thing.tasarim_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase()) &&
             thing.status.includes(`${searchParams.kategori}`)
           ) {
             result.push(thing);
@@ -169,7 +169,7 @@ let items: TasarimlarX[] | null = [];
         (result: any, thing: any) => {
           if (thing.tasarim_title != null && thing.status != null) {
             if (
-              thing.tasarim_title.includes(`${searchParams.name}`) &&
+              thing.tasarim_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase()) &&
               thing.status.includes(`${searchParams.kategori}`)
             ) {
               result.push(thing);
@@ -214,7 +214,7 @@ let items: TasarimlarX[] | null = [];
           var arananYalnizcaGecerli = yalnizcaGecerli.reduce(
             (result: any, thing) => {
               if (thing.tasarim_title != null) {
-                if (thing.tasarim_title.includes(`${searchParams.name}`)) {
+                if (thing.tasarim_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase())) {
                   result.push(thing);
                 }
               }
@@ -229,7 +229,7 @@ let items: TasarimlarX[] | null = [];
           var arananFirmaYalnizcaGecerli = firmaYalnizcaGecerli.reduce(
             (result: any, thing) => {
               if (thing.tasarim_title != null) {
-                if (thing.tasarim_title.includes(`${searchParams.name}`)) {
+                if (thing.tasarim_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase())) {
                   result.push(thing);
                 }
               }
@@ -244,7 +244,7 @@ let items: TasarimlarX[] | null = [];
       var firmadaAranan = arananFirma?.reduce((result: any, thing: any) => {
         if (
           thing.tasarim_title != null &&
-          thing.tasarim_title.includes(`${searchParams.name}`)
+          thing.tasarim_title.toLowerCase().includes(`${searchParams.name}`.toLowerCase())
         ) {
           result.push(thing);
         }
