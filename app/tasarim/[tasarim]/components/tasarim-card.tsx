@@ -45,10 +45,10 @@ import { Database } from "@/app/supabase";
 type TasarimlarX = Database["public"]["Tables"]["tasarimlar"]["Row"];
 
 interface TasarimCardProps {
-  data: TasarimlarX | null;
+  /* data: TasarimlarX | null; */
   bilgiler: TasarimlarX | null;
-  tasarim_id: string;
-  userid: string;
+/*   tasarim_id: string;
+  userid: string; */
   tasarimResimler:
     | {
         tasarim_resim_url: string | null;
@@ -58,17 +58,17 @@ interface TasarimCardProps {
 }
 
 const TasarimCard: React.FC<TasarimCardProps> = ({
-  data,
+  /* data, */
   bilgiler,
-  tasarim_id,
+  /* tasarim_id, */
   tasarimResimler,
-  userid,
+  /* userid, */
 }) => {
   let tasarim_resimler_urlx: any;
 
   if (tasarimResimler != null) {
     var ilgiliTasarimResimler = tasarimResimler.reduce((result: any, thing) => {
-      if (thing.tasarim_id.includes(`${tasarim_id}`)) {
+      if (thing.tasarim_id.includes(`${bilgiler?.id}`)) {
         result.push(thing);
       }
       return result;
@@ -129,38 +129,6 @@ const TasarimCard: React.FC<TasarimCardProps> = ({
     if (tasarim_url) downloadTasarimFigure(tasarim_url);
   }, [tasarim_url, supabase]);
 
-  const getProfile = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      let { data, error, status } = await supabase
-        .from("profiles")
-        .select(`full_name, username, avatar_url, yetki, pozisyon`)
-        .eq("id", userid)
-        .single();
-
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      if (data) {
-        setFullname(data.full_name);
-        setUsername(data.username);
-        setAvatarUrl(data.avatar_url);
-        setYetki(data.yetki);
-        setPozisyon(data.pozisyon);
-      }
-    } catch (error) {
-      alert(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [userid, supabase]);
-
-  useEffect(() => {
-    getProfile();
-  }, [userid, getProfile]);
-
   async function deleteTasarim() {
     try {
       const { error } = await supabase
@@ -213,12 +181,12 @@ const TasarimCard: React.FC<TasarimCardProps> = ({
   }
 
   return (
-      <div key={data?.id} className="aspect-square rounded-lg">
+      <div key={bilgiler?.id} className="aspect-square rounded-lg">
         <Card shadow="sm" >
           <CardHeader
             className="pb-0 pt-2 px-4 h-20 flex-col items-start hover:bg-primary/50"
             onClick={onOpen}>
-            <p className="text-lg uppercase font-bold">{data?.tasarim_title}</p>
+            <p className="text-lg uppercase font-bold">{bilgiler?.tasarim_title}</p>
             {/*             <p className="text-tiny uppercase font-bold">Daily Mix</p>
             <small className="text-default-500">12 Tracks</small>
             <h4 className="font-bold text-large">Frontend Radio</h4> */}
@@ -306,7 +274,7 @@ const TasarimCard: React.FC<TasarimCardProps> = ({
                   {(onClose) => (
                     <>
                       <ModalHeader className="flex flex-col gap-1 text-2xl justify-center items-center border-b border-primary text-primary font-bold text-center">
-                        {data?.tasarim_title}
+                        {bilgiler?.tasarim_title}
                       </ModalHeader>
                       <ModalBody>
                         <div className="max-w-[1400px]  w-full m-auto  relative group">

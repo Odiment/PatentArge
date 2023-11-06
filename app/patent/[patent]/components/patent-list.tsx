@@ -4,9 +4,9 @@ import { Database } from "@/app/supabase";
 type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
 
 interface PatentListProps {
-  items: PatentlerX[] | null;
+  /* items: PatentlerX[] | null; */
   bilgiler: PatentlerX[] | null;
-  userid: string;
+  /* userid: string; */
   patentResimler:
     | {
         patent_resim_url: string | null;
@@ -16,33 +16,31 @@ interface PatentListProps {
 }
 
 const PatentList: React.FC<PatentListProps> = ({
-  items,
+  /* items, */
   bilgiler,
   patentResimler,
-  userid,
+  /* userid, */
 }) => {
-
-    let keyid: React.Key | null | undefined = items?.map(({ id }) => id) as
+  let keyid: React.Key | null | undefined = bilgiler?.map(({ id }) => id) as
     | React.Key
     | null
     | undefined;
-      
 
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {bilgiler != null && (
           <>
-            {items?.map((item, index) => (
-              <div key={keyid}>
+            {bilgiler?.map((item, index) => (
+              <div key={item.referans_no}>
                 {item.basvuru_no != null && (
                   <div key={item.basvuru_no}>
                     <PatentCard
-                      data={item}
+                      /* data={item} */
                       bilgiler={bilgiler[index]}
-                      patent_id={item.id}
+                      /*  patent_id={bilgiler[index].id} */
                       patentResimler={patentResimler}
-                      userid={userid}
+                      /* userid={userid} */
                     />
                   </div>
                 )}

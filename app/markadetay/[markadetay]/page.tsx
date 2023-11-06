@@ -36,10 +36,9 @@ const MarkaDetay = async ({ params }: MarkaDetay) => {
 
   return (
     <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px] ">
-
       {secilenMarka != null && (
-        <div key={9}>
-            <MarkaDetayCard bilgiler={secilenMarka} />
+        <div key={secilenMarka[0].id}>
+          <MarkaDetayCard bilgiler={secilenMarka} />
         </div>
       )}
     </div>

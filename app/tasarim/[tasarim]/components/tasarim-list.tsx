@@ -4,9 +4,9 @@ import { Database } from "@/app/supabase";
 type TasarimlarX = Database["public"]["Tables"]["tasarimlar"]["Row"];
 
 interface TasarimListProps {
-  items: TasarimlarX[] | null;
+  /* items: TasarimlarX[] | null; */
   bilgiler: TasarimlarX[] | null;
-  userid: string;
+  /* userid: string; */
   tasarimResimler:
     | {
         tasarim_resim_url: string | null;
@@ -16,10 +16,10 @@ interface TasarimListProps {
 }
 
 const TasarimList: React.FC<TasarimListProps> = ({
-  items,
+  /* items, */
   bilgiler,
   tasarimResimler,
-  userid,
+  /* userid, */
 }) => {
   return (
     <div className="space-y-4">
@@ -27,16 +27,16 @@ const TasarimList: React.FC<TasarimListProps> = ({
         <div
           key={2}
           className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {items?.map((item, index) => (
+          {bilgiler?.map((item, index) => (
             <div key={index}>
               {item.basvuru_no != null && (
                 <div key={item.id}>
                   <TasarimCard
-                    data={item}
+                    /* data={item} */
                     bilgiler={bilgiler[index]}
-                    tasarim_id={item.id}
+                    /* tasarim_id={item.id} */
                     tasarimResimler={tasarimResimler}
-                    userid={userid}
+                    /* userid={userid} */
                   />
                 </div>
               )}

@@ -45,10 +45,10 @@ import { Database } from "@/app/supabase";
 type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
 
 interface PatentCardProps {
-  data: PatentlerX | null;
+  /* data: PatentlerX | null; */
   bilgiler: PatentlerX | null;
-  patent_id: string;
-  userid: string;
+  /* patent_id: string; */
+  /* userid: string; */
   patentResimler:
     | {
         patent_resim_url: string | null;
@@ -58,11 +58,11 @@ interface PatentCardProps {
 }
 
 const PatentCard: React.FC<PatentCardProps> = ({
-  data,
+  /* data, */
   bilgiler,
-  patent_id,
+  /* patent_id, */
   patentResimler,
-  userid,
+  /* userid, */
 }) => {
   let patent_resimler_urlx: any;
 
@@ -73,7 +73,7 @@ const PatentCard: React.FC<PatentCardProps> = ({
     ); */
 
     var ilgiliPatentResimler = patentResimler.reduce((result: any, thing) => {
-      if (thing.patent_id.includes(`${patent_id}`)) {
+      if (thing.patent_id.includes(`${bilgiler?.id}`)) {
         result.push(thing);
       }
       return result;
@@ -134,7 +134,7 @@ const PatentCard: React.FC<PatentCardProps> = ({
     if (patent_url) downloadPatentFigure(patent_url);
   }, [patent_url, supabase]);
 
-  const getProfile = useCallback(async () => {
+  /*  const getProfile = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -164,7 +164,7 @@ const PatentCard: React.FC<PatentCardProps> = ({
 
   useEffect(() => {
     getProfile();
-  }, [userid, getProfile]);
+  }, [userid, getProfile]); */
 
   async function deletePatent() {
     try {
@@ -221,11 +221,13 @@ const PatentCard: React.FC<PatentCardProps> = ({
   return (
     <>
       <div className="aspect-square rounded-lg">
-        <Card shadow="sm" key={data?.id}>
+        <Card shadow="sm" key={bilgiler?.id}>
           <CardHeader
             className="pb-0 pt-2 px-4 h-20 flex-col items-start hover:bg-primary/50"
             onClick={onOpen}>
-            <p className="text-lg uppercase font-bold">{data?.patent_title}</p>
+            <p className="text-lg uppercase font-bold">
+              {bilgiler?.patent_title}
+            </p>
             {/*             <p className="text-tiny uppercase font-bold">Daily Mix</p>
             <small className="text-default-500">12 Tracks</small>
             <h4 className="font-bold text-large">Frontend Radio</h4> */}
@@ -319,7 +321,7 @@ const PatentCard: React.FC<PatentCardProps> = ({
                   {(onClose) => (
                     <>
                       <ModalHeader className="flex flex-col gap-1 text-2xl justify-center items-center border-b border-primary text-primary font-bold text-center">
-                        {data?.patent_title}
+                        {bilgiler?.patent_title}
                       </ModalHeader>
                       <ModalBody>
                         <div className="max-w-[1400px]  w-full m-auto  relative group">

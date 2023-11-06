@@ -12,7 +12,6 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import MarkaList from "./components/marka-list";
 import Filter from "@/components/filter";
-import { FirmaFilter } from "@/components/firmaFilter";
 
 import { cache } from "react";
 import { Database } from "@/app/supabase";
@@ -32,19 +31,6 @@ import { getSession } from "@/app/auth/getSession/getSession";
 import { getUser } from "@/app/auth/getUser/getUser";
 
 export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
-  /* const supabase = createServerComponentClient<Database>({ cookies }); */
-  /* const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore }); */
-
-  /*  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();  */
-  /* const {session, user, supabase} = await getSession() */
-
   const createServerSupabaseClient = cache(() => {
     const cookieStore = cookies();
     return createServerComponentClient<Database>({
@@ -95,6 +81,11 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
       .eq("user_email", useremail);
 
     firma = firmatek;
+
+  /*   console.log("firma")
+    console.log(firma)
+    console.log("profil")
+    console.log(profil) */
   }
 
   let items: MarkalarX[] | null = [];
@@ -195,6 +186,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
         }
         return result;
       }, []);
+
       if (durumFirma === false) {
         firmaYalnizcaGecerli = arananFirma?.reduce((result: any, thing: any) => {
           if (thing.status != null) {
@@ -333,34 +325,26 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     }
   }
 
-  /* if(searchParams.kategori != null) {window.location.reload()} */
+/* console.log("searchParams.name")
+console.log(searchParams.name)
+console.log("searchParams.kategori")
+console.log(searchParams.kategori)
+console.log("searchParams.firma")
+console.log(searchParams.firma)
+console.log("items")
+console.log(items) */
 
-  /* let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as
-    | React.Key
-    | null
-    | undefined;
-  let item_marka: React.Key | null | undefined = items?.map(
-    ({ marka }) => marka
-  ) as React.Key | null | undefined; */
-  let basvuru_no: React.Key | null | undefined = items?.map(
+/*   let basvuru_no: React.Key | null | undefined = items?.map(
     ({ basvuru_no }) => basvuru_no
-  ) as React.Key | null | undefined;
+  ) as React.Key | null | undefined; */
 
   return (
     <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
-      {/* {profil != null && ( */}
-        <div /* key={profil[0].yetki} */ className="grid grid-cols-8 gap-4">
-          <div key={basvuru_no} className="col-span-4">
+        <div className="grid grid-cols-8 gap-4">
+          <div className="col-span-4">
             <Filter />
           </div>
-         {/*  {profil[0].yetki === "admin" && ( */}
-{/*             <div key={item_marka} className="col-span-4">
-              <FirmaFilter />
-            </div> */}
-          {/* )} */}
         </div>
-     {/*  )} */}
-
       <MarkaList items={items} bilgiler={items} userid={user?.id!} />
     </div>
   );

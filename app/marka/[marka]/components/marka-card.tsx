@@ -88,7 +88,7 @@ console.log(url) */
     if (url) downloadMarkaLogo(url);
   }, [url, supabase]);
 
-  const getProfile = useCallback(async () => {
+  /* const getProfile = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -118,7 +118,7 @@ console.log(url) */
 
   useEffect(() => {
     getProfile();
-  }, [userid, getProfile]);
+  }, [userid, getProfile]); */
 
   async function deleteMarka() {
     try {

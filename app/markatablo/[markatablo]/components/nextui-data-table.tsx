@@ -134,11 +134,23 @@ export default function NextUiDataTable({ veri, userid }: MarkaTableProps) {
   const filteredItems = React.useMemo(() => {
     let filteredUsers = [...veri];
 
+/*     if (hasSearchFilter) {
+      filteredUsers = filteredUsers.filter((user) => {
+          user.marka!.toLowerCase().includes(filterValue.toLowerCase());
+      });
+    } */
+
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user?.marka!.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    }
+        filteredUsers = filteredUsers.reduce((result: any, thing: any) => {
+          if (thing.marka != null) {
+            if (thing.marka.toLowerCase().includes(filterValue.toLowerCase())) {
+              result.push(thing);
+            }
+          }
+          return result;
+        }, []);
+      }
+
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length

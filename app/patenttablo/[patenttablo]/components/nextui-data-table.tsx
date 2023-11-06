@@ -145,11 +145,24 @@ export default function NextUiDataTable({
   const filteredItems = React.useMemo(() => {
     let filteredUsers = [...veri]
 
-    if (hasSearchFilter) {
+/*     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
         user?.patent_title!.toLowerCase().includes(filterValue.toLowerCase())
       )
-    }
+    } */
+
+    if (hasSearchFilter) {
+        filteredUsers = filteredUsers.reduce((result: any, thing: any) => {
+          if (thing.patent_title != null) {
+            if (thing.patent_title.toLowerCase().includes(filterValue.toLowerCase())) {
+              result.push(thing);
+            }
+          }
+          return result;
+        }, []);
+      }
+
+
     if (
       statusFilter !== 'all' &&
       Array.from(statusFilter).length !== statusOptions.length
