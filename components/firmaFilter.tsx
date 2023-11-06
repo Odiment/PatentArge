@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEventHandler, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import qs from "query-string";
 
@@ -41,9 +41,14 @@ export const FirmaFilter = () => {
     router.push(url);
   }, [debouncedValue, router /*  categoryId */]);
 
+  const pathname = usePathname();
+
   return (
     <>
-          <div key={firma} className="hidden md:flex min-w-[200px] md:w-[300px] lg:w-[620px]">
+    {(pathname.includes("marka") ||
+        pathname.includes("patent") ||
+        pathname.includes("tasarim")) && (
+          <div key={firma} className="hidden md:flex min-w-[200px] md:w-[300px] lg:w-[450px]">
             <Input
               onChange={onChange}
               value={value}
@@ -54,6 +59,7 @@ export const FirmaFilter = () => {
               <BiSearch />
             </div>
           </div>
+          )}
     </>
   );
 };

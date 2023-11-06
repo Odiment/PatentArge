@@ -50,7 +50,7 @@ export const SearchInput = () => {
         pathname.includes("tasarim")) && (
         <div
           key={pathname}
-          className="hidden md:flex min-w-[300px] lg:w-[620px]">
+          className="hidden md:flex min-w-[200px] md:w-[300px] lg:w-[450px]">
           <Input
             key={name}
             onChange={onChange}

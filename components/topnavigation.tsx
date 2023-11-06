@@ -1,15 +1,25 @@
-import { IoFingerPrintSharp } from 'react-icons/io5'
-import { HiOutlineMenu } from 'react-icons/hi'
-import { BsBell } from 'react-icons/bs'
-import { Session } from '@supabase/auth-helpers-nextjs'
+import { IoFingerPrintSharp } from "react-icons/io5";
+import { HiOutlineMenu } from "react-icons/hi";
+import { BsBell } from "react-icons/bs";
+import { Session } from "@supabase/auth-helpers-nextjs";
+import { FirmaFilter } from "@/components/firmaFilter";
 
-import LoginHeader from './login-header'
-import ThemeSwitcher from './theme-switcher'
-import { SearchInput } from '@/components/search-input'
-import { MobileSidebar } from './mobile-sidebar'
+import LoginHeader from "./login-header";
+import ThemeSwitcher from "./theme-switcher";
+import { SearchInput } from "@/components/search-input";
+import { MobileSidebar } from "./mobile-sidebar";
 import Image from "next/image";
 
-const TopNavigation = ({ session }: { session: Session | null }) => {
+interface TopNavigationProps {
+  session: Session | null;
+  userid: string | null;
+  arayetki: any | null;
+}
+
+const TopNavigation = ({ session, userid, arayetki }: TopNavigationProps) => {
+    let yetki = arayetki?.map(({ yetki }: any) => yetki);
+
+
   return (
     <div className="flex justify-between items-center p-4 gap-6 sticky top-0 z-40 bg-background">
       <div className="flex items-center gap-6">
@@ -17,13 +27,8 @@ const TopNavigation = ({ session }: { session: Session | null }) => {
           <MobileSidebar session={session} />
         </div>
         <div className="flex items-center gap-1">
-        <Image
-          src={"/logo.png"}
-          width={50}
-          height={50}
-          alt=""
-          className=''/>
-       {/*    <IoFingerPrintSharp size={30} className="text-emerald-500" /> */}
+          <Image src={"/logo.png"} width={50} height={50} alt="" className="" />
+          {/*    <IoFingerPrintSharp size={30} className="text-emerald-500" /> */}
           <span className="text-xl font-semibold ">PatentArge</span>
         </div>
       </div>
@@ -31,6 +36,11 @@ const TopNavigation = ({ session }: { session: Session | null }) => {
       <div className="">
         <SearchInput />
       </div>
+      {yetki[0] === "admin" && (
+        <div key={userid}>
+          <FirmaFilter />
+        </div>
+      )}
 
       <div className="flex item-center gap-3">
         <div className="flex items-center bg-transparent p-3 rounded-full hover:bg-primary/40 cursor-pointer">
@@ -40,12 +50,12 @@ const TopNavigation = ({ session }: { session: Session | null }) => {
           <BsBell />
         </div>
 
-         <div className="flex items-center">
+        <div className="flex items-center">
           <LoginHeader />
-        </div>   
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TopNavigation
+export default TopNavigation;

@@ -168,10 +168,10 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
       return result;
     }, []);
 
-    var arananFirmaVeKategori = markalarx?.reduce((result: any, thing) => {
-      if (thing.marka != null && thing.status != null) {
+    var firmaArananVeKategori = arananFirma?.reduce((result: any, thing: any) => {
+      if ((thing.marka != null) && (thing.status != null)){
         if (
-          thing.firma_unvan.includes(`${searchParams.firma}`) &&
+          thing.marka.includes(`${searchParams.name}`) &&
           thing.status.includes(`${searchParams.kategori}`)
         ) {
           result.push(thing);
@@ -225,7 +225,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
         var arananFirmaYalnizcaGecerli = firmaYalnizcaGecerli.reduce(
           (result: any, thing) => {
             if (thing.marka != null) {
-              if (thing.firma_unvan.includes(`${searchParams.firma}`)) {
+              if (thing.marka.includes(`${searchParams.name}`)) {
                 result.push(thing);
               }
             }
@@ -305,8 +305,8 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
         items = arananFirma;
       } else items = firmadaArananKategori;
 
-      if (durum === false && durumKategori === false) {
-        items = arananFirmaVeKategori;
+      if (durumKategori === false && durum === false  ) {
+        items = firmaArananVeKategori;
       }
 
       if (searchParams.kategori === "tumu") {
@@ -317,7 +317,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
         searchParams.kategori === "tumu" && durum === false;
 
       if (durumTumuVeAranan === true) {
-        items = arananFirma;
+        items = firmadaAranan;
       }
 
       if (searchParams.kategori === "yalnizcaGecerli") {
@@ -333,31 +333,33 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     }
   }
 
-  let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as
+  /* if(searchParams.kategori != null) {window.location.reload()} */
+
+  /* let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as
     | React.Key
     | null
     | undefined;
   let item_marka: React.Key | null | undefined = items?.map(
     ({ marka }) => marka
-  ) as React.Key | null | undefined;
+  ) as React.Key | null | undefined; */
   let basvuru_no: React.Key | null | undefined = items?.map(
     ({ basvuru_no }) => basvuru_no
   ) as React.Key | null | undefined;
 
   return (
     <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
-      {profil != null && (
-        <div key={profil[0].yetki} className="grid grid-cols-8 gap-4">
+      {/* {profil != null && ( */}
+        <div /* key={profil[0].yetki} */ className="grid grid-cols-8 gap-4">
           <div key={basvuru_no} className="col-span-4">
             <Filter />
           </div>
-          {profil[0].yetki === "admin" && (
-            <div key={item_marka} className="col-span-4">
+         {/*  {profil[0].yetki === "admin" && ( */}
+{/*             <div key={item_marka} className="col-span-4">
               <FirmaFilter />
-            </div>
-          )}
+            </div> */}
+          {/* )} */}
         </div>
-      )}
+     {/*  )} */}
 
       <MarkaList items={items} bilgiler={items} userid={user?.id!} />
     </div>

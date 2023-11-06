@@ -1,10 +1,10 @@
-export const dynamic = 'force-dynamic'
-export const dynamicParams = true
-export const revalidate = false
-export const fetchCache = 'auto'
-export const runtime = 'nodejs'
-export const preferredRegion = 'auto'
-export const maxDuration = 5
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = false;
+export const fetchCache = "auto";
+export const runtime = "nodejs";
+export const preferredRegion = "auto";
+export const maxDuration = 5;
 
 import "./globals.css";
 /* import { Metadata } from "next"; */
@@ -63,10 +63,10 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   /* const supabase = createServerComponentClient<Database>({ cookies }) */
-  /*  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore }); */
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
-/*   const {
+  /*   const {
     data: { session },
   } = await supabase.auth.getSession();
 
@@ -79,6 +79,17 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getSession();
   const user = await getUser();
 
+  let arayetki: any[] | null = []
+
+  if (user != null || user != undefined) {
+    const { data: yetkix } = await supabase
+      .from("profiles")
+      .select(`yetki`)
+      .eq("id", user.id);
+      arayetki = yetkix
+  }
+
+
   return (
     <>
       <html lang="en" suppressHydrationWarning>
@@ -90,7 +101,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           )}>
           <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
             <div className="relative flex min-h-screen flex-col">
-              <TopNavigation session={session} />
+              <TopNavigation session={session} userid={user?.id!} arayetki={arayetki}/>
               <div className="hidden md:flex w-20 flex-col fixed inset-y-0">
                 <SideNavigation session={session} userid={user?.id!} />
               </div>
