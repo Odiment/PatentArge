@@ -106,6 +106,7 @@ export interface Database {
           status: string | null
           tp_avatar: string | null
           tp_logo_url: string | null
+          yayin_tarihi: string | null
         }
         Insert: {
           basvuru_no?: string | null
@@ -127,6 +128,7 @@ export interface Database {
           status?: string | null
           tp_avatar?: string | null
           tp_logo_url?: string | null
+          yayin_tarihi?: string | null
         }
         Update: {
           basvuru_no?: string | null
@@ -148,6 +150,7 @@ export interface Database {
           status?: string | null
           tp_avatar?: string | null
           tp_logo_url?: string | null
+          yayin_tarihi?: string | null
         }
         Relationships: [
           {
@@ -164,6 +167,38 @@ export interface Database {
           }
         ]
       }
+      marka_siniflar: {
+        Row: {
+          id: string
+          marka_id: string
+          created_at?: string
+          basvurulan_sinif_no: string | null
+          basvurulan_sinif_aciklamasi: string | null
+          kalan_siniflar: string | null
+          cikan_siniflar: string | null
+          tescil_edilen_siniflar: string | null
+        }
+        Insert: {
+            id?: string
+            marka_id?: string
+            created_at?: string
+            basvurulan_sinif_no?: string | null
+            basvurulan_sinif_aciklamasi?: string | null
+            kalan_siniflar?: string | null
+            cikan_siniflar?: string | null
+            tescil_edilen_siniflar?: string | null
+        }
+        Update: {
+            id?: string
+            marka_id?: string
+            created_at?: string
+            basvurulan_sinif_no?: string | null
+            basvurulan_sinif_aciklamasi?: string | null
+            kalan_siniflar?: string | null
+            cikan_siniflar?: string | null
+            tescil_edilen_siniflar?: string | null
+        }
+    }
       patent_resimler: {
         Row: {
           id: string

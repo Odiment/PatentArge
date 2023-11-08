@@ -40,19 +40,52 @@ interface MarkaCardProps {
   data: MarkalarX | null;
   bilgiler: MarkalarX | null;
   userid: string;
+  yetki: any | null;
+  tumMarkaSiniflar: any | null;
 }
 
-const MarkaCard: React.FC<MarkaCardProps> = ({ data, bilgiler, userid }) => {
+const MarkaCard: React.FC<MarkaCardProps> = ({ data, bilgiler, userid, yetki, tumMarkaSiniflar }) => {
+
   const supabase = createClientComponentClient<Database>();
   const [fullname, setFullname] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [avatar_url, setAvatarUrl] = useState<string | null>(null);
-  const [yetki, setYetki] = useState<string | null>(null);
+  /* const [yetki, setYetki] = useState<string | null>(null); */
   const [pozisyon, setPozisyon] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
+
+    let basvurulan_sinif_aciklamasi: any;
+    let basvurulan_sinif_numarasi: any;
+
+    if (tumMarkaSiniflar != null) {
+        /*     let patentResimler_id = patentResimler.map(({ patent_id }) => patent_id);*/
+        /*     let patentResimler_resim_url = patentResimler.map(
+          ({ patent_resim_url }) => patent_resim_url
+        ); */
+    
+        var ilgiliMarkaSiniflar = tumMarkaSiniflar.reduce((result: any, thing: any) => {
+          if (thing.marka_id.includes(`${bilgiler?.id}`)) {
+            result.push(thing);
+          }
+          return result;
+        }, []);
+    
+        let basvurulan_sinif_numarasix = ilgiliMarkaSiniflar.map(
+          ({ basvurulan_sinif_numarasi }: any) => basvurulan_sinif_numarasi
+        );
+        basvurulan_sinif_numarasi = basvurulan_sinif_numarasix;
+
+
+        let basvurulan_sinif_aciklamasix = ilgiliMarkaSiniflar.map(
+          ({ basvurulan_sinif_aciklamasi }: any) => basvurulan_sinif_aciklamasi
+        );
+        basvurulan_sinif_aciklamasi = basvurulan_sinif_aciklamasix;
+      }
+    
+
 
   let markadurumu = `${bilgiler?.status}`;
 

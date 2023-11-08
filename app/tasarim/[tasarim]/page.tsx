@@ -64,6 +64,7 @@ export default async function TasarimKart({ searchParams }: TasarimIdPageProps) 
   
     type Firma = { firma_id: string }[] | null;
     let firma: Firma | undefined;
+    let yetki: any | null;
   
     if (user != null || user != undefined) {
       const { data: profiltek } = await supabase
@@ -81,6 +82,9 @@ export default async function TasarimKart({ searchParams }: TasarimIdPageProps) 
         .eq("user_email", useremail);
   
       firma = firmatek;
+
+      let yetkix = profil?.map(({ yetki }: any) => yetki);
+      yetki = yetkix;
     }
 
 
@@ -309,6 +313,7 @@ let items: TasarimlarX[] | null = [];
           bilgiler={items}
           tasarimResimler={tasarimResimlerx}
           /* userid={user?.id!} */
+          yetki={yetki[0]}
         />
       </div>
   );

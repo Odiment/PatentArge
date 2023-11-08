@@ -47,6 +47,7 @@ type TasarimlarX = Database["public"]["Tables"]["tasarimlar"]["Row"];
 interface TasarimCardProps {
   /* data: TasarimlarX | null; */
   bilgiler: TasarimlarX | null;
+  yetki: any | null;
 /*   tasarim_id: string;
   userid: string; */
   tasarimResimler:
@@ -62,6 +63,7 @@ const TasarimCard: React.FC<TasarimCardProps> = ({
   bilgiler,
   /* tasarim_id, */
   tasarimResimler,
+  yetki,
   /* userid, */
 }) => {
   let tasarim_resimler_urlx: any;
@@ -85,7 +87,7 @@ const TasarimCard: React.FC<TasarimCardProps> = ({
   const [fullname, setFullname] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [avatar_url, setAvatarUrl] = useState<string | null>(null);
-  const [yetki, setYetki] = useState<string | null>(null);
+ /*  const [yetki, setYetki] = useState<string | null>(null); */
   const [pozisyon, setPozisyon] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 

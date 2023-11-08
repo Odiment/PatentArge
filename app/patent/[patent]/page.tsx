@@ -63,6 +63,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
 
   type Firma = { firma_id: string }[] | null;
   let firma: Firma | undefined;
+  let yetki: any | null;
 
   if (user != null || user != undefined) {
     const { data: profiltek } = await supabase
@@ -80,6 +81,10 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
       .eq("user_email", useremail);
 
     firma = firmatek;
+
+    let yetkix = profil?.map(({ yetki }: any) => yetki);
+    yetki = yetkix;
+
   }
 
   let items: PatentlerX[] | null = [];
@@ -379,7 +384,7 @@ export default async function PatentKart({ searchParams }: PatentIdPageProps) {
         /* items={items} */
         bilgiler={items}
         patentResimler={patentResimlerx}
-        /* userid={user?.id!} */
+        yetki={yetki[0]}
       />
     </div>
   );

@@ -34,11 +34,20 @@ const MarkaDetay = async ({ params }: MarkaDetay) => {
     .select()
     .eq("referans_no", `${params.markadetay}`);
 
+    let secilenMarka_id: any | null = secilenMarka?.map(({ id }: any) => id);
+
+
+const { data: secilenMarkaSiniflar } = await supabase
+    .from("marka_siniflar")
+    .select("basvurulan_sinif_no, basvurulan_sinif_aciklamasi")
+    .eq("marka_id", `${secilenMarka_id[0]}`)
+
+
   return (
     <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px] ">
       {secilenMarka != null && (
-        <div key={secilenMarka[0].id}>
-          <MarkaDetayCard bilgiler={secilenMarka} />
+        <div key={secilenMarka_id}>
+          <MarkaDetayCard bilgiler={secilenMarka}  secilenMarkaSiniflar={secilenMarkaSiniflar} />
         </div>
       )}
     </div>

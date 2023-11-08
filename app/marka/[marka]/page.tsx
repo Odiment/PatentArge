@@ -12,6 +12,9 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import MarkaList from "./components/marka-list";
 import Filter from "@/components/filter";
+import {FirmaFilter} from "@/components/firmaFilter";
+import {SearchInput} from "@/components/search-input";
+
 
 import { cache } from "react";
 import { Database } from "@/app/supabase";
@@ -64,6 +67,8 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
 
   type Firma = { firma_id: string }[] | null;
   let firma: Firma | undefined;
+  let yetki: any | null;
+  let tumMarkaSiniflar: any | null;
 
   if (user != null || user != undefined) {
     const { data: profiltek } = await supabase
@@ -82,10 +87,8 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
 
     firma = firmatek;
 
-  /*   console.log("firma")
-    console.log(firma)
-    console.log("profil")
-    console.log(profil) */
+    let yetkix = profil?.map(({ yetki }: any) => yetki);
+    yetki = yetkix;
   }
 
   let items: MarkalarX[] | null = [];
@@ -93,6 +96,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   let arananFirmaMarka: MarkalarX[] | null = [];
 
   // admin yetkisinde tüm markaların görülebilmesi - erişilebilmesi
+
   if (profil != null) {
     if (profil[0].yetki !== "admin" && (firma != null || firma != undefined)) {
       const { data: marka_firma } = await supabase
@@ -107,7 +111,10 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     }
 
     var aranan = markalarx?.reduce((result: any, thing) => {
-      if (thing.marka != null && thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase())) {
+      if (
+        thing.marka != null &&
+        thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase())
+      ) {
         result.push(thing);
       }
 
@@ -117,7 +124,9 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     var arananFirma = markalarx?.reduce((result: any, thing) => {
       if (
         thing.firma_unvan != null &&
-        thing.firma_unvan.toLowerCase().includes(`${searchParams.firma}`.toLowerCase())
+        thing.firma_unvan
+          .toLowerCase()
+          .includes(`${searchParams.firma}`.toLowerCase())
       ) {
         result.push(thing);
       }
@@ -149,7 +158,9 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     var arananVeKategori = markalarx?.reduce((result: any, thing) => {
       if (thing.marka != null && thing.status != null) {
         if (
-          thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase()) &&
+          thing.marka
+            .toLowerCase()
+            .includes(`${searchParams.name}`.toLowerCase()) &&
           thing.status.includes(`${searchParams.kategori}`)
         ) {
           result.push(thing);
@@ -159,18 +170,23 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
       return result;
     }, []);
 
-    var firmaArananVeKategori = arananFirma?.reduce((result: any, thing: any) => {
-      if ((thing.marka != null) && (thing.status != null)){
-        if (
-          thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase()) &&
-          thing.status.includes(`${searchParams.kategori}`)
-        ) {
-          result.push(thing);
+    var firmaArananVeKategori = arananFirma?.reduce(
+      (result: any, thing: any) => {
+        if (thing.marka != null && thing.status != null) {
+          if (
+            thing.marka
+              .toLowerCase()
+              .includes(`${searchParams.name}`.toLowerCase()) &&
+            thing.status.includes(`${searchParams.kategori}`)
+          ) {
+            result.push(thing);
+          }
         }
-      }
 
-      return result;
-    }, []);
+        return result;
+      },
+      []
+    );
 
     let yalnizcaGecerli: MarkalarX[] = [];
     let firmaYalnizcaGecerli: MarkalarX[] = [];
@@ -188,21 +204,28 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
       }, []);
 
       if (durumFirma === false) {
-        firmaYalnizcaGecerli = arananFirma?.reduce((result: any, thing: any) => {
-          if (thing.status != null) {
-            if (!thing.status.includes("iptal")) {
-              result.push(thing);
+        firmaYalnizcaGecerli = arananFirma?.reduce(
+          (result: any, thing: any) => {
+            if (thing.status != null) {
+              if (!thing.status.includes("iptal")) {
+                result.push(thing);
+              }
             }
-          }
-          return result;
-        }, []);
+            return result;
+          },
+          []
+        );
       }
 
       if (yalnizcaGecerli != null) {
         var arananYalnizcaGecerli = yalnizcaGecerli.reduce(
           (result: any, thing) => {
             if (thing.marka != null) {
-              if (thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase())) {
+              if (
+                thing.marka
+                  .toLowerCase()
+                  .includes(`${searchParams.name}`.toLowerCase())
+              ) {
                 result.push(thing);
               }
             }
@@ -211,13 +234,17 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
           },
           []
         );
-    }
+      }
 
- if (firmaYalnizcaGecerli != null) {
+      if (firmaYalnizcaGecerli != null) {
         var arananFirmaYalnizcaGecerli = firmaYalnizcaGecerli.reduce(
           (result: any, thing) => {
             if (thing.marka != null) {
-              if (thing.marka.toLowerCase().includes(`${searchParams.name}`.toLowerCase())) {
+              if (
+                thing.marka
+                  .toLowerCase()
+                  .includes(`${searchParams.name}`.toLowerCase())
+              ) {
                 result.push(thing);
               }
             }
@@ -226,27 +253,36 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
           },
           []
         );
-        }
+      }
     }
 
     var firmadaAranan = arananFirma?.reduce((result: any, thing: any) => {
-        if (thing.marka != null && thing.marka.includes(`${searchParams.name}`)) {
-          result.push(thing);
-        }
-  
-        return result;
-      }, []);
-  
-      var firmadaArananKategori = arananFirma?.reduce((result: any, thing: any) => {
+      if (thing.marka != null && thing.marka.includes(`${searchParams.name}`)) {
+        result.push(thing);
+      }
+
+      return result;
+    }, []);
+
+    var firmadaArananKategori = arananFirma?.reduce(
+      (result: any, thing: any) => {
         if (
           thing.status != null &&
           thing.status.includes(`${searchParams.kategori}`)
         ) {
           result.push(thing);
         }
-  
+
         return result;
-      }, []);
+      },
+      []
+    );
+
+    const { data: tumMarkaSiniflarx } = await supabase
+    .from("marka_siniflar")
+    .select("basvurulan_siniflar, marka_id");
+
+    tumMarkaSiniflar = tumMarkaSiniflarx;
 
     // Eğer firma araması yapılmadıysa, standart filtreleme yap...
     if (durumFirma === true) {
@@ -285,8 +321,6 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
       }
     }
 
-   
-
     // Eğer firma bazlı arama yapılıyorsa önceliği firma aramasına ver...
     if (durumFirma === false) {
       if (durum === true) {
@@ -297,7 +331,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
         items = arananFirma;
       } else items = firmadaArananKategori;
 
-      if (durumKategori === false && durum === false  ) {
+      if (durumKategori === false && durum === false) {
         items = firmaArananVeKategori;
       }
 
@@ -325,27 +359,31 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     }
   }
 
-/* console.log("searchParams.name")
-console.log(searchParams.name)
-console.log("searchParams.kategori")
-console.log(searchParams.kategori)
-console.log("searchParams.firma")
-console.log(searchParams.firma)
-console.log("items")
-console.log(items) */
-
-/*   let basvuru_no: React.Key | null | undefined = items?.map(
+let basvuru_no: React.Key | null | undefined = items?.map(
     ({ basvuru_no }) => basvuru_no
-  ) as React.Key | null | undefined; */
+  ) as React.Key | null | undefined;
 
   return (
     <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
-        <div className="grid grid-cols-8 gap-4">
-          <div className="col-span-4">
-            <Filter />
-          </div>
+      <div className="flex flex-1 justify-between">
+        <div className="flex">
+          <Filter />
         </div>
-      <MarkaList items={items} bilgiler={items} userid={user?.id!} />
+        <div className="flex">
+        {yetki[0] === "admin" && (
+        <div key={basvuru_no}>
+          <FirmaFilter />
+        </div>
+      )}
+        </div>
+      </div>
+      <MarkaList
+        items={items}
+        bilgiler={items}
+        userid={user?.id!}
+        yetki={yetki[0]}
+        tumMarkaSiniflar={tumMarkaSiniflar}
+      />
     </div>
   );
 }

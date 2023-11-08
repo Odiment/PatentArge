@@ -49,6 +49,7 @@ interface PatentCardProps {
   bilgiler: PatentlerX | null;
   /* patent_id: string; */
   /* userid: string; */
+  yetki: any | null
   patentResimler:
     | {
         patent_resim_url: string | null;
@@ -63,6 +64,7 @@ const PatentCard: React.FC<PatentCardProps> = ({
   /* patent_id, */
   patentResimler,
   /* userid, */
+  yetki
 }) => {
   let patent_resimler_urlx: any;
 
@@ -90,7 +92,7 @@ const PatentCard: React.FC<PatentCardProps> = ({
   const [fullname, setFullname] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [avatar_url, setAvatarUrl] = useState<string | null>(null);
-  const [yetki, setYetki] = useState<string | null>(null);
+  /* const [yetki, setYetki] = useState<string | null>(null); */
   const [pozisyon, setPozisyon] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 

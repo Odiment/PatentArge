@@ -11,9 +11,11 @@ import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import YeniMarka from "./yeni-marka";
+import MarkaSinifForm from './marka-sinif-form'
 
 import { Database } from "@/app/supabase";
 import EksikBilgiMarka from "./eksikBilgiMarka";
+
 
 /* type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"]; */
 
@@ -130,6 +132,10 @@ let eksikMarkaFirmax = eksikVeriMarkalar.map(({ firma_unvan }: any) => firma_unv
         <div className="flex-none object-contain">
           <YeniMarka key={firma_bilgi_id} firmabilgi={firma_bilgi} />
         </div>
+
+{/*         <div className="container py-10 mx-auto">
+        <MarkaSinifForm session={session} secilenMarka={secilenMarka!} secilenMarkaSiniflar={secilenMarkaSiniflar!} />
+      </div> */}
 
         <div className="md:ml-14 lg:ml-20 container grid items-center gap-6 pb-8">
         <h1 className="text-xl font-extrabold">Verileri Düzenlenecek Markalar</h1>

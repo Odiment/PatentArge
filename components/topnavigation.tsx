@@ -36,11 +36,11 @@ const TopNavigation = ({ session, userid, arayetki }: TopNavigationProps) => {
       <div className="">
         <SearchInput />
       </div>
-      {yetki[0] === "admin" && (
+{/*       {yetki[0] === "admin" && (
         <div key={userid}>
           <FirmaFilter />
         </div>
-      )}
+      )} */}
 
       <div className="flex item-center gap-3">
         <div className="flex items-center bg-transparent p-3 rounded-full hover:bg-primary/40 cursor-pointer">

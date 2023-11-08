@@ -6,6 +6,7 @@ type TasarimlarX = Database["public"]["Tables"]["tasarimlar"]["Row"];
 interface TasarimListProps {
   /* items: TasarimlarX[] | null; */
   bilgiler: TasarimlarX[] | null;
+  yetki: any | null
   /* userid: string; */
   tasarimResimler:
     | {
@@ -19,6 +20,7 @@ const TasarimList: React.FC<TasarimListProps> = ({
   /* items, */
   bilgiler,
   tasarimResimler,
+  yetki,
   /* userid, */
 }) => {
   return (
@@ -36,6 +38,7 @@ const TasarimList: React.FC<TasarimListProps> = ({
                     bilgiler={bilgiler[index]}
                     /* tasarim_id={item.id} */
                     tasarimResimler={tasarimResimler}
+                    yetki = {yetki}
                     /* userid={userid} */
                   />
                 </div>

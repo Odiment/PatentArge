@@ -167,7 +167,7 @@ let resim_url: string | null
           /* disabled={loading} */
           onClick={handleClick}
         >
-          Bilgisayarından Resim Yükle
+          Bilgisayardan Resim Yükle
           <Wand2 className="w-4 h-4 ml-2" />
         </Button>
         <input

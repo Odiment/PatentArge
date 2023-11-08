@@ -7,6 +7,7 @@ interface PatentListProps {
   /* items: PatentlerX[] | null; */
   bilgiler: PatentlerX[] | null;
   /* userid: string; */
+  yetki: any | null
   patentResimler:
     | {
         patent_resim_url: string | null;
@@ -20,6 +21,7 @@ const PatentList: React.FC<PatentListProps> = ({
   bilgiler,
   patentResimler,
   /* userid, */
+  yetki,
 }) => {
   let keyid: React.Key | null | undefined = bilgiler?.map(({ id }) => id) as
     | React.Key
@@ -41,6 +43,7 @@ const PatentList: React.FC<PatentListProps> = ({
                       /*  patent_id={bilgiler[index].id} */
                       patentResimler={patentResimler}
                       /* userid={userid} */
+                      yetki = {yetki}
                     />
                   </div>
                 )}
