@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import {
   Form,
@@ -58,17 +59,18 @@ type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
 
 interface MarkaSinifFormProps {
   secilenMarka: MarkalarX[] | null;
-  secilenMarkaSiniflar: {
-    marka_id: any;
-    basvurulan_sinif_no: any;
-    basvurulan_sinif_aciklamasi: any;
-}[] | null  
+  secilenMarkaSiniflar:
+    | {
+        marka_id: any;
+        basvurulan_sinif_no: any;
+        basvurulan_sinif_aciklamasi: any;
+      }[]
 
   session: Session | null;
 }
 
 const formSchema = z.object({
-/*   firma_ad: z.string(),
+  /*   firma_ad: z.string(),
   marka: z.string(),
   basvuru_no: z.string(),
   basvuru_tarihi: z.string(),
@@ -153,7 +155,9 @@ export default function MarkaSinifForm({
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
   const [markaSinifNo, setMarkaSinifNo] = useState<string | null>(null);
-  const [markaSinifAciklamasi, setMarkaSinifAciklamasi] = useState<string | null>(null);
+  const [markaSinifAciklamasi, setMarkaSinifAciklamasi] = useState<
+    string | null
+  >(null);
 
   const [formStep, setFormStep] = React.useState(0);
 
@@ -162,7 +166,7 @@ export default function MarkaSinifForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-/*       firma_ad: "",
+      /*       firma_ad: "",
       marka: "",
       basvuru_no: "",
       basvuru_tarihi: "",
@@ -181,8 +185,8 @@ export default function MarkaSinifForm({
   const isLoading = form.formState.isSubmitting;
 
   async function onSubmitYeniMarkaSinif(veri: z.infer<typeof formSchema>) {
-    if(secilenMarka != null) { 
-   /*  if (firmabilgi != null) {
+    if (secilenMarka != null) {
+      /*  if (firmabilgi != null) {
       var secilenFirma = firmabilgi.reduce((result: any, thing) => {
         if (thing.firma_unvan.includes(`${veri.firma_unvan}`)) {
           result.push(thing);
@@ -192,22 +196,22 @@ export default function MarkaSinifForm({
       secilenFirmax = secilenFirma;
     } */
 
-    /* const frontId = `${veri.marka}-${Math.random()}`;
+      /* const frontId = `${veri.marka}-${Math.random()}`;
     setDeger(frontId); */
-    /* setMarka(veri.marka.toLowerCase()); */
-    setMarkaSinifNo(veri.basvurulan_sinif_no);
-    setMarkaSinifAciklamasi(veri.basvurulan_sinif_aciklamasi);
-    /* setFirma_ad(veri.firma_ad); */
-   /*  setFirma_id(secilenMarka[0].id); */
+      /* setMarka(veri.marka.toLowerCase()); */
+      setMarkaSinifNo(veri.basvurulan_sinif_no);
+      setMarkaSinifAciklamasi(veri.basvurulan_sinif_aciklamasi);
+      /* setFirma_ad(veri.firma_ad); */
+      /*  setFirma_id(secilenMarka[0].id); */
 
-    try {
-      const { data, error, status } = await supabase
-        .from("marka_siniflar")
-        .insert({
-          marka_id: secilenMarka[0].id,
-          basvurulan_sinif_no: veri.basvurulan_sinif_no,
-          basvurulan_sinif_aciklamasi: veri.basvurulan_sinif_aciklamasi,
-/*           deger: frontId,
+      try {
+        const { data, error, status } = await supabase
+          .from("marka_siniflar")
+          .insert({
+            marka_id: secilenMarka[0].id,
+            basvurulan_sinif_no: veri.basvurulan_sinif_no,
+            basvurulan_sinif_aciklamasi: veri.basvurulan_sinif_aciklamasi,
+            /*           deger: frontId,
           referans_no: veri.referans,
           firma_id: secilenFirma[0].id,
           firma_unvan: secilenFirma[0].firma_unvan,
@@ -219,33 +223,32 @@ export default function MarkaSinifForm({
           son_islem: null,
           son_islem_tarihi: null,
           status: null, */
-        })
-        .single();
+          })
+          .single();
 
-      if (error) throw error;
+        if (error) throw error;
 
-      toast({
-        variant: "affirmative",
-        title: "Veri tabanında marka için bir id oluşturuldu",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
-            <code className="text-white">
-              {JSON.stringify(veri.basvurulan_sinif_no, null, 2)}
-            </code>
-          </pre>
-        ),
-      });
+        toast({
+          variant: "affirmative",
+          title: "Veri tabanında marka için bir id oluşturuldu",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
+              <code className="text-white">
+                {JSON.stringify(veri.basvurulan_sinif_no, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
 
-      window.location.reload();
-    } catch (error: any) {
-      alert(error.message);
+        window.location.reload();
+      } catch (error: any) {
+        alert(error.message);
+      }
     }
   }
-}
-
 
   async function updateMarka(values: z.infer<typeof formSchema>) {
-   /*  values.firma_ad = values.firma_ad.toLowerCase(); */
+    /*  values.firma_ad = values.firma_ad.toLowerCase(); */
 
     if (secilenMarka != null) {
       /* if (values.marka === "") {
@@ -295,8 +298,8 @@ export default function MarkaSinifForm({
           let { error } = await supabase
             .from("marka_siniflar")
             .update({
-                basvurulan_sinif_no: values.basvurulan_sinif_no,
-                basvurulan_sinif_aciklamasi: values.basvurulan_sinif_aciklamasi,
+              basvurulan_sinif_no: values.basvurulan_sinif_no,
+              basvurulan_sinif_aciklamasi: values.basvurulan_sinif_aciklamasi,
               /* marka: values.marka,
               basvuru_no: values.basvuru_no,
               basvuru_tarihi: values.basvuru_tarihi,
@@ -340,7 +343,8 @@ export default function MarkaSinifForm({
               </div>
               <Separator className="bg-primary" />
             </div>
-            <FormField
+
+            {/*             <FormField
               control={form.control}
               name="basvurulan_sinif_no"
               render={({ field }) => (
@@ -401,7 +405,65 @@ export default function MarkaSinifForm({
                   <FormMessage />
                 </FormItem>
               )}
+            /> */}
+
+            <FormField
+              control={form.control}
+              name="basvurulan_sinif_no"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Marka sınıfını seçiniz...</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1">
+                      {/* <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="all" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          All new messages
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="mentions" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Direct messages and mentions
+                        </FormLabel>
+                      </FormItem>
+
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="none" />
+                        </FormControl>
+                        <FormLabel className="font-normal">Nothing</FormLabel>
+                      </FormItem> */}
+
+                      <div className="grid grid-rows-5 grid-flow-col gap-4">
+                        {siniflar.map((item) => (
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem
+                                value={item.label}
+                                key={item.label}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {item.label}
+                            </FormLabel>
+                          </FormItem>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
+
             <FormField
               name="basvurulan_sinif_aciklamasi"
               control={form.control}
@@ -412,7 +474,7 @@ export default function MarkaSinifForm({
                     <Textarea
                       className="font-black resize italic"
                       {...field}
-                      placeholder={`${secilenMarka[0]?.durum_aciklamasi!}`}
+                      placeholder={"Kurumda kayıtlı sınıf bilgilerini kopyalayınız..."}
                     />
                     {/*                   <Input
                     className="font-black italic "

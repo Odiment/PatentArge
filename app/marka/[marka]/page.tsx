@@ -12,9 +12,8 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation";
 import MarkaList from "./components/marka-list";
 import Filter from "@/components/filter";
-import {FirmaFilter} from "@/components/firmaFilter";
-import {SearchInput} from "@/components/search-input";
-
+import { FirmaFilter } from "@/components/firmaFilter";
+import { SearchInput } from "@/components/search-input";
 
 import { cache } from "react";
 import { Database } from "@/app/supabase";
@@ -70,6 +69,8 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   type Firma = { firma_id: string }[] | null;
   let firma: Firma | undefined;
   let tumMarkaSiniflar: any | null;
+  let tumMarkaSurecBilgileri: any | null;
+
 
   if (user != null || user != undefined) {
     const { data: profiltek } = await supabase
@@ -87,7 +88,6 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
       .eq("user_email", useremail);
 
     firma = firmatek;
-
   }
 
   let items: MarkalarX[] | null = [];
@@ -278,10 +278,18 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     );
 
     const { data: tumMarkaSiniflarx } = await supabase
-    .from("marka_siniflar")
-    .select("basvurulan_siniflar, marka_id");
+      .from("marka_siniflar")
+      .select("basvurulan_siniflar, marka_id");
 
     tumMarkaSiniflar = tumMarkaSiniflarx;
+
+    const { data: tumMarkaSurecBilgilerix } = await supabase
+      .from("marka_surec")
+      .select("id, marka_id, islem_tarihi, islem, islem_aciklamasi")
+
+      tumMarkaSurecBilgileri = tumMarkaSurecBilgilerix
+
+    
 
     // Eğer firma araması yapılmadıysa, standart filtreleme yap...
     if (durumFirma === true) {
@@ -358,10 +366,10 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
     }
   }
 
-let basvuru_no: React.Key | null | undefined = items?.map(
+  let basvuru_no: React.Key | null | undefined = items?.map(
     ({ basvuru_no }) => basvuru_no
   ) as React.Key | null | undefined;
-
+  
   return (
     <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px]">
       <div className="flex flex-1 justify-between">
@@ -369,11 +377,11 @@ let basvuru_no: React.Key | null | undefined = items?.map(
           <Filter />
         </div>
         <div className="flex">
-        {yetki === "admin" && (
-        <div key={basvuru_no}>
-          <FirmaFilter />
-        </div>
-      )}
+          {yetki === "admin" && (
+            <div key={basvuru_no}>
+              <FirmaFilter />
+            </div>
+          )}
         </div>
       </div>
       <MarkaList
@@ -382,7 +390,11 @@ let basvuru_no: React.Key | null | undefined = items?.map(
         userid={user?.id!}
         yetki={yetki}
         tumMarkaSiniflar={tumMarkaSiniflar}
+        tumMarkaSurecBilgileri={tumMarkaSurecBilgileri!}
       />
     </div>
   );
 }
+
+
+

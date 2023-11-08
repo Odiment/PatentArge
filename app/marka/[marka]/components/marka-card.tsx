@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -42,9 +43,11 @@ interface MarkaCardProps {
   userid: string;
   yetki: any | null;
   tumMarkaSiniflar: any | null;
+  tumMarkaSurecBilgileri: any | null;
 }
 
-const MarkaCard: React.FC<MarkaCardProps> = ({ data, bilgiler, userid, yetki, tumMarkaSiniflar }) => {
+const MarkaCard: React.FC<MarkaCardProps> = ({ data, bilgiler, userid, yetki, tumMarkaSiniflar, tumMarkaSurecBilgileri }) => {
+
 
   const supabase = createClientComponentClient<Database>();
   const [fullname, setFullname] = useState<string | null>(null);
@@ -61,10 +64,6 @@ const MarkaCard: React.FC<MarkaCardProps> = ({ data, bilgiler, userid, yetki, tu
     let basvurulan_sinif_numarasi: any;
 
     if (tumMarkaSiniflar != null) {
-        /*     let patentResimler_id = patentResimler.map(({ patent_id }) => patent_id);*/
-        /*     let patentResimler_resim_url = patentResimler.map(
-          ({ patent_resim_url }) => patent_resim_url
-        ); */
     
         var ilgiliMarkaSiniflar = tumMarkaSiniflar.reduce((result: any, thing: any) => {
           if (thing.marka_id.includes(`${bilgiler?.id}`)) {
@@ -84,8 +83,41 @@ const MarkaCard: React.FC<MarkaCardProps> = ({ data, bilgiler, userid, yetki, tu
         );
         basvurulan_sinif_aciklamasi = basvurulan_sinif_aciklamasix;
       }
-    
 
+  /*     let islem_tarihi: any;
+      let islem: any;
+      let islem_aciklamasi: any;
+      let ilgiliMarkaSurecBilgileri: any;
+  
+
+      if (tumMarkaSurecBilgileri != null) {
+    
+        var ilgiliMarkaSurecBilgilerix = tumMarkaSurecBilgileri.reduce((result: any, thing: any) => {
+          if (thing.marka_id.includes(`${bilgiler?.id}`)) {
+            result.push(thing);
+          }
+          return result;
+        }, []);
+
+        ilgiliMarkaSurecBilgileri = ilgiliMarkaSurecBilgilerix
+    
+        let islemx = ilgiliMarkaSurecBilgileri.map(
+          ({ islem }: any) => islem
+        );
+        islem = islemx;
+
+
+        let islem_aciklamasix = ilgiliMarkaSurecBilgileri.map(
+          ({ islem_aciklamasi }: any) => islem_aciklamasi
+        );
+        islem_aciklamasi = islem_aciklamasix;
+
+        let islem_tarihix = ilgiliMarkaSurecBilgileri.map(
+          ({ islem_tarihi }: any) => islem_tarihi
+        );
+        islem_tarihi = islem_tarihix;
+      } */
+    
 
   let markadurumu = `${bilgiler?.status}`;
 
@@ -99,8 +131,6 @@ const MarkaCard: React.FC<MarkaCardProps> = ({ data, bilgiler, userid, yetki, tu
     bilgiler?.logo_url!
   );
 
-/* console.log("url")
-console.log(url) */
 
   useEffect(() => {
     async function downloadMarkaLogo(path: string) {
@@ -121,37 +151,6 @@ console.log(url) */
     if (url) downloadMarkaLogo(url);
   }, [url, supabase]);
 
-  /* const getProfile = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      let { data, error, status } = await supabase
-        .from("profiles")
-        .select(`full_name, username, avatar_url, yetki, pozisyon`)
-        .eq("id", userid)
-        .single();
-
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      if (data) {
-        setFullname(data.full_name);
-        setUsername(data.username);
-        setAvatarUrl(data.avatar_url);
-        setYetki(data.yetki);
-        setPozisyon(data.pozisyon);
-      }
-    } catch (error) {
-      alert(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [userid, supabase]);
-
-  useEffect(() => {
-    getProfile();
-  }, [userid, getProfile]); */
 
   async function deleteMarka() {
     try {
@@ -252,8 +251,8 @@ console.log(url) */
                     <p className="text-sm text-primary/80">
                       Ref: {bilgiler?.referans_no}
                     </p>
-                    <p className="text-sm text-primary/80 text-sky-400">
-                      {bilgiler?.firma_ad}
+                    <p className="text-primary/80 text-sky-400">
+                      {bilgiler?.firma_unvan}
                     </p>
                   </div>
                 </div>
@@ -277,8 +276,27 @@ console.log(url) */
                   </p>
                 </div>
                 <div>
+                  <p>Marka Durumu:</p>
+                </div>
+                <div>
+                  <p>{bilgiler?.marka_durumu}</p>
+                </div>
+                <div>
                   <p>{bilgiler?.durum_aciklamasi}</p>
                 </div>
+
+{/*                 {ilgiliMarkaSurecBilgileri?.map((item: any, index: any) => (
+                    <>
+                    <Separator className="bg-primary" />
+                      <p className="font-light">{item.islem_tarihi}</p>
+                      <h3
+                        key={item.id}
+                        className="text-xl font-bold text-foreground/90">
+                        {item.islem}
+                      </h3>
+                      <p className="font-light">{item.islem_aciklamasi}</p>
+                    </>
+                  ))} */}
               </ModalBody>
               <ModalFooter>
                 <Button asChild className="bg-primary hover:bg-primary/50">

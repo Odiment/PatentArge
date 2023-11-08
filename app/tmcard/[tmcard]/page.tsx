@@ -46,6 +46,7 @@ const MarkaCardYaz = async ({ params }: MarkaCardYazProps) => {
         marka_id: any;
         basvurulan_sinif_no: any;
         basvurulan_sinif_aciklamasi: any;
+        basvurulan_sinif_id: any
       }[]
     | null = [];
 
@@ -54,7 +55,7 @@ const MarkaCardYaz = async ({ params }: MarkaCardYazProps) => {
   if (secilenMarka != null) {
     const { data: secilenMarkaSiniflarx } = await supabase
       .from("marka_siniflar")
-      .select("id, marka_id, basvurulan_sinif_no, basvurulan_sinif_aciklamasi")
+      .select("id, marka_id, basvurulan_sinif_no, basvurulan_sinif_aciklamasi, basvurulan_sinif_id")
       .eq("marka_id", `${secilenMarkaId}`);
 
     secilenMarkaSiniflar = secilenMarkaSiniflarx;

@@ -9,9 +9,10 @@ interface MarkaListProps {
   userid: string;
   yetki: any | null
   tumMarkaSiniflar: any | null
+  tumMarkaSurecBilgileri: any | null
 }
 
-const MarkaList: React.FC<MarkaListProps> = ({ items, bilgiler, userid, yetki, tumMarkaSiniflar }) => {
+const MarkaList: React.FC<MarkaListProps> = ({ items, bilgiler, userid, yetki, tumMarkaSiniflar, tumMarkaSurecBilgileri }) => {
   let keyid: React.Key | null | undefined = items?.map(({ id }) => id) as
     | React.Key
     | null
@@ -32,6 +33,7 @@ const MarkaList: React.FC<MarkaListProps> = ({ items, bilgiler, userid, yetki, t
                       userid={userid}
                       yetki = {yetki}
                       tumMarkaSiniflar={tumMarkaSiniflar}
+                      tumMarkaSurecBilgileri={tumMarkaSurecBilgileri}
                     />
                   </div>
                 )}

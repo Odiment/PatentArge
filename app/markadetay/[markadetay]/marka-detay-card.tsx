@@ -11,6 +11,7 @@ import { EditIcon } from "@/icons/EditIcon";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 import { Database } from "@/app/supabase";
 
@@ -71,6 +72,9 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
   } else if (bilgiler[0]?.status === "iptal") {
     durum_bilgisi = "İptal";
   }
+
+  const sortedSiniflar = secilenMarkaSiniflar?.sort((a,b) => a.basvurulan_sinif_no - b.basvurulan_sinif_no)
+
 
   return (
     <>
@@ -168,10 +172,10 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
                         {bilgiler[0]?.class_no}
                       </p>
 
-                      <p className="font-light">Marka İlan Bülten Tarihi:</p>
+{/*                       <p className="font-light">Marka İlan Bülten Tarihi:</p>
                       <p className="text-lg font-semibold text-foreground/80 ">
                         {bilgiler[0]?.yayin_tarihi}
-                      </p>
+                      </p> */}
 
                       {bilgiler[0]?.yayin_tarihi != null && (
                         <>
@@ -211,6 +215,7 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
               <p className="font-semibold text-2xl">
                 {bilgiler[0]?.firma_unvan}
               </p>
+              <Separator className="bg-primary" />
               {bilgiler[0]?.son_islem_tarihi !== null && (
                 <div>
                   <p className="font-light">Son İşlem Tarihi:</p>
@@ -225,6 +230,7 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
                   <p className="font-semibold">{bilgiler[0]?.son_islem}</p>
                 </div>
               )}
+              <Separator className="bg-primary" />
 
               {bilgiler[0]?.durum_aciklamasi !== null && (
                 <div>
@@ -250,6 +256,7 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
           </Card>
         </div>
       </div>
+      
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="rounded-lg justify-center">
           <Card
@@ -269,10 +276,11 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
                   <p className="font-light">Marka SÜREÇ Ayrıntıları:</p>
                   {secilenMarkaSurecBilgileri?.map((item, index) => (
                     <>
+                    <Separator className="bg-primary" />
                       <p className="font-light">{item.islem_tarihi}</p>
                       <h3
                         key={item.id}
-                        className="text-3xl font-bold text-foreground/90">
+                        className="text-xl font-bold text-foreground/90">
                         {item.islem}
                       </h3>
                       <p className="font-light">{item.islem_aciklamasi}</p>
@@ -296,8 +304,9 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
                     MARKA SINIFLARI DETAY BİLGİLERİ
                   </h3>
                   <p className="font-light">Marka Sınıf Ayrıntıları:</p>
-                  {secilenMarkaSiniflar?.map((item, index) => (
+                  {sortedSiniflar?.map((item, index) => (
                     <>
+                    <Separator className="bg-primary" />
                       <h3
                         key={item.id}
                         className="text-3xl font-bold text-foreground/90">
