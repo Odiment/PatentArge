@@ -443,8 +443,8 @@ export default function MarkaSinifForm({
                       </FormItem> */}
 
                       <div className="grid grid-rows-5 grid-flow-col gap-4">
-                        {siniflar.map((item) => (
-                          <FormItem className="flex items-center space-x-3 space-y-0">
+                        {siniflar.map((item, index) => (
+                          <FormItem key={index} className="flex items-center space-x-3 space-y-0">
                             <FormControl>
                               <RadioGroupItem
                                 value={item.label}
