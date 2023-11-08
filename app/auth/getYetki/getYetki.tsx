@@ -18,7 +18,7 @@ export const createServerSupabaseClient = cache(() => {
   return createServerComponentClient<Database>({ cookies: () => cookieStore });
 });
 
-export const getUser = async () => {
+export const getYetki = async () => {
   const supabase = createServerSupabaseClient();
 
   type Profil =
@@ -45,10 +45,10 @@ let tumMarkaSiniflar: any | null;
 
     const { data: profil } = await supabase
     .from("profiles")
-    .select(`id, firma_ad, yetki`)
+    .select(`yetki`)
     .eq("id", user.id);
 
-    let yetki = profil?.map(({ yetki }: any) => yetki);
+    /* let yetki = profil?.map(({ yetki }: any) => yetki); */
 
     const useremail: string = user.email || "";
 
@@ -57,7 +57,10 @@ let tumMarkaSiniflar: any | null;
     .select("firma_id")
     .eq("user_email", useremail);
 
-    return user;
+    if (!profil) return null;
+
+    return profil[0].yetki;
+
   } catch (error) {
     console.error("Error", error);
     return null;

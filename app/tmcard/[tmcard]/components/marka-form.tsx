@@ -72,13 +72,11 @@ const formSchema = z.object({
   son_islem: z.string(),
   son_islem_tarihi: z.string(),
   durum_aciklamasi: z.string(),
+  yayin_tarihi: z.string(),
+  marka_durumu: z.string(),
   basvurulan_sinif_no: z.string(),
   basvurulan_sinif_aciklamasi: z.string(),
 });
-
-const siniflar = [
-  { id: "01", label: "01", },   { id: "02", label: "02", },  { id: "03", label: "03", }, { id: "04", label: "04", }, { id: "05", label: "05", }, { id: "06", label: "06", }, { id: "07", label: "07", }, { id: "08", label: "08", }, { id: "09", label: "09", }, { id: "10", label: "10", },  { id: "11", label: "11", },   { id: "12", label: "12", },  { id: "13", label: "13", }, { id: "14", label: "14", }, { id: "15", label: "15", }, { id: "16", label: "16", }, { id: "17", label: "17", }, { id: "18", label: "18", }, { id: "19", label: "19", }, { id: "20", label: "20", },   { id: "21", label: "21", },   { id: "22", label: "22", },  { id: "23", label: "23", }, { id: "24", label: "24", }, { id: "25", label: "25", }, { id: "26", label: "26", }, { id: "27", label: "27", }, { id: "28", label: "28", }, { id: "29", label: "29", }, { id: "30", label: "30", },  { id: "31", label: "31", },   { id: "32", label: "32", },  { id: "33", label: "33", }, { id: "34", label: "34", }, { id: "35", label: "35", }, { id: "36", label: "36", }, { id: "37", label: "37", }, { id: "38", label: "38", }, { id: "39", label: "39", }, { id: "40", label: "40", }, { id: "41", label: "41", },   { id: "42", label: "42", },  { id: "43", label: "43", }, { id: "44", label: "44", }, { id: "45", label: "45", },
-] as const;
 
 export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
   const supabase = createClientComponentClient<Database>();
@@ -114,6 +112,8 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
       son_islem: "",
       son_islem_tarihi: "",
       durum_aciklamasi: "",
+      yayin_tarihi: "",
+      marka_durumu: "",
       basvurulan_sinif_no: "",
       basvurulan_sinif_aciklamasi: "",
     },
@@ -156,7 +156,13 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
       if (values.durum_aciklamasi === "") {
         values.durum_aciklamasi = secilenMarka[0].durum_aciklamasi!;
       }
-/*       if (values.basvurulan_sinif_no === "") {
+      if (values.yayin_tarihi === "") {
+        values.yayin_tarihi = secilenMarka[0].yayin_tarihi!;
+      }
+      if (values.marka_durumu === "") {
+        values.marka_durumu = secilenMarka[0].marka_durumu!;
+      }
+      /*       if (values.basvurulan_sinif_no === "") {
         values.basvurulan_sinif_no = secilenMarka[0].basvurulan_sinif_no!;
       }
       if (values.basvurulan_sinif_aciklamasi === "") {
@@ -177,6 +183,8 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
             referans_no: values.referans_no,
             firma_ad: values.firma_ad,
             son_islem: values.son_islem,
+            marka_durumu: values.marka_durumu,
+            yayin_tarihi: values.yayin_tarihi,
             son_islem_tarihi: values.son_islem_tarihi,
             durum_aciklamasi: values.durum_aciklamasi,
           })
@@ -220,7 +228,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                     <FormLabel>Marka</FormLabel>
                     <FormControl>
                       <Input
-                        className="font-black italic"
+                        className="font-black text-black italic"
                         disabled={isLoading}
                         placeholder={`${secilenMarka[0]?.marka!}`}
                         {...field}
@@ -241,7 +249,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                     <FormLabel>Başvuru No</FormLabel>
                     <FormControl>
                       <Input
-                        className="font-black italic"
+                        className="font-black text-black italic"
                         disabled={isLoading}
                         placeholder={`${secilenMarka[0]?.basvuru_no!}`}
                         {...field}
@@ -262,7 +270,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                     <FormLabel>Başvuru Tarihi</FormLabel>
                     <FormControl>
                       <Input
-                        className="font-black italic"
+                        className="font-black  text-black italic"
                         disabled={isLoading}
                         placeholder={`${secilenMarka[0]?.basvuru_tarihi!}`}
                         {...field}
@@ -283,7 +291,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                     <FormLabel>Sınıf No</FormLabel>
                     <FormControl>
                       <Input
-                        className="font-black italic"
+                        className="font-black text-black italic"
                         disabled={isLoading}
                         placeholder={`${secilenMarka[0]?.class_no!}`}
                         {...field}
@@ -307,7 +315,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                       onValueChange={field.onChange}
                       defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="font-black italic">
+                        <SelectTrigger className="font-black text-black italic">
                           <SelectValue
                             placeholder={`${secilenMarka[0]?.status!}`}
                             {...field}
@@ -340,7 +348,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                     <FormLabel className="text-red-500">Referans No</FormLabel>
                     <FormControl>
                       <Input
-                        className="font-black italic"
+                        className="font-black text-black italic"
                         /* disabled={isLoading} */
                         disabled
                         placeholder={`${secilenMarka[0]?.referans_no!}`}
@@ -354,29 +362,49 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                   </FormItem>
                 )}
               />
-
               <FormField
-                name="son_islem"
+                name="yayin_tarihi"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Son İşlem/Hareket ADI</FormLabel>
+                    <FormLabel>Marka İlan Bülten TARİHİ</FormLabel>
                     <FormControl>
                       <Input
-                        className="font-black italic"
+                        className="font-black text-black italic"
                         disabled={isLoading}
-                        placeholder={`${secilenMarka[0]?.son_islem!}`}
+                        placeholder={`${secilenMarka[0]?.yayin_tarihi!}`}
                         {...field}
                       />
                     </FormControl>
                     <FormDescription>
-                      Başvuru ile ilgili Kurum nezdindeki son aksiyonun adını
-                      giriniz
+                      Marka bülten yayın tarihini yazınız...
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              <FormField
+                name="marka_durumu"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Marka Durumu (KISA)</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="font-black text-black italic"
+                        disabled={isLoading}
+                        placeholder={`${secilenMarka[0]?.marka_durumu!}`}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Kısaca marka başvurusunun mevcut durumunu ifade ediniz...
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 name="son_islem_tarihi"
                 control={form.control}
@@ -385,7 +413,7 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                     <FormLabel>Son İşlem/Hareket TARİHİ</FormLabel>
                     <FormControl>
                       <Input
-                        className="font-black italic"
+                        className="font-black text-black italic"
                         disabled={isLoading}
                         placeholder={`${secilenMarka[0]?.son_islem_tarihi!}`}
                         {...field}
@@ -393,6 +421,28 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                     </FormControl>
                     <FormDescription>
                       Kurum son işlemin veya hareketin TARİHİNİ giriniz...
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="son_islem"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Son İşlem/Hareket ADI</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="font-black text-black italic"
+                        disabled={isLoading}
+                        placeholder={`${secilenMarka[0]?.son_islem!}`}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Başvuru ile ilgili Kurum nezdindeki son aksiyonun adını
+                      giriniz
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -407,16 +457,10 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                   <FormLabel>Son İşlem/Hareket DETAYLI AÇIKLAMASI</FormLabel>
                   <FormControl>
                     <Textarea
-                      className="font-black resize italic"
+                      className="font-black text-black resize italic"
                       {...field}
                       placeholder={`${secilenMarka[0]?.durum_aciklamasi!}`}
                     />
-                    {/*                   <Input
-                    className="font-black italic "
-                    disabled={isLoading}
-                    placeholder={`${secilenMarka[0].durum_aciklamasi}`}
-                    {...field}
-                  /> */}
                   </FormControl>
                   <FormDescription>
                     Kurum nezdinde gerçekleşen son işlem, Kurumdan, Vekilden
@@ -427,93 +471,6 @@ export default function MarkaForm({ secilenMarka, session }: MarkaFormProps) {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="basvurulan_sinif_no"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Sınıf Numarası</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground"
-                          )}>
-                          {field.value
-                            ? siniflar.find(
-                                (sinif) => sinif.label === field.value
-                              )?.label
-                            : "Sınıf seçiniz..."}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput placeholder="Sınıf no seçiniz..." />
-                        <CommandEmpty>Sınıf bulunamadı.</CommandEmpty>
-                        <CommandGroup>
-                          {siniflar.map((item) => (
-                            <CommandItem
-                              value={item.label}
-                              key={item.label}
-                              onSelect={() => {
-                                form.setValue("basvurulan_sinif_no", item.label);
-                              }}>
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  item.label === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {item.label}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormDescription>
-                    Marka başvurusundaki sınıf numaraları...
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="basvurulan_sinif_aciklamasi"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Sınıf açıklamalarını giriniz...</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="font-black resize italic"
-                      {...field}
-                      placeholder={`${secilenMarka[0]?.durum_aciklamasi!}`}
-                    />
-                    {/*                   <Input
-                    className="font-black italic "
-                    disabled={isLoading}
-                    placeholder={`${secilenMarka[0].durum_aciklamasi}`}
-                    {...field}
-                  /> */}
-                  </FormControl>
-                  <FormDescription>
-                    Marka başvurusu esnasında girilen sınıfların detaylarını giriniz....
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <div className="w-full flex justify-center">
               <Button
                 className="bg-emerald-500 font-bold"

@@ -15,11 +15,13 @@ type MarkalarX = Database["public"]["Tables"]["markalar"]["Row"];
 interface MarkaCardProps {
   bilgiler: any | null;
   secilenMarkaSiniflar: any[] | null;
+  secilenMarkaSurecBilgileri: any[] | null;
 }
 
 const MarkaDetayCard: React.FC<MarkaCardProps> = ({
   bilgiler,
   secilenMarkaSiniflar,
+  secilenMarkaSurecBilgileri,
 }) => {
   const supabase = createClientComponentClient<Database>();
 
@@ -146,14 +148,25 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
                       <p className="text-lg font-semibold text-foreground/80 ">
                         {bilgiler[0]?.class_no}
                       </p>
+
                       <p className="font-light">Marka İlan Bülten Tarihi:</p>
                       <p className="text-lg font-semibold text-foreground/80 ">
                         {bilgiler[0]?.yayin_tarihi}
                       </p>
 
-                      {bilgiler[0]?.durum_aciklamasi !== null && (
+                      {bilgiler[0]?.yayin_tarihi != null && (
+                        <>
+                          <p className="font-light">
+                            Marka İlan Bülten Tarihi:
+                          </p>
+                          <p className="text-lg font-semibold text-foreground/80 ">
+                            {bilgiler[0]?.yayin_tarihi}
+                          </p>
+                        </>
+                      )}
+                      {bilgiler[0]?.marka_durumu !== null && (
                         <div>
-                          <p className="font-light">Durum Açıklaması:</p>
+                          <p className="font-light">Marka Durumu:</p>
                           <p className="font-semibold">
                             {bilgiler[0]?.marka_durumu}
                           </p>
@@ -173,17 +186,45 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
             isBlurred
             className=" hover:bg-primary/20">
             <CardBody>
-              <h3 className="text-3xl font-bold text-foreground/90">
-                KISA DURUM VE BAŞVURU SAHİBİ BİLGİLERİ - SIRADAKİ İŞLEMİN KISA
-                İFADESİ
-              </h3>
+              <p className="text-xl font-light text-foreground/90">
+                Marka / Başvuru Sahibi:
+              </p>
               <p className="font-semibold text-2xl">
                 {bilgiler[0]?.firma_unvan}
               </p>
+              {bilgiler[0]?.son_islem_tarihi !== null && (
+                <div>
+                  <p className="font-light">Son İşlem Tarihi:</p>
+                  <p className="font-semibold">
+                    {bilgiler[0]?.son_islem_tarihi}
+                  </p>
+                </div>
+              )}
+              {bilgiler[0]?.son_islem !== null && (
+                <div>
+                  <p className="font-light">Son İşlem Açıklaması:</p>
+                  <p className="font-semibold">{bilgiler[0]?.son_islem}</p>
+                </div>
+              )}
+
               {bilgiler[0]?.durum_aciklamasi !== null && (
                 <div>
                   <p className="font-light">Durum Açıklaması:</p>
-                  <p className="font-semibold">{bilgiler[0]?.marka_durumu}</p>
+                  <p className="font-semibold">
+                    {bilgiler[0]?.durum_aciklamasi}
+                  </p>
+                </div>
+              )}
+              {bilgiler[0]?.beklenen_islem !== null && (
+                <div>
+                  <p className="font-light">Beklenen/Sıradaki İşlem:</p>
+                  <p className="font-semibold">{bilgiler[0]?.beklenen_islem}</p>
+                  <p className="font-semibold">
+                    {bilgiler[0]?.beklenen_islem_tarihi}
+                  </p>
+                  <p className="font-semibold">
+                    {bilgiler[0]?.beklenen_islem_aciklamasi}
+                  </p>
                 </div>
               )}
             </CardBody>
@@ -206,6 +247,23 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
                     MARKA SÜREÇ DETAY BİLGİLERİ - SONRAKİ AŞAMALARA DAİR
                     BİLGİLER
                   </h3>
+                  <p className="font-light">Marka SÜREÇ Ayrıntıları:</p>
+                  {secilenMarkaSurecBilgileri?.map((item, index) => (
+                    <>
+
+                      <p className="font-light">
+                        {item.islem_tarihi}
+                      </p>
+                      <h3
+                        key={item.id}
+                        className="text-3xl font-bold text-foreground/90">
+                        {item.islem}
+                      </h3>
+                      <p className="font-light">
+                        {item.islem_aciklamasi}
+                      </p>
+                    </>
+                  ))}
                 </div>
               </div>
               {/*                 </div>
@@ -227,14 +285,17 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
                   </h3>
                   <p className="font-light">Marka Sınıf Ayrıntıları:</p>
                   {secilenMarkaSiniflar?.map((item, index) => (
-                  <>
-                  <h3 key={item.id} className="text-3xl font-bold text-foreground/90">
-                    {item.basvurulan_sinif_no}
-                  </h3>
-                  <p className="font-light">{item.basvurulan_sinif_aciklamasi}</p>
-                  </>
-                ))}
-
+                    <>
+                      <h3
+                        key={item.id}
+                        className="text-3xl font-bold text-foreground/90">
+                        {item.basvurulan_sinif_no}
+                      </h3>
+                      <p className="font-light">
+                        {item.basvurulan_sinif_aciklamasi}
+                      </p>
+                    </>
+                  ))}
                 </div>
               </div>
             </CardBody>

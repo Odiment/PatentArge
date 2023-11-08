@@ -1,8 +1,5 @@
 "use client";
-
-//import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Session,
@@ -310,7 +307,7 @@ export default function MarkaSinifForm({
             })
             .eq("marka_id", secilenMarka[0].id);
           if (error) throw error;
-          /* window.location.reload(); */
+          window.location.reload();
           /* alert("Marka Güncellendi!") */
         } catch (error) {
           alert("HATA: Marka güncelemesi gerçekleştirilemedi!");

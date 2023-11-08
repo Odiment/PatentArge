@@ -59,6 +59,28 @@ const MarkaCardYaz = async ({ params }: MarkaCardYazProps) => {
 
     secilenMarkaSiniflar = secilenMarkaSiniflarx;
   }
+
+  let secilenMarkaSurecBilgileri:
+    | {
+        marka_id: any;
+        islem_tarihi: any;
+        islem: any;
+        islem_aciklamasi: any;
+      }[]
+    | null = [];
+
+  if (secilenMarka != null) {
+    const { data: secilenMarkaSurecBilgilerix } = await supabase
+      .from("marka_surec")
+      .select("id, marka_id, islem_tarihi, islem, islem_aciklamasi")
+      .eq("marka_id", `${secilenMarkaId}`);
+
+      secilenMarkaSurecBilgileri = secilenMarkaSurecBilgilerix;
+  }
+
+
+
+
   /* console.log("secilenMarkaSiniflar")
 console.log(secilenMarkaSiniflar) */
 
@@ -76,12 +98,6 @@ console.log(secilenMarkaSiniflar) */
           secilenMarkaSiniflar={secilenMarkaSiniflar!}
         />
       </div>
-      <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px] ">
-        <MarkaDetayCard
-          bilgiler={secilenMarka}
-          secilenMarkaSiniflar={secilenMarkaSiniflar!}
-        />
-      </div>
       {secilenMarkaSiniflar?.map((secilenMarkaSinif: any, index: any) => (
         <div key={index}>
           <div className="container py-10 mx-auto">
@@ -89,10 +105,18 @@ console.log(secilenMarkaSiniflar) */
               session={session}
               secilenMarka={secilenMarka!}
               secilenMarkaSinif={secilenMarkaSinif!}
+              secilenMarkaSurecBilgileri={secilenMarkaSurecBilgileri!}
             />
           </div>
         </div>
       ))}
+      <div className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px] ">
+        <MarkaDetayCard
+          bilgiler={secilenMarka}
+          secilenMarkaSiniflar={secilenMarkaSiniflar!}
+          secilenMarkaSurecBilgileri={secilenMarkaSurecBilgileri!}
+        />
+      </div>
     </div>
   );
 };

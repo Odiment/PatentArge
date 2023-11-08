@@ -32,6 +32,7 @@ interface MarkaIdPageProps {
 
 import { getSession } from "@/app/auth/getSession/getSession";
 import { getUser } from "@/app/auth/getUser/getUser";
+import { getYetki } from "@/app/auth/getYetki/getYetki";
 
 export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   const createServerSupabaseClient = cache(() => {
@@ -43,6 +44,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
 
   const session = await getSession();
   const user = await getUser();
+  const yetki = await getYetki();
 
   const supabase = createServerSupabaseClient();
 
@@ -67,7 +69,6 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
 
   type Firma = { firma_id: string }[] | null;
   let firma: Firma | undefined;
-  let yetki: any | null;
   let tumMarkaSiniflar: any | null;
 
   if (user != null || user != undefined) {
@@ -87,8 +88,6 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
 
     firma = firmatek;
 
-    let yetkix = profil?.map(({ yetki }: any) => yetki);
-    yetki = yetkix;
   }
 
   let items: MarkalarX[] | null = [];
@@ -98,7 +97,7 @@ export default async function MarkaKart({ searchParams }: MarkaIdPageProps) {
   // admin yetkisinde tüm markaların görülebilmesi - erişilebilmesi
 
   if (profil != null) {
-    if (profil[0].yetki !== "admin" && (firma != null || firma != undefined)) {
+    if (yetki !== "admin" && (firma != null || firma != undefined)) {
       const { data: marka_firma } = await supabase
         .from("markalar")
         .select()
@@ -370,7 +369,7 @@ let basvuru_no: React.Key | null | undefined = items?.map(
           <Filter />
         </div>
         <div className="flex">
-        {yetki[0] === "admin" && (
+        {yetki === "admin" && (
         <div key={basvuru_no}>
           <FirmaFilter />
         </div>
@@ -381,7 +380,7 @@ let basvuru_no: React.Key | null | undefined = items?.map(
         items={items}
         bilgiler={items}
         userid={user?.id!}
-        yetki={yetki[0]}
+        yetki={yetki}
         tumMarkaSiniflar={tumMarkaSiniflar}
       />
     </div>
