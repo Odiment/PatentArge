@@ -23,7 +23,7 @@ const MarkaList: React.FC<MarkaListProps> = ({ items, bilgiler, userid, yetki, t
         {bilgiler != null && (
           <>
             {items?.map((item, index) => (
-              <div key={item.referans_no}>
+              <>
                 {item.basvuru_no != null && (
                   <div key={item.basvuru_no}>
                     <MarkaCard
@@ -35,7 +35,7 @@ const MarkaList: React.FC<MarkaListProps> = ({ items, bilgiler, userid, yetki, t
                     />
                   </div>
                 )}
-              </div>
+              </>
             ))}
           </>
         )}
