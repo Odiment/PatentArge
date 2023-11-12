@@ -80,11 +80,6 @@ const MarkaCardYaz = async ({ params }: MarkaCardYazProps) => {
   }
 
 
-
-
-  /* console.log("secilenMarkaSiniflar")
-console.log(secilenMarkaSiniflar) */
-
   return (
     <div className="flex flex-col content-center mx-auto pt-10 gap-y-8  px-4 sm:px-6 lg:px-8">
       <MarkaCardTek data={secilenMarka!} />

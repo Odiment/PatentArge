@@ -41,27 +41,36 @@ const EksikBilgiMarka: React.FC<MarkaCardProps> = ({
   const supabase = createClientComponentClient<Database>();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";  
+    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   let resim_url: string =
     "https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/patentFigure/format.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXRlbnRGaWd1cmUvZm9ybWF0LnBuZyIsImlhdCI6MTY5ODkxODI3NSwiZXhwIjoxNzkzNTI2Mjc1fQ.lb7bGb--HDNNLsPPXqUNjPpZNPD7zlbrGoezrglkFEI&t=2023-11-02T09%3A44%3A35.926Z";
 
+  async function deleteMarka() {
+    try {
+      const { error } = await supabase
+        .from("marka_siniflar")
+        .delete()
+        .eq("marka_id", eksikMarkaId);
 
-     async function deleteMarka() {
-        try {
-          const { error } = await supabase
-            .from('markalar')
-            .delete()
-            .eq('id', eksikMarkaId)
-    
-           
-    
-          if (error) throw error
-          window.location.reload()
-        } catch (error: any) {
-          alert(error.message)
-        }
-      } 
+      if (error) throw error;
+      window.location.reload();
+    } catch (error: any) {
+      alert(error.message);
+    }
+
+    try {
+      const { error } = await supabase
+        .from("markalar")
+        .delete()
+        .eq("id", eksikMarkaId);
+
+      if (error) throw error;
+      window.location.reload();
+    } catch (error: any) {
+      alert(error.message);
+    }
+  }
 
   return (
     <>
@@ -72,13 +81,15 @@ const EksikBilgiMarka: React.FC<MarkaCardProps> = ({
           isPressable
           className="border-1 border-primary bg-primary/5 hover:bg-primary/20">
           <CardBody className="overflow-visible p-0">
-            <Button asChild className="bg-primary hover:bg-primary/50 border-2 border-emerald-500">
-              <Link href={`/tmcard/${eksikMarkaRef}`} >
+            <Button
+              asChild
+              className="bg-primary hover:bg-primary/50 border-2 border-emerald-500">
+              <Link href={`/tmcard/${eksikMarkaRef}`}>
                 <EditIcon className={cn(iconClasses, "text-white")} />
                 Markayı Düzenle
               </Link>
             </Button>
-            <b className="text-center">{eksikMarka}</b> 
+            <b className="text-center">{eksikMarka}</b>
             <Image
               isZoomed
               shadow="sm"
@@ -91,15 +102,17 @@ const EksikBilgiMarka: React.FC<MarkaCardProps> = ({
             />
             <b className="text-center">{firma_unvan}</b>
           </CardBody>
-          <CardFooter onClick={deleteMarka}  className="flex text-small justify-between  h-20 border-2 border-red-500">
-{/*             <Button className="bg-primary hover:bg-primary/50 border-2 border-emerald-500">
+          <CardFooter
+            onClick={deleteMarka}
+            className="flex text-small justify-between  h-20 border-2 border-red-500">
+            {/*             <Button className="bg-primary hover:bg-primary/50 border-2 border-emerald-500">
                 <DeleteDocumentIcon className={cn(iconClasses, "text-white")} />
                 Tasarımı Sil
             </Button> */}
             <DeleteDocumentIcon className={cn(iconClasses, "text-white")} />
             Markayı Sil
           </CardFooter>
-{/*           <CardFooter className="flex text-small justify-between  h-20 ">
+          {/*           <CardFooter className="flex text-small justify-between  h-20 ">
             <b className="text-left">{eksikMarka}</b>            
             <b><GiPlainCircle size={200} className="h-5 w-5" /></b>
           </CardFooter> */}

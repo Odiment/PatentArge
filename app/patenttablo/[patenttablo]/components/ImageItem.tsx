@@ -335,7 +335,7 @@ if (patentResimler != null) {
                       asChild
                       className="bg-yellow-700 hover:bg-yellow-400"
                     >
-                      <Link href={`/tmcard/${bilgiler?.referans_no}`}>
+                      <Link href={`/ptcard/${bilgiler?.referans_no}`}>
                         <EditIcon className={cn(iconClasses, 'text-white')} />
                         Düzenle
                       </Link>

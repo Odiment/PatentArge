@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/select";
 //import { useToast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
-/* import { Textarea } from '@/components/ui/textarea' */
+import { Textarea } from '@/components/ui/textarea'
 
 import { Database } from "@/app/supabase";
 
@@ -52,6 +52,7 @@ const formSchema = z.object({
   class_no: z.string(),
   status: z.string(),
   referans_no: z.string(),
+  ozet: z.string(),
 });
 
 export default function PatentForm({
@@ -93,6 +94,7 @@ export default function PatentForm({
       class_no: "",
       status: "",
       referans_no: "",
+      ozet: "",
     },
   });
 
@@ -124,6 +126,9 @@ export default function PatentForm({
         if (values.firma_ad === "") {
           values.firma_ad = secilenPatent[0].firma_ad!;
         }
+        if (values.ozet === "") {
+          values.ozet = secilenPatent[0].ozet!;
+        }
 
         try {
           setLoading(true);
@@ -139,6 +144,7 @@ export default function PatentForm({
               referans_no: values.referans_no,
               /* referans_no: values.referans_no, */
               firma_ad: values.firma_ad,
+              ozet: values.ozet,
             })
             .eq("id", secilenPatent[0].id);
           if (error) throw error;
@@ -300,7 +306,7 @@ export default function PatentForm({
                   </FormItem>
                 )}
               />
-              <FormField
+ {/*              <FormField
                 name="firma_ad"
                 control={form.control}
                 render={({ field }) => (
@@ -311,7 +317,6 @@ export default function PatentForm({
                         disabled={isLoading}
                         placeholder={secilenPatent[0].firma_ad!}
                         {...field}
-                        /*  onChange={(e) => setReferansNo(e.target.value)} */
                       />
                     </FormControl>
                     <FormDescription>
@@ -320,8 +325,28 @@ export default function PatentForm({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
+            <FormField
+              name="ozet"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Özet metnini giriniz..</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="font-black resize italic"
+                      {...field}
+                      placeholder={secilenPatent[0].ozet!}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Patent başvurusunda yer alan özet metnini giriniz....
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="w-full flex justify-center">
               <Button
                 className="bg-emerald-500 font-bold"

@@ -50,6 +50,21 @@ const EksikBilgiPatent: React.FC<PatentCardProps> = ({
     "https://qzxxwmyywwqvbreysvto.supabase.co/storage/v1/object/sign/patentFigure/format.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJwYXRlbnRGaWd1cmUvZm9ybWF0LnBuZyIsImlhdCI6MTY5ODkxODI3NSwiZXhwIjoxNzkzNTI2Mjc1fQ.lb7bGb--HDNNLsPPXqUNjPpZNPD7zlbrGoezrglkFEI&t=2023-11-02T09%3A44%3A35.926Z";
 
   async function deletePatent() {
+    
+    try {
+        const { error } = await supabase
+          .from("patent_tarifname")
+          .delete()
+          .eq("patent_id", eksikPatentId);
+  
+        /*  setSil(true); */
+  
+        if (error) throw error;
+        window.location.reload();
+      } catch (error: any) {
+        alert(error.message);
+      }
+    
     try {
       const { error } = await supabase
         .from("patentler")
@@ -59,10 +74,11 @@ const EksikBilgiPatent: React.FC<PatentCardProps> = ({
       /*  setSil(true); */
 
       if (error) throw error;
-      window.location.reload();
+     /*  window.location.reload(); */
     } catch (error: any) {
       alert(error.message);
     }
+   
   }
 
   return (
@@ -77,7 +93,7 @@ const EksikBilgiPatent: React.FC<PatentCardProps> = ({
             <Button
               asChild
               className="bg-primary hover:bg-primary/50 border-2 border-emerald-500">
-              <Link href={`/tscard/${eksikPatentRef}`}>
+              <Link href={`/ptcard/${eksikPatentRef}`}>
                 <EditIcon className={cn(iconClasses, "text-white")} />
                 Patenti Düzenle
               </Link>

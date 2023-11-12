@@ -15,6 +15,9 @@ import PatentDetayCard from "./patent-detay-card";
 
 import { Database } from "@/app/supabase";
 
+import { getSession } from "@/app/auth/getSession/getSession";
+import { getUser } from "@/app/auth/getUser/getUser";
+
 type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
 
 interface PatentDetay {
@@ -27,72 +30,93 @@ const PatentDetay = async ({ params }: PatentDetay) => {
   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
-  const {
+  /*   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await supabase.auth.getSession(); */
+
+  const session = await getSession();
+
+  const user = await getUser();
 
   if (!session) {
     redirect("/");
   }
+
+/*   const {
+    data: profil,
+    error,
+    status,
+  } = await supabase
+    .from("profiles")
+    .select(`full_name, username, avatar_url, yetki, pozisyon`)
+    .eq("id", user?.id!)
+    .single();
+
+  if (profil != null) {
+    console.log("profil?.yetki");
+    console.log(profil?.yetki);
+  } */
 
   const { data: secilenPatent } = await supabase
     .from("patentler")
     .select()
     .eq("referans_no", `${params.patentdetay}`);
 
-
-    const { data: secilenPatentidx } = await supabase
+  const { data: secilenPatentidx } = await supabase
     .from("patentler")
     .select("id")
     .eq("referans_no", `${params.patentdetay}`);
 
-    let secilenPatentid = secilenPatentidx?.map(({ id }: any) => id);
-    let patentResimlerx:
+  let secilenPatentid = secilenPatentidx?.map(({ id }: any) => id);
+  let patentResimlerx:
     | {
         patent_resim_url: string | null;
         patent_id: string;
       }[]
     | null = [];
 
-    const { data: tumPatentResimler } = await supabase
-      .from("patent_resimler")
-      .select("patent_resim_url, patent_id");
+  const { data: tumPatentResimler } = await supabase
+    .from("patent_resimler")
+    .select("patent_resim_url, patent_id");
 
-    patentResimlerx = tumPatentResimler;
+  patentResimlerx = tumPatentResimler;
 
-let tumPatentResimlerPatent_id: any 
+  let tumPatentResimlerPatent_id: any;
 
-    if (tumPatentResimler != null) {
-        let tumPatentResimlerPatent_idx = tumPatentResimler.map(
-          ({ patent_id }) => patent_id
-        );
+  if (tumPatentResimler != null) {
+    let tumPatentResimlerPatent_idx = tumPatentResimler.map(
+      ({ patent_id }) => patent_id
+    );
 
-        tumPatentResimlerPatent_id = tumPatentResimlerPatent_idx
+    tumPatentResimlerPatent_id = tumPatentResimlerPatent_idx;
 
-        var arananPatentResimler = tumPatentResimler.reduce(
-            (result: any, thing) => {
-              if (thing.patent_id.includes(`${secilenPatentid}`)) {
-                result.push(thing);
-              }
-              return result;
-            },
-            []
-          );
+    var arananPatentResimler = tumPatentResimler.reduce(
+      (result: any, thing) => {
+        if (thing.patent_id.includes(`${secilenPatentid}`)) {
+          result.push(thing);
         }
-/*         let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as
+        return result;
+      },
+      []
+    );
+  }
+  /*         let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as
     | React.Key
     | null
     | undefined; */
 
   return (
-    <div key={8} className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px] ">
+    <div
+      key={8}
+      className="flex flex-col gap-y-8 pt-5 object-contain ml-[7px] md:ml-[55px] lg:ml-[115px] mr-[10px] ">
       {secilenPatent != null && (
-        <div key={9}>        
+        <div key={9}>
           <PatentDetayCard
-          key={tumPatentResimlerPatent_id}
-          bilgiler={secilenPatent}
-          patent_id={secilenPatentid}
-          patentResimler={arananPatentResimler}
+            key={tumPatentResimlerPatent_id}
+            bilgiler={secilenPatent}
+            patent_id={secilenPatentid}
+            patentResimler={arananPatentResimler}
+            user={user}
           />
         </div>
       )}
@@ -100,4 +124,4 @@ let tumPatentResimlerPatent_id: any
   );
 };
 
-export default PatentDetay
+export default PatentDetay;

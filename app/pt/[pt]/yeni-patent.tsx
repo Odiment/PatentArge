@@ -79,6 +79,7 @@ export default function YeniPatent({ firmabilgi }: YeniPatentProps) {
   const [referans, setReferans] = useState<string | null>(null);
   const [firma_ad, setFirma_ad] = useState<string | null>(null);
   const [firma_id, setFirma_id] = useState<string | null>(null);
+  const [yeniPatentId, setYeniPatentId] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
   /*  const [patent_figure_url, setPatentFigureUrl] = useState<string | null>(null) */
@@ -141,6 +142,8 @@ export default function YeniPatent({ firmabilgi }: YeniPatentProps) {
 
       if (error) throw error;
 
+      /* setYeniPatentId(yeniPatent.id) */
+
       toast({
         variant: "affirmative",
         title: "Veri tabanında patent için bir id oluşturuldu",
@@ -157,24 +160,38 @@ export default function YeniPatent({ firmabilgi }: YeniPatentProps) {
     } catch (error: any) {
       alert(error.message);
     }
+
+   
+
+
+
   }
 
   const getirYeniPatent = useCallback(async () => {
     try {
       setLoading(true);
 
-      let { data, error, status } = await supabase
+      let { data: yeniPatent, error, status } = await supabase
         .from("patentler")
         .select(`patent_title, deger, id, referans_no, patent_figure_url`)
         .eq("deger", deger!)
         .single();
 
+        let { data } = await supabase
+        .from("patent_tarifname")
+        .insert({            
+          tarifname: null,
+          patent_id: yeniPatent?.id,
+        })
+        .single();
+
+
       if (error && status !== 406) {
         throw error;
       }
 
-      if (data) {
-        setUid(data.id);
+      if (yeniPatent) {
+        setUid(yeniPatent.id);
         /* setPatentler(data) */
       }
     } catch (error) {
@@ -184,6 +201,35 @@ export default function YeniPatent({ firmabilgi }: YeniPatentProps) {
     }
   }, [deger, supabase]);
 
+/* 
+  try {
+    const { data, error, status } = await supabase
+      .from("patent_tarifname")
+      .insert({            
+        tarifname: null,
+        patent_id: yeniPatentId,
+      })
+      .single();
+
+    if (error) throw error;
+
+    toast({
+      variant: "affirmative",
+      title: "Veri tabanında patent için bir id oluşturuldu",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-emerald-900 p-4">
+          <code className="text-white">
+            {JSON.stringify(veri.patent_title, null, 2)}
+          </code>
+        </pre>
+      ),
+    });
+
+    window.location.reload();
+  } catch (error: any) {
+    alert(error.message);
+  }
+ */
   useEffect(() => {
     getirYeniPatent();
   }, [patent_title, getirYeniPatent]);

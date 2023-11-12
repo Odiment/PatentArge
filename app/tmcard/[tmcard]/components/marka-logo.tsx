@@ -125,15 +125,24 @@ const MarkaLogo: React.FC<MarkaLogoProps> = ({
     (hiddenFileInput as any).current.click()
   }
 
-let resim_url: string | null  
+let resim_url: string | null
 
-  if ((markaLogoUrl !== null) && (markaLogoUrl !== undefined )) {
+
+if (markaLogoUrl === null) {
+    resim_url = tp_logo_url!;
+  } else {
+    resim_url = markaLogoUrl;
+  }
+
+ /*  if ((markaLogoUrl !== null) && (markaLogoUrl !== undefined )) {
     if (markaLogoUrl.includes('blob' || 'data')) {
     resim_url = markaLogoUrl
   } else {
     resim_url = tp_logo_url
   }
-} 
+}  */
+
+
 
   return (
     <div className="flex flex-col">

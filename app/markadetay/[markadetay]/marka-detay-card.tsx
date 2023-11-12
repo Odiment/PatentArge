@@ -269,10 +269,10 @@ const MarkaDetayCard: React.FC<MarkaCardProps> = ({
                 <div className="flex flex-col col-span-3 md:col-span-8 content-start"> */}
               <div className="flex justify-between ">
                 <div className="flex flex-col gap-0">
-                  <h3 className="text-3xl font-bold text-foreground/90">
+                  {/* <h3 className="text-3xl font-bold text-foreground/90">
                     MARKA SÜREÇ DETAY BİLGİLERİ - SONRAKİ AŞAMALARA DAİR
                     BİLGİLER
-                  </h3>
+                  </h3> */}
                   <p className="font-light">Marka SÜREÇ Ayrıntıları:</p>
                   {secilenMarkaSurecBilgileri?.map((item, index) => (
                     <>

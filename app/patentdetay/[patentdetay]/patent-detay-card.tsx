@@ -7,6 +7,7 @@ import { DeleteDocumentIcon } from "@/icons/DeleteDocumentIcon";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { EditIcon } from "@/icons/EditIcon";
 import { GiPlainCircle } from "react-icons/gi";
+import { Separator } from "@/components/ui/separator";
 import {
   /*   Button,
   Link, */
@@ -46,15 +47,50 @@ interface PatentCardProps {
         patent_id: string;
       }[]
     | null;
+    user: any
 }
 
 const PatentDetayCard: React.FC<PatentCardProps> = ({
   bilgiler,
   patent_id,
   patentResimler,
+  user,
 }) => {
   const supabase = createClientComponentClient<Database>();
   const [currentPatentIndex, setCurrentPatentIndex] = useState(0);
+  const [yetki, setYetki] = useState<string | null>(null);
+  const iconClasses =
+  "text-xl text-default-500 pointer-events-none flex-shrink-0";
+
+  const getProfile = useCallback(async () => {
+    try {
+      /* setLoading(true); */
+
+      let { data, error, status } = await supabase
+        .from("profiles")
+        .select(`full_name, username, avatar_url, yetki, pozisyon`)
+        .eq("id", user?.id!)
+        .single();
+
+/*       if (error && status !== 406) {
+        throw error;
+      } */
+
+      if (data) {
+        setYetki(data.yetki);
+      }
+    } catch (error) {
+      /* alert(`getProfile hatası - UserMenu ${error}`); */
+      console.log(`profil çekme hatası ${error}`)
+    } finally {
+     /*  setLoading(false); */
+    }
+  }, [user, supabase]);
+
+
+  useEffect(() => {
+    getProfile();
+  }, [user, getProfile]);
 
   let patent_resimler_urlx: any;
 
@@ -141,6 +177,16 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
 
   return (
     <>
+    {yetki === "admin" && (
+        <>
+          <Button asChild className="bg-yellow-700 hover:bg-yellow-400">
+            <Link href={`/ptcard/${bilgiler[0].referans_no}`}>
+              <EditIcon className={cn(iconClasses, "text-white")} />
+              Düzenle
+            </Link>
+          </Button>
+        </>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 pb-2">
       <div className="rounded-lg justify-center">
           <Card
@@ -209,22 +255,22 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
                     <p className="text-lg font-semibold text-foreground/80 ">
                       {bilgiler[0]?.class_no}
                     </p>
-
-                    {bilgiler[0]?.durum_aciklamasi !== null && (
-                      <div>
-                        <p className="font-light">Durum Açıklaması:</p>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
               <p className="font-semibold text-2xl">
                 {bilgiler[0]?.firma_unvan}
               </p>
-              {bilgiler[0]?.durum_aciklamasi !== null && (
+              {bilgiler[0]?.patent_durumu !== null && (
                 <div>
                   <p className="font-light">Durum Açıklaması:</p>
                   <p className="font-semibold">{bilgiler[0]?.patent_durumu}</p>
+                </div>
+              )}
+              {bilgiler[0]?.ozet !== null && (
+                <div>
+                  <p className="font-light">Özet:</p>
+                  <p className="font-semibold">{bilgiler[0]?.ozet}</p>
                 </div>
               )}
             </CardBody>
@@ -269,17 +315,13 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
             isBlurred
             className="hover:bg-primary/20">
             <CardBody>
-              {/* <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 justify-center">
-                <div className="flex flex-col col-span-3 md:col-span-8 content-start"> */}
               <div className="flex justify-between ">
                 <div className="flex flex-col gap-0">
-                  <h3 className="text-3xl font-bold text-foreground/90">
+                  <h3 className="text-xl font-bold text-foreground/90">
                     PATENT KORUMA KAPSAMI - ÖZEL NOTLAR
                   </h3>
                 </div>
               </div>
-              {/*                 </div>
-              </div> */}
             </CardBody>
           </Card>
         </div>
@@ -292,9 +334,19 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
             <CardBody>
               <div className="flex justify-between ">
                 <div className="flex flex-col gap-0">
-                  <h3 className="text-3xl font-bold text-foreground/90">
+                  <h3 className="text-xl font-bold text-foreground/90">
                     PATENT İSTEMLER VE TARİFNAME
                   </h3>
+                  <>
+                    <Separator className="bg-primary" />
+                      <h3
+                        className="text-xl font-bold text-foreground/90">
+                        İstem 1.
+                      </h3>
+                      <p className="font-light">
+                        {/* {item.basvurulan_sinif_aciklamasi} */}
+                      </p>
+                    </>
                 </div>
                 <div></div>
               </div>

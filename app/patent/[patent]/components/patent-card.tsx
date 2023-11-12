@@ -49,7 +49,7 @@ interface PatentCardProps {
   bilgiler: PatentlerX | null;
   /* patent_id: string; */
   /* userid: string; */
-  yetki: any | null
+  yetki: any | null;
   patentResimler:
     | {
         patent_resim_url: string | null;
@@ -64,7 +64,7 @@ const PatentCard: React.FC<PatentCardProps> = ({
   /* patent_id, */
   patentResimler,
   /* userid, */
-  yetki
+  yetki,
 }) => {
   let patent_resimler_urlx: any;
 
@@ -313,124 +313,113 @@ const PatentCard: React.FC<PatentCardProps> = ({
                 )}
                 {/* </div> */}
               </div>
-
-              {/******* MODAL GÖRÜNÜMÜ *******/}
-              <Modal
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                isDismissable={true}>
-                <ModalContent>
-                  {(onClose) => (
-                    <>
-                      <ModalHeader className="flex flex-col gap-1 text-2xl justify-center items-center border-b border-primary text-primary font-bold text-center">
-                        {bilgiler?.patent_title}
-                      </ModalHeader>
-                      <ModalBody>
-                        <div className="max-w-[1400px]  w-full m-auto  relative group">
-                          <Image
-                            shadow="sm"
-                            radius="lg"
-                            width="100%"
-                            height={200}
-                            alt="patent_figure"
-                            className="relative opacity-0 shadow-black/5 data-[loaded=true]:opacity-100 shadow-none transition-transform-opacity motion-reduce:transition-none !duration-300 rounded-large z-0 w-full h-full object-cover"
-                            src={resim_url!}
-                          />
-
-                          <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-                            <ChevronLeft onClick={prevPatentSlide} size={30} />
-                          </div>
-
-                          <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-                            <ChevronRight onClick={nextPatentSlide} size={30} />
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <p
-                            className={classNames("text-2xl", "font-bold", {
-                              "text-emerald-500": yesil,
-                              "text-yellow-500": sari,
-                              "text-red-500": kirmizi,
-                            })}>
-                            <GiPlainCircle size={200} className="h-7 w-7" />
-                          </p>
-                          {/*  <p>Durum:</p> */}
-                          <p
-                            className={classNames("text-2xl", "font-bold", {
-                              "text-emerald-500": yesil,
-                              "text-yellow-500": sari,
-                              "text-red-500": kirmizi,
-                            })}>
-                            {durum_bilgisi}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="font-semibold text-2xl">
-                            {bilgiler?.basvuru_no}
-                          </p>
-                          <table>
-                            <tr>
-                              <td>Başvuru Tarihi: </td>
-                              <td className="font-semibold text-2xl">
-                                {bilgiler?.basvuru_tarihi}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>Patent Sınıfları:</td>
-                              <td>{bilgiler?.class_no}</td>
-                            </tr>
-                          </table>
-                          <p className="text-sm text-primary/80">
-                            Ref: {bilgiler?.referans_no}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-primary/80">Özet:</p>
-                          <p className="text-sm">{bilgiler?.ozet}</p>
-                        </div>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button
-                          asChild
-                          className="bg-primary hover:bg-primary/50">
-                          <Link href={`/patentdetay/${bilgiler?.referans_no}`}>
-                            <EyeIcon
-                              className={cn(iconClasses, "text-white")}
-                            />
-                            Patent Detay
-                          </Link>
-                        </Button>
-                        {yetki === "admin" && (
-                          <>
-                            <Button
-                              asChild
-                              className="bg-yellow-700 hover:bg-yellow-400">
-                              <Link href={`/ptcard/${bilgiler?.referans_no}`}>
-                                <EditIcon
-                                  className={cn(iconClasses, "text-white")}
-                                />
-                                Düzenle
-                              </Link>
-                            </Button>
-                            <Button
-                              onClick={deletePatent}
-                              variant="destructive">
-                              <DeleteDocumentIcon
-                                className={cn(iconClasses, "text-white")}
-                              />
-                              Patenti Sil
-                            </Button>
-                          </>
-                        )}
-                      </ModalFooter>
-                    </>
-                  )}
-                </ModalContent>
-              </Modal>
             </>
           </CardFooter>
         </Card>
       </div>
+
+      {/******* MODAL GÖRÜNÜMÜ *******/}
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={true}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-2xl justify-center items-center border-b border-primary text-primary font-bold text-center">
+                {bilgiler?.patent_title}
+              </ModalHeader>
+              <ModalBody>
+                <div className="max-w-[1400px]  w-full m-auto  relative group">
+                  <Image
+                    shadow="sm"
+                    radius="lg"
+                    width="100%"
+                    height={200}
+                    alt="patent_figure"
+                    className="relative opacity-0 shadow-black/5 data-[loaded=true]:opacity-100 shadow-none transition-transform-opacity motion-reduce:transition-none !duration-300 rounded-large z-0 w-full h-full object-cover"
+                    src={resim_url!}
+                  />
+
+                  <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                    <ChevronLeft onClick={prevPatentSlide} size={30} />
+                  </div>
+
+                  <div className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                    <ChevronRight onClick={nextPatentSlide} size={30} />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <p
+                    className={classNames("text-2xl", "font-bold", {
+                      "text-emerald-500": yesil,
+                      "text-yellow-500": sari,
+                      "text-red-500": kirmizi,
+                    })}>
+                    <GiPlainCircle size={200} className="h-7 w-7" />
+                  </p>
+                  {/*  <p>Durum:</p> */}
+                  <p
+                    className={classNames("text-2xl", "font-bold", {
+                      "text-emerald-500": yesil,
+                      "text-yellow-500": sari,
+                      "text-red-500": kirmizi,
+                    })}>
+                    {durum_bilgisi}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-semibold text-2xl">
+                    {bilgiler?.basvuru_no}
+                  </p>
+                  <table>
+                    <tr>
+                      <td>Başvuru Tarihi: </td>
+                      <td className="font-semibold text-2xl">
+                        {bilgiler?.basvuru_tarihi}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Patent Sınıfları:</td>
+                      <td>{bilgiler?.class_no}</td>
+                    </tr>
+                  </table>
+                  <p className="text-sm text-primary/80">
+                    Ref: {bilgiler?.referans_no}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-primary/80">Özet:</p>
+                  <p className="text-sm">{bilgiler?.ozet}</p>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button asChild className="bg-primary hover:bg-primary/50">
+                  <Link href={`/patentdetay/${bilgiler?.referans_no}`}>
+                    <EyeIcon className={cn(iconClasses, "text-white")} />
+                    Patent Detay
+                  </Link>
+                </Button>
+                {yetki === "admin" && (
+                  <>
+                    <Button
+                      asChild
+                      className="bg-yellow-700 hover:bg-yellow-400">
+                      <Link href={`/ptcard/${bilgiler?.referans_no}`}>
+                        <EditIcon className={cn(iconClasses, "text-white")} />
+                        Düzenle
+                      </Link>
+                    </Button>
+                    <Button onClick={deletePatent} variant="destructive">
+                      <DeleteDocumentIcon
+                        className={cn(iconClasses, "text-white")}
+                      />
+                      Patenti Sil
+                    </Button>
+                  </>
+                )}
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 };

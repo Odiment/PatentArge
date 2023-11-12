@@ -152,7 +152,7 @@ export default async function YeniPatentOlustur() {
         </div>
         <div className="md:ml-14 lg:ml-20 container grid items-center gap-6 pb-8">
           <h1 className="text-xl font-extrabold">
-            Verileri Düzenlenecek Tasarımlar
+            Verileri Düzenlenecek Patentler
           </h1>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 min-[900px]:grid-cols-4 min-[1350px]:grid-cols-6 min-[1650px]:grid-cols-8 gap-4">
