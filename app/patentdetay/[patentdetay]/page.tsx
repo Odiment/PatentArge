@@ -42,21 +42,6 @@ const PatentDetay = async ({ params }: PatentDetay) => {
     redirect("/");
   }
 
-/*   const {
-    data: profil,
-    error,
-    status,
-  } = await supabase
-    .from("profiles")
-    .select(`full_name, username, avatar_url, yetki, pozisyon`)
-    .eq("id", user?.id!)
-    .single();
-
-  if (profil != null) {
-    console.log("profil?.yetki");
-    console.log(profil?.yetki);
-  } */
-
   const { data: secilenPatent } = await supabase
     .from("patentler")
     .select()
@@ -68,6 +53,17 @@ const PatentDetay = async ({ params }: PatentDetay) => {
     .eq("referans_no", `${params.patentdetay}`);
 
   let secilenPatentid = secilenPatentidx?.map(({ id }: any) => id);
+
+  const { data: secilenPatentIstemler } = await supabase
+  .from("patent_istemler")
+  .select("istem_no, istem_metni")
+  .eq("patent_id", `${secilenPatentid}`);
+
+  const { data: secilenPatentTarifname } = await supabase
+  .from("patent_tarifname")
+  .select("tarifname")
+  .eq("patent_id", `${secilenPatentid}`);
+
   let patentResimlerx:
     | {
         patent_resim_url: string | null;
@@ -100,6 +96,9 @@ const PatentDetay = async ({ params }: PatentDetay) => {
       []
     );
   }
+
+
+
   /*         let itemid: React.Key | null | undefined = items?.map(({ id }) => id) as
     | React.Key
     | null
@@ -116,6 +115,8 @@ const PatentDetay = async ({ params }: PatentDetay) => {
             bilgiler={secilenPatent}
             patent_id={secilenPatentid}
             patentResimler={arananPatentResimler}
+            istemler={secilenPatentIstemler}
+            secilenPatentTarifname={secilenPatentTarifname}
             user={user}
           />
         </div>

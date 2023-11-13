@@ -87,63 +87,48 @@ const PatentCardYaz = async ({ params }: PatentCardYazProps) => {
 
   // İstemler
 
-  let secilenPatentIstemler:
+/*   let secilenPatentIstemler:
     | {
         patent_id: any;
         istem_no: any;
         istem_metni: any;
       }[]
-    | null = [];
+    | null = []; */
 
-  if (secilenPatent != null) {
-    const { data: secilenPatentIstemlerx } = await supabase
+  
+    const { data: secilenPatentIstemler } = await supabase
       .from("patent_istemler")
       .select("id, patent_id, istem_no, istem_metni")
       .eq("patent_id", `${secilenPatent_id}`);
 
-    secilenPatentIstemler = secilenPatentIstemlerx;
-  }
+   /*  secilenPatentIstemler = secilenPatentIstemlerx; */
+  
 
   
   // Tarifname
 
-  let secilenPatentTarifname: any;
-
-  if (secilenPatent != null) {
-    const { data: secilenPatentTarifnamex } = await supabase
+    
+    const { data: secilenPatentTarifname } = await supabase
       .from("patent_tarifname")
       .select("tarifname")
       .eq("patent_id", `${secilenPatent_id}`);
 
-    secilenPatentTarifname = secilenPatentTarifnamex;
-  }
+    
+  
 
-  let tarifname = secilenPatentTarifname?.map(({ tarifname }: any) => tarifname)
-
-  /* console.log("secilenPatentTarifname");
-  console.log(secilenPatentTarifname); */
+  /* let tarifname = secilenPatentTarifname?.map(({ tarifname }: any) => tarifname) */
 
   console.log("secilenPatentTarifname")
   console.log(secilenPatentTarifname)
+  console.log("secilenPatent_id")
+  console.log(secilenPatent_id)
+  /* console.log("secilenPatentIstemler")
+  console.log(secilenPatentIstemler) */
 
   // Patent Süreç Bilgileri
-  /*   let secilenMarkaSurecBilgileri:
-    | {
-        marka_id: any;
-        islem_tarihi: any;
-        islem: any;
-        islem_aciklamasi: any;
-      }[]
-    | null = [];
 
-  if (secilenPatent != null) {
-    const { data: secilenMarkaSurecBilgilerix } = await supabase
-      .from("marka_surec")
-      .select("id, marka_id, islem_tarihi, islem, islem_aciklamasi")
-      .eq("marka_id", `${secilenPatent_id}`);
 
-      secilenMarkaSurecBilgileri = secilenMarkaSurecBilgilerix;
-  } */
+
 
   return (
     <div className="flex flex-col content-center mx-auto pt-10 gap-y-8  px-4 sm:px-6 lg:px-8">
@@ -172,7 +157,7 @@ const PatentCardYaz = async ({ params }: PatentCardYazProps) => {
         <PatentTarifnameFormEdit
           session={session}
           secilenPatent={secilenPatent!}
-          tarifname={tarifname}
+          secilenPatentTarifname={secilenPatentTarifname}
         />
       </div>
 

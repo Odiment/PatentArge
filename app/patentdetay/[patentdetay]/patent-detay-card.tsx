@@ -11,12 +11,12 @@ import { Separator } from "@/components/ui/separator";
 import {
   /*   Button,
   Link, */
-  Modal,
+  /*   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  useDisclosure,
+  useDisclosure, */
   cn,
 } from "@nextui-org/react";
 
@@ -29,8 +29,8 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {
   Card,
   CardBody,
-  CardHeader,
-  CardFooter,
+  /*   CardHeader,
+  CardFooter, */
   Image,
 } from "@nextui-org/react";
 
@@ -47,7 +47,16 @@ interface PatentCardProps {
         patent_id: string;
       }[]
     | null;
-    user: any
+  user: any;
+  istemler:
+    | {
+        istem_no: any;
+        istem_metni: any;
+      }[]
+    | null;
+    secilenPatentTarifname: {
+        tarifname: any;
+    }[] | null
 }
 
 const PatentDetayCard: React.FC<PatentCardProps> = ({
@@ -55,12 +64,14 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
   patent_id,
   patentResimler,
   user,
+  istemler,
+  secilenPatentTarifname,
 }) => {
   const supabase = createClientComponentClient<Database>();
   const [currentPatentIndex, setCurrentPatentIndex] = useState(0);
   const [yetki, setYetki] = useState<string | null>(null);
   const iconClasses =
-  "text-xl text-default-500 pointer-events-none flex-shrink-0";
+    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   const getProfile = useCallback(async () => {
     try {
@@ -72,7 +83,7 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
         .eq("id", user?.id!)
         .single();
 
-/*       if (error && status !== 406) {
+      /*       if (error && status !== 406) {
         throw error;
       } */
 
@@ -81,16 +92,19 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
       }
     } catch (error) {
       /* alert(`getProfile hatası - UserMenu ${error}`); */
-      console.log(`profil çekme hatası ${error}`)
+      console.log(`profil çekme hatası ${error}`);
     } finally {
-     /*  setLoading(false); */
+      /*  setLoading(false); */
     }
   }, [user, supabase]);
-
 
   useEffect(() => {
     getProfile();
   }, [user, getProfile]);
+
+  let istem_no = istemler?.map(({ istem_no }: any) => istem_no);
+  let istem_metni = istemler?.map(({ istem_metni }: any) => istem_metni);
+  let tarifname = secilenPatentTarifname?.map(({ tarifname }: any) => tarifname);
 
   let patent_resimler_urlx: any;
 
@@ -175,9 +189,11 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
     durum_bilgisi = "İptal";
   }
 
+  const sortedIstemler = istemler?.sort((a, b) => a.istem_no - b.istem_no);
+
   return (
     <>
-    {yetki === "admin" && (
+      {yetki === "admin" && (
         <>
           <Button asChild className="bg-yellow-700 hover:bg-yellow-400">
             <Link href={`/ptcard/${bilgiler[0].referans_no}`}>
@@ -188,7 +204,7 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
         </>
       )}
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 pb-2">
-      <div className="rounded-lg justify-center">
+        <div className="rounded-lg justify-center">
           <Card
             shadow="sm"
             key={bilgiler?.id}
@@ -305,7 +321,24 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
             </CardBody>
           </Card>
         </div>
+      </div>
 
+      <div className="rounded-lg justify-center">
+        <Card
+          shadow="sm"
+          key={bilgiler?.id}
+          isBlurred
+          className="hover:bg-primary/20">
+          <CardBody>
+            <div className="flex justify-between ">
+              <div className="flex flex-col gap-0">
+                <h3 className="text-xl font-bold text-foreground/90">
+                  PATENT KORUMA KAPSAMI - ÖZEL NOTLAR
+                </h3>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="rounded-lg justify-center">
@@ -318,9 +351,21 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
               <div className="flex justify-between ">
                 <div className="flex flex-col gap-0">
                   <h3 className="text-xl font-bold text-foreground/90">
-                    PATENT KORUMA KAPSAMI - ÖZEL NOTLAR
+                    İSTEMLER
                   </h3>
+                  {sortedIstemler?.map((item, index) => (
+                    <>
+                      <Separator className="bg-primary" />
+                      <h3
+                        key={index}
+                        className="text-xl font-bold text-foreground/90">
+                        {item.istem_no}
+                      </h3>
+                      <p className="font-light">{item.istem_metni}</p>
+                    </>
+                  ))}
                 </div>
+                <div></div>
               </div>
             </CardBody>
           </Card>
@@ -335,18 +380,12 @@ const PatentDetayCard: React.FC<PatentCardProps> = ({
               <div className="flex justify-between ">
                 <div className="flex flex-col gap-0">
                   <h3 className="text-xl font-bold text-foreground/90">
-                    PATENT İSTEMLER VE TARİFNAME
+                    TARİFNAME
                   </h3>
                   <>
                     <Separator className="bg-primary" />
-                      <h3
-                        className="text-xl font-bold text-foreground/90">
-                        İstem 1.
-                      </h3>
-                      <p className="font-light">
-                        {/* {item.basvurulan_sinif_aciklamasi} */}
-                      </p>
-                    </>
+                    <p className="font-light">{tarifname}</p>
+                  </>
                 </div>
                 <div></div>
               </div>

@@ -37,7 +37,9 @@ type PatentlerX = Database["public"]["Tables"]["patentler"]["Row"];
 
 interface PatentOzetTarifnameEditFormProps {
   secilenPatent: PatentlerX[] | null;
-  tarifname: string;
+  secilenPatentTarifname: {
+    tarifname: any;
+}[] | null
 
   session: Session | null;
 }
@@ -48,7 +50,7 @@ const formSchema = z.object({
 
 export default function PatentTarifnameEditForm({
   secilenPatent,
-  tarifname,
+  secilenPatentTarifname,
   session,
 }: PatentOzetTarifnameEditFormProps) {
   const supabase = createClientComponentClient<Database>();
@@ -67,6 +69,9 @@ export default function PatentTarifnameEditForm({
   });
 
   const isLoading = form.formState.isSubmitting;
+
+  let tarifname : any = secilenPatentTarifname?.map(({ tarifname }: any) => tarifname);
+
 
   async function updatePatentTarifname(values: z.infer<typeof formSchema>) {
     if (secilenPatent != null) {
