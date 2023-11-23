@@ -102,7 +102,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
             <div className="relative flex min-h-screen flex-col">
               <TopNavigation session={session} userid={user?.id!} arayetki={arayetki}/>
-              <div className="hidden md:flex w-20 flex-col fixed inset-y-0">
+              {/* <div className="hidden md:flex w-20 flex-col fixed inset-y-0"> */}
+              <div className="hidden md:flex fixed z-50">
                 <SideNavigation session={session} userid={user?.id!} />
               </div>
               <Nav session={session} />
