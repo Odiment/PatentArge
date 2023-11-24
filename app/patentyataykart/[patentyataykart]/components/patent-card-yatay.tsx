@@ -328,7 +328,7 @@ const PatentCardYatay: React.FC<PatentCardProps> = ({
       </div>
 
       {/******* MODAL GÖRÜNÜMÜ *******/}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={true}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={true} placement="top">
         <ModalContent>
           {(onClose) => (
             <>

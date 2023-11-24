@@ -222,7 +222,7 @@ const MarkaCardYatay: React.FC<MarkaCardProps> = ({
       </div>
 
       {/******* MODAL GÖRÜNÜMÜ *******/}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
         <ModalContent>
           {(onClose) => (
             <>

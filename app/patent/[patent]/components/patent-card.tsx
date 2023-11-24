@@ -319,8 +319,8 @@ const PatentCard: React.FC<PatentCardProps> = ({
       </div>
 
       {/******* MODAL GÖRÜNÜMÜ *******/}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={true}>
-        <ModalContent>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={true} placement="top">
+        <ModalContent className="overflow-y-auto">
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-2xl justify-center items-center border-b border-primary text-primary font-bold text-center">

@@ -217,8 +217,8 @@ const MarkaCard: React.FC<MarkaCardProps> = ({ data, bilgiler, userid, yetki, tu
       </Card>
 
       {/******* MODAL GÖRÜNÜMÜ *******/}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
+        <ModalContent className="overflow-y-auto">
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-2xl justify-center items-center border-b border-primary text-primary font-bold">
