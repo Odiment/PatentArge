@@ -149,7 +149,7 @@ const SideNavigation = ({
 
 
   return (
-    <div key={1} className="text-xs mt-20 p-[2px] lg:w-[200px] pt-5">
+    <div key={1} className="text-xs p-[2px] lg:w-[200px] pt-5 overflow-y-auto">
       {session ? (
         <div key={2} className={(cn("space-y-2"), font.className)}>
           {MenuItems.map((item, index) => (
@@ -174,7 +174,7 @@ const SideNavigation = ({
       ) : (
         // Session olmayan (login girişi yapmayanlara) gösterilecek menüler
         <div
-          className=" lg:hidden  
+          className="lg:hidden  
          gap-1 lg:gap-6 p-4 px:3 lg:py-3 items-center hover:text-primary hover:bg-primary/10 rounded-lg bg-primary/30 hover:primary/30 cursor-pointer"
           onClick={() => handleItemClick(MenuItems[0])}
           key={MenuItems[0].id}>

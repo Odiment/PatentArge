@@ -79,16 +79,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getSession();
   const user = await getUser();
 
-  let arayetki: any[] | null = []
+  let arayetki: any[] | null = [];
 
   if (user != null || user != undefined) {
     const { data: yetkix } = await supabase
       .from("profiles")
       .select(`yetki`)
       .eq("id", user.id);
-      arayetki = yetkix
+    arayetki = yetkix;
   }
-
 
   return (
     <>
@@ -101,14 +100,18 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           )}>
           <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
             <div className="relative flex min-h-screen flex-col">
-              <TopNavigation session={session} userid={user?.id!} arayetki={arayetki}/>
+              <TopNavigation
+                session={session}
+                userid={user?.id!}
+                arayetki={arayetki}
+              />
               {/* <div className="hidden md:flex w-20 flex-col fixed inset-y-0"> */}
-              <div className="hidden md:flex fixed z-50">
+              <div className="hidden md:hidden lg:flex overflow-y-auto mt-20 fixed z-10">
                 <SideNavigation session={session} userid={user?.id!} />
               </div>
               <Nav session={session} />
 
-              <div className="flex-1 ml-[5px] md:ml-[30px] lg:ml-[90px] ">
+              <div className="flex-1 ml-[5px] md:ml-[50px] lg:ml-[70px] ">
                 {children}
               </div>
             </div>

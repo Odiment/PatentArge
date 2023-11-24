@@ -1,8 +1,21 @@
 "use client";
 
 import { Menu } from "lucide-react";
+import SideNavigation from "@/components/sidenavigation";
 
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+  SheetClose,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 /* import { Sidebar } from '@/components/sidebar' */
 import { Session } from "@supabase/auth-helpers-nextjs";
 /* import SideNavigation from './sidenavigation' */
@@ -15,6 +28,7 @@ import { BsShieldCheck } from "react-icons/bs";
 import { PiShieldCheckeredBold } from "react-icons/pi";
 import { LuGalleryVertical } from "react-icons/lu";
 import { FiSettings } from "react-icons/fi";
+
 interface MenuItem {
   id: number;
   icon: IconType;
@@ -75,7 +89,13 @@ const MenuItems: Array<MenuItem> = [
   },
 ];
 
-export const MobileSidebar = ({ session }: { session: Session | null }) => {
+export const MobileSidebar = ({
+  session,
+  userid,
+}: {
+  session: Session | null;
+  userid: string;
+}) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -85,7 +105,7 @@ export const MobileSidebar = ({ session }: { session: Session | null }) => {
   return (
     <Sheet>
       {session ? (
-        <SheetTrigger className="md:hidden pr-4">
+        <SheetTrigger className="lg:hidden pr-4">
           <Menu className="text-muted-foreground hover:text-[#3ecf8e]" />
         </SheetTrigger>
       ) : (
@@ -94,21 +114,8 @@ export const MobileSidebar = ({ session }: { session: Session | null }) => {
         </SheetTrigger>
       )}
 
-      <SheetContent side="left" className="md:hidden pt-20 w-32">
-        <div className="space-y-2">
-          {MenuItems.map((item) => (
-            <div
-              key={item.id}
-              className={`flex flex-col lg:flex-row gap-1 lg:gap-6 p-4 px:3 lg:py-3 items-center 
-    hover:text-primary hover:bg-primary/10 rounded-lg ${
-      item.pathname === pathname && "bg-primary/30 hover:primary/30"
-    } rounded-lg cursor-pointer`}
-              onClick={() => handleItemClick(item)}>
-              <item.icon size={30} className="h-5 w-5" />
-              <span className="text-xs text-center">{item.text}</span>
-            </div>
-          ))}
-        </div>
+      <SheetContent side="left" className="w-32 overflow-y-auto">
+        <SideNavigation session={session} userid={userid} />
       </SheetContent>
     </Sheet>
   );

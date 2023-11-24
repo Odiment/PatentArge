@@ -21,10 +21,10 @@ const TopNavigation = ({ session, userid, arayetki }: TopNavigationProps) => {
 
 
   return (
-    <div className="flex justify-between items-center p-4 gap-6 sticky top-0 z-40 bg-background">
+    <div className="flex justify-between items-center p-4 gap-6 sticky top-0 z-20 bg-background">
       <div className="flex items-center gap-6">
-        <div>
-          <MobileSidebar session={session} />
+        <div className="overflow-y-auto">
+          <MobileSidebar session={session} userid={userid!}/>
         </div>
         <div className="flex items-center gap-1">
           <Image src={"/logo.png"} width={50} height={50} alt="" className="" />

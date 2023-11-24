@@ -74,63 +74,56 @@ const PatentLongCard: React.FC<PatentCardProps> = ({
   let patent_resimler_urlx: any;
 
   if (patentResimler != null) {
-/*     let patent_resimler_id = patentResimler.map(({ patent_id }) => patent_id);
+    /*     let patent_resimler_id = patentResimler.map(({ patent_id }) => patent_id);
     let product_resimler_id = productResimler.map(({ patent_id }) => patent_id); */
 
-    var ilgiliPatentResimler = patentResimler.reduce(
+    var ilgiliPatentResimler = patentResimler.reduce((result: any, thing) => {
+      if (thing.patent_id.includes(`${patent_id}`)) {
+        result.push(thing);
+      }
+      return result;
+    }, []);
+
+    let patent_resimler_url = ilgiliPatentResimler.map(
+      ({ patent_resim_url }: any) => patent_resim_url
+    );
+    patent_resimler_urlx = patent_resimler_url;
+  }
+
+  let product_resimler_urlx: any;
+
+  if (productResimler != null) {
+    var ilgiliProductResimler = productResimler.reduce((result: any, thing) => {
+      if (thing.patent_id.includes(`${patent_id}`)) {
+        result.push(thing);
+      }
+      return result;
+    }, []);
+
+    let product_resimler_url = ilgiliProductResimler.map(
+      ({ product_resim_url }: any) => product_resim_url
+    );
+    product_resimler_urlx = product_resimler_url;
+  }
+
+  let product_remote_resimler_urlx: any;
+
+  if (productRemoteResimler != null) {
+    var ilgiliProductRemoteResimler = productRemoteResimler.reduce(
       (result: any, thing) => {
         if (thing.patent_id.includes(`${patent_id}`)) {
-            result.push(thing);
+          result.push(thing);
         }
         return result;
       },
       []
     );
-  
-let patent_resimler_url = ilgiliPatentResimler.map(
-    ({ patent_resim_url }: any) => patent_resim_url
-  );
-  patent_resimler_urlx = patent_resimler_url
-}
 
-let product_resimler_urlx: any;
-
-if (productResimler != null) {
-
-  var ilgiliProductResimler = productResimler.reduce(
-    (result: any, thing) => {
-      if (thing.patent_id.includes(`${patent_id}`)) {
-        result.push(thing);
-      }
-      return result;
-    },
-    []
-  );
-
-   let product_resimler_url = ilgiliProductResimler.map(
-    ({ product_resim_url }: any) => product_resim_url
-  );
-  product_resimler_urlx = product_resimler_url
-}
-
-let product_remote_resimler_urlx: any;
-
-if (productRemoteResimler != null) {
-  var ilgiliProductRemoteResimler = productRemoteResimler.reduce(
-    (result: any, thing) => {
-      if (thing.patent_id.includes(`${patent_id}`)) {
-        result.push(thing);
-      }
-      return result;
-    },
-    []
-  );
-
-  let product_remote_resimler_url = ilgiliProductRemoteResimler.map(
-    ({ product_remote_url }: any) => product_remote_url
-  );
-  product_remote_resimler_urlx = product_remote_resimler_url
-}
+    let product_remote_resimler_url = ilgiliProductRemoteResimler.map(
+      ({ product_remote_url }: any) => product_remote_url
+    );
+    product_remote_resimler_urlx = product_remote_resimler_url;
+  }
 
   const supabase = createClientComponentClient<Database>();
   const [currentPatentIndex, setCurrentPatentIndex] = useState(0);
@@ -314,7 +307,8 @@ if (productRemoteResimler != null) {
   };
 
   const nextProductSlide = () => {
-    const isLastSlide = currentProductIndex === product_resimler_urlx.length - 1;
+    const isLastSlide =
+      currentProductIndex === product_resimler_urlx.length - 1;
     const newIndex = isLastSlide ? 0 : currentProductIndex + 1;
     setCurrentProductIndex(newIndex);
     setProductUrl(product_resimler_urlx[currentProductIndex]);
@@ -388,12 +382,66 @@ if (productRemoteResimler != null) {
               <div className="flex flex-col col-span-6 md:col-span-8 content-start">
                 <div className="flex justify-between items-start">
                   <div className="flex flex-col gap-0">
+                    <div className="hover:scale-y-125">
+                      {bilgiler?.status === "basvuru" && (
+                        <Chip
+                          onClick={onOpen}
+                          variant="flat"
+                          color="warning"
+                          size="lg"
+                          avatar={
+                            <Avatar
+                              name={durum_bilgisi}
+                              size="lg"
+                              color="warning"
+                              getInitials={(name) => name.charAt(0)}
+                            />
+                          }>
+                          {durum_bilgisi}
+                        </Chip>
+                      )}
+                      {bilgiler?.status === "tescil" && (
+                        <Chip
+                          onClick={onOpen}
+                          variant="flat"
+                          color="success"
+                          size="lg"
+                          avatar={
+                            <Avatar
+                              name={durum_bilgisi}
+                              size="lg"
+                              color="success"
+                              getInitials={(name) => name.charAt(0)}
+                            />
+                          }>
+                          {durum_bilgisi}
+                        </Chip>
+                      )}
+                      {bilgiler?.status === "iptal" && (
+                        <Chip
+                          onClick={onOpen}
+                          variant="flat"
+                          color="danger"
+                          size="lg"
+                          avatar={
+                            <Avatar
+                              name={durum_bilgisi}
+                              size="lg"
+                              color="danger"
+                              getInitials={(name) => name.charAt(0)}
+                            />
+                          }>
+                          {durum_bilgisi}
+                        </Chip>
+                      )}
+                    </div>
                     <h3 className="text-3xl font-bold text-foreground/90">
                       {data?.patent_title}
                     </h3>
                     <p className="font-semibold text-2xl">
                       {bilgiler?.basvuru_no}
                     </p>
+
                     <p className="text-small text-foreground/80 h-4">
                       {bilgiler?.class_no}
                     </p>
@@ -404,57 +452,6 @@ if (productRemoteResimler != null) {
                       </div>
                     )}
                   </div>
-                  {bilgiler?.status === "basvuru" && (
-                    <Chip
-                      onClick={onOpen}
-                      variant="flat"
-                      color="warning"
-                      size="lg"
-                      avatar={
-                        <Avatar
-                          name={durum_bilgisi}
-                          size="lg"
-                          color="warning"
-                          getInitials={(name) => name.charAt(0)}
-                        />
-                      }>
-                      {durum_bilgisi}
-                    </Chip>
-                  )}
-                  {bilgiler?.status === "tescil" && (
-                    <Chip
-                      onClick={onOpen}
-                      variant="flat"
-                      color="success"
-                      size="lg"
-                      avatar={
-                        <Avatar
-                          name={durum_bilgisi}
-                          size="lg"
-                          color="success"
-                          getInitials={(name) => name.charAt(0)}
-                        />
-                      }>
-                      {durum_bilgisi}
-                    </Chip>
-                  )}
-                  {bilgiler?.status === "iptal" && (
-                    <Chip
-                      onClick={onOpen}
-                      variant="flat"
-                      color="danger"
-                      size="lg"
-                      avatar={
-                        <Avatar
-                          name={durum_bilgisi}
-                          size="lg"
-                          color="danger"
-                          getInitials={(name) => name.charAt(0)}
-                        />
-                      }>
-                      {durum_bilgisi}
-                    </Chip>
-                  )}
                 </div>
 
                 {/* <div className="flex flex-col mt-3 gap-1">
